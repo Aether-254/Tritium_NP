@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.memleakfix;
+package org.craftamethyst.tritium.mixin.memory.client.leakfix;
 
 import com.mojang.blaze3d.platform.GlUtil;
 import net.minecraft.client.Minecraft;

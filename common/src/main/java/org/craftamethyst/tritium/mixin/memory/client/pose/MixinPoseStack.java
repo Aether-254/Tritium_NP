@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.renderer.other;
+package org.craftamethyst.tritium.mixin.memory.client.pose;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix3f;
@@ -34,6 +34,9 @@ public class MixinPoseStack {
 
     @Inject(method = "pushPose", at = @At("HEAD"), cancellable = true)
     private void onPush(CallbackInfo ci) {
+        if (this.poseStack.isEmpty()) {
+            return;
+        }
         PoseStack.Pose top = this.poseStack.getLast();
         PoseStack.Pose reused = this.pool.pollLast();
 
