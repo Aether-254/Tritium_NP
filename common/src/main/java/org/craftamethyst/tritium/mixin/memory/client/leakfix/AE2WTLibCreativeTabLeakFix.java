@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.memleakfix;
+package org.craftamethyst.tritium.mixin.memory.client.leakfix;
 
 import de.mari_023.ae2wtlib.AE2wtlibCreativeTab;
 import net.minecraft.world.item.ItemStack;

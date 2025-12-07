@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.client.memleakfix;
+package org.craftamethyst.tritium.mixin.memory.client.leakfix;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
