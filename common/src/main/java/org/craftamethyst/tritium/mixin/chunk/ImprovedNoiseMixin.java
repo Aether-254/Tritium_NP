@@ -16,19 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ImprovedNoiseMixin {
     @Shadow @Final
     public double xo;
-
     @Shadow @Final
     public double yo;
-
     @Shadow @Final
     public double zo;
-
     @Shadow @Final
     private byte[] p;
-
     @Unique
     private static final double[] OPTIMIZED_GRADIENTS = tritium$createOptimizedGradients();
-
     @Unique
     private int[] tritium$optimizedPermutation;
 
@@ -40,14 +35,13 @@ public abstract class ImprovedNoiseMixin {
                 {0, 1, 1}, {0, -1, 1}, {0, 1, -1}, {0, -1, -1},
                 {1, 1, 0}, {-1, 1, 0}, {0, -1, 1}, {0, -1, -1}
         };
-
         double[] gradients = new double[48];
         for (int i = 0; i < 16; i++) {
-            gradients[i * 3] = simplexGradients[i][0];
-            gradients[i * 3 + 1] = simplexGradients[i][1];
-            gradients[i * 3 + 2] = simplexGradients[i][2];
+            int base = i * 3;
+            gradients[base] = simplexGradients[i][0];
+            gradients[base + 1] = simplexGradients[i][1];
+            gradients[base + 2] = simplexGradients[i][2];
         }
-
         return gradients;
     }
 
@@ -55,14 +49,17 @@ public abstract class ImprovedNoiseMixin {
     private void tritium$onInit(RandomSource random, CallbackInfo ci) {
         this.tritium$optimizedPermutation = new int[512];
         for (int i = 0; i < 256; i++) {
-            this.tritium$optimizedPermutation[i] = this.p[i] & 0xFF;
-            this.tritium$optimizedPermutation[i + 256] = this.p[i] & 0xFF;
+            int value = this.p[i] & 0xFF;
+            this.tritium$optimizedPermutation[i] = value;
+            this.tritium$optimizedPermutation[i + 256] = value;
         }
     }
 
-    /**
-     * @author ZCRAFT
-     */
+    @Unique
+    private int tritium$getPerm(int index) {
+        return this.tritium$optimizedPermutation[index & 0xFF];
+    }
+
     @Deprecated
     @Overwrite
     public double noise(double x, double y, double z, double yScale, double yMax) {
@@ -86,32 +83,29 @@ public abstract class ImprovedNoiseMixin {
             yShift = 0.0;
         }
 
-        return tritium$optimizedSampleAndLerp(
-                gridX, gridY, gridZ,
-                deltaX, deltaY - yShift, deltaZ, deltaY
-        );
+        return tritium$optimizedSampleAndLerp(gridX, gridY, gridZ, deltaX, deltaY - yShift, deltaZ, deltaY);
     }
 
     @Unique
     private double tritium$optimizedSampleAndLerp(int gridX, int gridY, int gridZ,
                                                   double deltaX, double weirdDeltaY,
                                                   double deltaZ, double deltaY) {
-        int idxX0 = this.tritium$optimizedPermutation[gridX & 0xFF];
-        int idxX1 = this.tritium$optimizedPermutation[(gridX + 1) & 0xFF];
+        int idxX0 = tritium$getPerm(gridX);
+        int idxX1 = tritium$getPerm(gridX + 1);
 
-        int idxXY00 = this.tritium$optimizedPermutation[idxX0 + gridY];
-        int idxXY10 = this.tritium$optimizedPermutation[idxX1 + gridY];
-        int idxXY01 = this.tritium$optimizedPermutation[idxX0 + gridY + 1];
-        int idxXY11 = this.tritium$optimizedPermutation[idxX1 + gridY + 1];
+        int idxXY00 = tritium$getPerm(idxX0 + gridY);
+        int idxXY10 = tritium$getPerm(idxX1 + gridY);
+        int idxXY01 = tritium$getPerm(idxX0 + gridY + 1);
+        int idxXY11 = tritium$getPerm(idxX1 + gridY + 1);
 
-        int gradIdx000 = this.tritium$optimizedPermutation[idxXY00 + gridZ] & 15;
-        int gradIdx100 = this.tritium$optimizedPermutation[idxXY10 + gridZ] & 15;
-        int gradIdx010 = this.tritium$optimizedPermutation[idxXY01 + gridZ] & 15;
-        int gradIdx110 = this.tritium$optimizedPermutation[idxXY11 + gridZ] & 15;
-        int gradIdx001 = this.tritium$optimizedPermutation[idxXY00 + gridZ + 1] & 15;
-        int gradIdx101 = this.tritium$optimizedPermutation[idxXY10 + gridZ + 1] & 15;
-        int gradIdx011 = this.tritium$optimizedPermutation[idxXY01 + gridZ + 1] & 15;
-        int gradIdx111 = this.tritium$optimizedPermutation[idxXY11 + gridZ + 1] & 15;
+        int gradIdx000 = tritium$getPerm(idxXY00 + gridZ) & 15;
+        int gradIdx100 = tritium$getPerm(idxXY10 + gridZ) & 15;
+        int gradIdx010 = tritium$getPerm(idxXY01 + gridZ) & 15;
+        int gradIdx110 = tritium$getPerm(idxXY11 + gridZ) & 15;
+        int gradIdx001 = tritium$getPerm(idxXY00 + gridZ + 1) & 15;
+        int gradIdx101 = tritium$getPerm(idxXY10 + gridZ + 1) & 15;
+        int gradIdx011 = tritium$getPerm(idxXY01 + gridZ + 1) & 15;
+        int gradIdx111 = tritium$getPerm(idxXY11 + gridZ + 1) & 15;
 
         double d0 = tritium$optimizedGradDot(gradIdx000, deltaX, weirdDeltaY, deltaZ);
         double d1 = tritium$optimizedGradDot(gradIdx100, deltaX - 1.0, weirdDeltaY, deltaZ);
@@ -135,7 +129,6 @@ public abstract class ImprovedNoiseMixin {
         double gradX = OPTIMIZED_GRADIENTS[baseIdx];
         double gradY = OPTIMIZED_GRADIENTS[baseIdx + 1];
         double gradZ = OPTIMIZED_GRADIENTS[baseIdx + 2];
-
         return gradX * x + gradY * y + gradZ * z;
     }
 
@@ -145,9 +138,6 @@ public abstract class ImprovedNoiseMixin {
         return t3 * (t * (t * 6.0 - 15.0) + 10.0);
     }
 
-    /**
-     * @author ZCRAFT
-     */
     @Overwrite
     public double noiseWithDerivative(double x, double y, double z, double[] values) {
         double offsetX = x + this.xo;
@@ -169,22 +159,22 @@ public abstract class ImprovedNoiseMixin {
     private double tritium$optimizedSampleWithDerivative(int gridX, int gridY, int gridZ,
                                                          double deltaX, double deltaY, double deltaZ,
                                                          double[] values) {
-        int idxX0 = this.tritium$optimizedPermutation[gridX & 0xFF];
-        int idxX1 = this.tritium$optimizedPermutation[(gridX + 1) & 0xFF];
+        int idxX0 = tritium$getPerm(gridX);
+        int idxX1 = tritium$getPerm(gridX + 1);
 
-        int idxXY00 = this.tritium$optimizedPermutation[idxX0 + gridY];
-        int idxXY10 = this.tritium$optimizedPermutation[idxX1 + gridY];
-        int idxXY01 = this.tritium$optimizedPermutation[idxX0 + gridY + 1];
-        int idxXY11 = this.tritium$optimizedPermutation[idxX1 + gridY + 1];
+        int idxXY00 = tritium$getPerm(idxX0 + gridY);
+        int idxXY10 = tritium$getPerm(idxX1 + gridY);
+        int idxXY01 = tritium$getPerm(idxX0 + gridY + 1);
+        int idxXY11 = tritium$getPerm(idxX1 + gridY + 1);
 
-        int gradIdx000 = this.tritium$optimizedPermutation[idxXY00 + gridZ] & 15;
-        int gradIdx100 = this.tritium$optimizedPermutation[idxXY10 + gridZ] & 15;
-        int gradIdx010 = this.tritium$optimizedPermutation[idxXY01 + gridZ] & 15;
-        int gradIdx110 = this.tritium$optimizedPermutation[idxXY11 + gridZ] & 15;
-        int gradIdx001 = this.tritium$optimizedPermutation[idxXY00 + gridZ + 1] & 15;
-        int gradIdx101 = this.tritium$optimizedPermutation[idxXY10 + gridZ + 1] & 15;
-        int gradIdx011 = this.tritium$optimizedPermutation[idxXY01 + gridZ + 1] & 15;
-        int gradIdx111 = this.tritium$optimizedPermutation[idxXY11 + gridZ + 1] & 15;
+        int gradIdx000 = tritium$getPerm(idxXY00 + gridZ) & 15;
+        int gradIdx100 = tritium$getPerm(idxXY10 + gridZ) & 15;
+        int gradIdx010 = tritium$getPerm(idxXY01 + gridZ) & 15;
+        int gradIdx110 = tritium$getPerm(idxXY11 + gridZ) & 15;
+        int gradIdx001 = tritium$getPerm(idxXY00 + gridZ + 1) & 15;
+        int gradIdx101 = tritium$getPerm(idxXY10 + gridZ + 1) & 15;
+        int gradIdx011 = tritium$getPerm(idxXY01 + gridZ + 1) & 15;
+        int gradIdx111 = tritium$getPerm(idxXY11 + gridZ + 1) & 15;
 
         int base000 = gradIdx000 * 3;
         int base100 = gradIdx100 * 3;

@@ -33,8 +33,6 @@
     "MCBUG.boat.BoatMixin",
     "packs.CompositePackResourcesMixin",
     "packs.FilePackResourcesMixin",
-    "server.EntityMixin",
-    "server.ServerLevelMixin",
     "stack.DataComponentsMixin",
     "stack.ItemStackMixin",
     "tickstop.EntityTypeMixin",

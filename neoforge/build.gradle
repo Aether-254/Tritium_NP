@@ -91,5 +91,4 @@ tasks.shadowJar {
     enableAutoRelocation = true
     relocationPrefix = 'org.craftamethyst.tritium.libs'
     configurations = [project.configurations.shadow]
-
 }
