@@ -49,6 +49,11 @@ neoForge {
 }
 
 dependencies {
+    //ASM
+    implementation 'org.ow2.asm:asm:9.5'
+    implementation 'org.ow2.asm:asm-tree:9.5'
+    implementation 'org.ow2.asm:asm-commons:9.5'
+    //joml
     implementation 'org.joml:joml:1.10.5'
     //Create
     implementation 'maven.modrinth:create:88L641Un'
