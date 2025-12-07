@@ -1,5 +1,6 @@
 # Tritium TODO
 
+- [ ]  **[Full version]** GPU entity collision optimization: By placing the physical AABB collision calculation on the GPU, the main thread pressure is shared, achieving significant performance improvement in dense biological scenes.
 - [x]  **[Full version]** Fast Language: Dramatically speed up language switching by intercepting resource bundle reloading when switching languages
 - [x]  **[Except NeoForge]** Fast Event: Replaced generated classes with construction lambdas to speed up construction event listening
 - [x]  **[Full version]** Leaf Culling: Ported Optifine smart foliage options
