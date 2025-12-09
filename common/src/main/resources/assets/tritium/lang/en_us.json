@@ -138,6 +138,10 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "A list, fill in according to example format, mode determined by your list mode setting",
 
   "config.tritium.category.techOptimizations": "Technical Optimizations",
+  "config.tritium.techOptimizations.lambdaEventListeners": "Lambda Event Listeners",
+  "config.tritium.techOptimizations.lambdaEventListeners.tooltip": "Optimize event listener performance using Lambda expressions",
+  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners": "Enable Lambda Event Listeners",
+  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners.tooltip": "Enable Lambda event listeners to improve Forge event performance (Forge only)",
   "config.tritium.techOptimizations.createOptimizations": "Create Optimizations",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "Enable Rail Offloading",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "Move rail system tick processing to separate thread to improve server performance",
@@ -182,5 +186,12 @@
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering": "Enable Structure Block Filtering",
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering.tooltip": "Filter structure blocks outside bounding boxes to improve performance",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck": "Enable Jigsaw Generation Check",
-  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "Perform pre-generation checks to avoid unnecessary jigsaw placement"
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "Perform pre-generation checks to avoid unnecessary jigsaw placement",
+
+  "config.tritium.serverPerformance.asyncWorldSave": "Async World Save",
+  "config.tritium.serverPerformance.asyncWorldSave.tooltip": "Reduce server lag",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave": "Enable Async World Save",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave.tooltip": "Enable asynchronous world saving to reduce server lag",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds": "Async Save Timeout",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds.tooltip": "Timeout duration for asynchronous world saving (in seconds)"
 }

@@ -138,6 +138,10 @@
 
 
   "config.tritium.category.techOptimizations": "技术优化",
+  "config.tritium.techOptimizations.lambdaEventListeners": "Lambda事件监听器",
+  "config.tritium.techOptimizations.lambdaEventListeners.tooltip": "使用Lambda表达式优化事件监听器性能",
+  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners": "启用Lambda事件监听器",
+  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners.tooltip": "启用Lambda事件监听器以提升Forge事件性能(仅Forge)",
   "config.tritium.techOptimizations.createOptimizations": "机械动力优化",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "启用铁路卸载",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "将铁路系统刻处理移至独立线程以提升服务器性能",
@@ -182,5 +186,12 @@
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering": "启用结构块过滤",
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering.tooltip": "过滤边界框外的结构块以提升性能",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck": "启用拼图生成检查",
-  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "执行生成前检查以避免不必要的拼图放置"
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "执行生成前检查以避免不必要的拼图放置",
+
+  "config.tritium.serverPerformance.asyncWorldSave": "异步世界保存",
+  "config.tritium.serverPerformance.asyncWorldSave.tooltip": "减少服务器卡顿",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave": "启用异步世界保存",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave.tooltip": "启用异步世界保存以减少服务器卡顿",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds": "异步保存超时时间",
+  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds.tooltip": "异步世界保存的超时时间（秒）"
 }
