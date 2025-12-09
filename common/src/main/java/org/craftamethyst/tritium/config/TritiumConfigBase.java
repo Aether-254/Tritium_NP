@@ -254,6 +254,9 @@ public class TritiumConfigBase {
         @SubCategory("Jigsaw Optimizations")
         public JigsawOptimizations jigsawOptimizations = new JigsawOptimizations();
 
+        @SubCategory("Async World Save")
+        public AsyncWorldSave asyncWorldSave = new AsyncWorldSave();
+
         public static class NoiseSamplingCache {
             public static boolean noiseSamplingCache = true;
         }
@@ -264,6 +267,12 @@ public class TritiumConfigBase {
             public static boolean enableFastWeightedSampling = true;
             public static boolean enableStructureBlockFiltering = true;
             public static boolean enableJigsawGenerationCheck = true;
+        }
+        public static class AsyncWorldSave {
+            public static boolean asyncWorldSave = true;
+
+            @Range(min = 1, max = 60)
+            public static int asyncWorldSaveTimeoutSeconds = 30;
         }
     }
 }

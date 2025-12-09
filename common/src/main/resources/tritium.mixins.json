@@ -30,6 +30,7 @@
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
     "packs.FilePackResourcesMixin",
+    "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],
