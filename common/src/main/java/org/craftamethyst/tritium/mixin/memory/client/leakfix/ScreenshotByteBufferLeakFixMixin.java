@@ -1,5 +1,7 @@
 package org.craftamethyst.tritium.mixin.memory.client.leakfix;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.platform.GlUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -8,7 +10,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.nio.ByteBuffer;
@@ -19,19 +20,19 @@ public class ScreenshotByteBufferLeakFixMixin {
     @Unique
     private ByteBuffer tritium$buffer = null;
 
-    @Redirect(
+    @WrapOperation(
             method = "grabHugeScreenshot",
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/mojang/blaze3d/platform/GlUtil;allocateMemory(I)Ljava/nio/ByteBuffer;"
             )
     )
-    private ByteBuffer tritium$redirectAllocateMemory(int size) {
+    private ByteBuffer tritium$wrapAllocateMemory(int size, Operation<ByteBuffer> original) {
         if (!TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix) {
-            return GlUtil.allocateMemory(size);
+            return original.call(size);
         }
 
-        ByteBuffer buffer = GlUtil.allocateMemory(size);
+        ByteBuffer buffer = original.call(size);
         tritium$buffer = buffer;
         return buffer;
     }

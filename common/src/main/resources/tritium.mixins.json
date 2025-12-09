@@ -2,20 +2,21 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
-  "plugin": "org.craftamethyst.tritium.mixin.plugins.TritiumMixinPlugin",
   "refmap": "tritium.refmap.json",
-  "compatibilityLevel": "JAVA_17",
+  "priority": 2000,
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
     "cache.BlockStatePairKeyLazyCache",
     "chunk.EndIslandDensityFunctionMixin",
+    "chunk.ImprovedNoiseMixin",
     "chunk.NoiseSamplingCacheMixin",
-    "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
-    "client.renderer.immediate.DirectionMixin",
-    "create.CarriageEntitiesMixin",
-    "create.TrainEntitiesMixin",
     "entity.stack.ExperienceOrbMixin",
+    "entity.stack.item.InventoryMixin",
+    "entity.stack.item.ItemEntityMixin",
     "entity.stack.item.ItemStackMixin",
+    "entity.stack.item.SlotMixin",
+    "entity.stack.item.fix.BucketItem",
+    "entity.stack.item.fix.BucketItemAccessor",
     "jigsaw.JigsawBlockEntityMixin",
     "jigsaw.JigsawPlacementMixin",
     "jigsaw.SinglePoolElementMixin",
@@ -23,12 +24,12 @@
     "jigsaw.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
+    "math.MthMixin",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
     "packs.FilePackResourcesMixin",
-    "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],
@@ -37,6 +38,7 @@
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
+    "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
     "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
@@ -48,14 +50,20 @@
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fast_blit.FastBlit",
-    "memory.client.pose.MixinPoseStack",
+    "client.renderer.immediate.DirectionMixin",
+    "memory.client.PoseStackMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
     "client.renderer.vc.FramebufferCleanerMixin",
     "client.renderer.vertex.VertexBufferMixin",
+    "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

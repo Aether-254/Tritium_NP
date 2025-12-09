@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * 跳过竹子光照计算。
+ * Skip BamBoo Light
  */
 @Mixin(net.minecraft.world.level.block.state.BlockBehaviour.class)
 public abstract class FastBamboo {
@@ -25,7 +25,7 @@ public abstract class FastBamboo {
                                       BlockGetter level,
                                       BlockPos pos,
                                       CallbackInfoReturnable<Float> cir) {
-        if (!TritiumConfigBase.Performance.FastBambooLight.bambooLight) {
+        if (!TritiumConfigBase.Performance.LightingOptimizations.bambooLight) {
             return;
         }
         if (state.getBlock() instanceof BambooStalkBlock) {

@@ -16,6 +16,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.octree.BoxOctree;
 import org.craftamethyst.tritium.util.OctreeHolder;
 import org.craftamethyst.tritium.util.RotationFailMask;
@@ -37,6 +38,9 @@ public abstract class SinglePoolElementMixin {
     private void tritium$skipIfGlobalRotationsFailed(
             StructureTemplateManager manager, WorldGenLevel level, StructureManager structureManager, ChunkGenerator generator, BlockPos offset, BlockPos pos, Rotation rotation, BoundingBox box, RandomSource random, boolean keepJigsaws, CallbackInfoReturnable<Boolean> cir) {
 
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations) {
+            return;
+        }
         ResourceLocation id = this.template.left().orElse(null);
         if (id == null) return;
         int templateId = id.hashCode();
@@ -55,15 +59,19 @@ public abstract class SinglePoolElementMixin {
         BoundingBox bb = tpl.getBoundingBox(new StructurePlaceSettings().setRotation(rotation), pos);
         AABB aabb = new AABB(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
 
-        if (octree.intersects(aabb)) {
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection && octree.intersects(aabb)) {
             if (RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx)) {
 
             }
             cir.setReturnValue(false);
             return;
         }
-
-        VoxelShape shape = Shapes.create(aabb);
-        octree.addShape(shape, this);
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
+            VoxelShape shape = Shapes.create(aabb);
+            if (!shape.isEmpty()) {
+                octree.addShape(shape, this);
+            }
+            octree.addShape(shape, this);
+        }
     }
 }

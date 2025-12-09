@@ -20,7 +20,7 @@ public abstract class LanguageManagerMixin {
     private String currentCode;
 
     @Shadow
-    public abstract void onResourceManagerReload(ResourceManager resourceManager);
+    protected abstract void onResourceManagerReload(ResourceManager resourceManager);
 
     @Unique
     private String tritium$previousLanguage;

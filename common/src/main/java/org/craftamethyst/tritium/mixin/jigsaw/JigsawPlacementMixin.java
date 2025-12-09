@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pools.JigsawPlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.phys.AABB;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.octree.BoxOctree;
 import org.craftamethyst.tritium.util.OctreeHolder;
 import org.craftamethyst.tritium.util.RotationFailMask;
@@ -25,8 +26,11 @@ public class JigsawPlacementMixin {
     private static void onAddPiecesStart(
             Structure.GenerationContext context, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int maxDepth, BlockPos pos, boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir) {
 
-        if (OctreeHolder.get() == null) {
-            OctreeHolder.set(new BoxOctree(new AABB(-300, -64, -300, 300, 256, 300)));
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations &&
+                TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
+            if (OctreeHolder.get() == null) {
+                OctreeHolder.set(new BoxOctree(new AABB(-300, -64, -300, 300, 256, 300)));
+            }
         }
     }
 
@@ -34,7 +38,10 @@ public class JigsawPlacementMixin {
     private static void onAddPiecesEnd(
             Structure.GenerationContext context, Holder<StructureTemplatePool> startPool, Optional<ResourceLocation> startJigsawName, int maxDepth, BlockPos pos, boolean useExpansionHack, Optional<Heightmap.Types> projectStartToHeightmap, int maxDistanceFromCenter, CallbackInfoReturnable<Optional<Structure.GenerationStub>> cir) {
 
-        OctreeHolder.clear();
-        RotationFailMask.clear();
+        if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations &&
+                TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
+            OctreeHolder.clear();
+            RotationFailMask.clear();
+        }
     }
 }

@@ -15,8 +15,11 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public boolean isModLoaded(String modId) {
-
-        return ModList.get().isLoaded(modId);
+        ModList modList = ModList.get();
+        if (modList == null) {
+            return false;
+        }
+        return modList.isLoaded(modId);
     }
 
     @Override

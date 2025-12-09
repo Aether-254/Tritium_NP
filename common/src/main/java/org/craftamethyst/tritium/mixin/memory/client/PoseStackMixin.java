@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.memory.client.pose;
+package org.craftamethyst.tritium.mixin.memory.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.joml.Matrix3f;
@@ -10,11 +10,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
 @Mixin(PoseStack.class)
-public class MixinPoseStack {
+public class PoseStackMixin {
 
     private final Deque<PoseStack.Pose> pool = new ArrayDeque<>();
     @Shadow
@@ -23,7 +24,7 @@ public class MixinPoseStack {
 
     private static PoseStack.Pose createPose(Matrix4f pose, Matrix3f normal) {
         try {
-            java.lang.reflect.Constructor<PoseStack.Pose> ctr =
+            Constructor<PoseStack.Pose> ctr =
                     PoseStack.Pose.class.getDeclaredConstructor(Matrix4f.class, Matrix3f.class);
             ctr.setAccessible(true);
             return ctr.newInstance(pose, normal);

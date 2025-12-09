@@ -14,27 +14,27 @@ public abstract class ItemStackMixin {
     @Shadow
     public abstract Item getItem();
 
+    @Shadow
+    public abstract int getCount();
 
     @Inject(method = "getMaxStackSize", at = @At("HEAD"), cancellable = true)
     private void onGetMaxStackSize(CallbackInfoReturnable<Integer> cir) {
-        if (!TritiumConfigBase.Entities.EntityStacking.enable) {
-            return;
-        }
-        int configMax = TritiumConfigBase.Entities.EntityStacking.maxStackSize;
-        if (configMax > 0) {
-            int vanillaMax = this.getItem().getMaxStackSize();
-            cir.setReturnValue(Math.min(configMax, vanillaMax));
+        if (TritiumConfigBase.Entities.EntityStacking.enable) {
+            int configMax = TritiumConfigBase.Entities.EntityStacking.maxStackSize;
+            if (configMax > 0) {
+                int vanillaMax = this.getItem().getMaxStackSize();
+                cir.setReturnValue(Math.min(configMax, vanillaMax));
+            }
         }
     }
 
     @Inject(method = "isStackable", at = @At("HEAD"), cancellable = true)
     private void onIsStackable(CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfigBase.Entities.EntityStacking.enable) {
-            return;
-        }
-        int configMax = TritiumConfigBase.Entities.EntityStacking.maxStackSize;
-        if (configMax == 0) {
-            cir.setReturnValue(this.getItem().getMaxStackSize() > 1);
+        if (TritiumConfigBase.Entities.EntityStacking.enable) {
+            int configMax = TritiumConfigBase.Entities.EntityStacking.maxStackSize;
+            if (configMax > 0) {
+                cir.setReturnValue(this.getCount() < configMax && configMax > 1);
+            }
         }
     }
 }

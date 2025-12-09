@@ -1,5 +1,6 @@
 package org.craftamethyst.tritium.mixin.cache;
 
+import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -49,7 +51,10 @@ public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Shadow
     protected NonNullList<ItemStack> items;
-
+    @Shadow
+    private static int getTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
+        throw new AssertionError();
+    }
     @Unique
     private boolean tritium$isInputChanged(ItemStack currentInput) {
         if (tritium$cachedInput == null) {
@@ -126,6 +131,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             )
     )
     private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return getTotalCookTime(level, blockEntity);
+        }
         return ((AbstractFurnaceBlockEntityMixin) (Object) blockEntity).tritium$getCachedTotalCookTime(level);
     }
 
@@ -153,6 +161,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             at = @At("HEAD")
     )
     private void onSetItem(int pIndex, ItemStack pStack, CallbackInfo ci) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         if (pIndex == 0) {
             if (tritium$cachedInput == null || !ItemStack.isSameItemSameTags(tritium$cachedInput, pStack)) {
                 tritium$resetCache();
@@ -166,6 +177,9 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             at = @At("HEAD")
     )
     private void onSetItems(int index, ItemStack stack, CallbackInfo ci) {
+        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return;
+        }
         tritium$resetCache();
     }
 }

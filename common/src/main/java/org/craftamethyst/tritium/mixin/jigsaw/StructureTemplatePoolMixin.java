@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.ints.IntArrays;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.craftamethyst.tritium.platform.Services;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,6 +27,7 @@ public class StructureTemplatePoolMixin {
     @Unique private StructurePoolElement[] tritium$elements;
     @Unique private int[] tritium$prefix;
     @Unique private int tritium$total;
+    @Unique private static final boolean SPA_LOADED = Services.PLATFORM.isModLoaded("structure_pool_api");
 
     @Inject(method = "getShuffledTemplates",
             at = @At("HEAD"),
@@ -32,6 +35,12 @@ public class StructureTemplatePoolMixin {
             require = 1)
     private void tritium$fastWeightedSample(RandomSource random,
                                             CallbackInfoReturnable<List<StructurePoolElement>> cir) {
+        if (!SPA_LOADED) return;
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
+                !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableFastWeightedSampling) {
+            return;
+        }
+
         try {
             if (!tritium$initialized) {
                 synchronized (tritium$lock) {
@@ -57,7 +66,6 @@ public class StructureTemplatePoolMixin {
             System.err.println("Tritium StructureTemplatePool failed, falling back to vanilla: " + e.getMessage());
         }
     }
-
     @Unique
     private void tritium$init() {
         try {

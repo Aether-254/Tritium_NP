@@ -57,7 +57,7 @@ public class LambdaEventListenerFactory {
     }
     
     public static IEventListener createListener(Object instance, Method method) {
-        if (!TritiumConfigBase.TechOptimizations.lambdaEventListeners) {
+        if (!TritiumConfigBase.TechOptimizations.LambdaEventListeners.lambdaEventListeners) {
             return new ReflectionFallbackListener(instance, method);
         }
         
