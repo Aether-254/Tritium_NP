@@ -83,6 +83,9 @@ public abstract class SinglePoolElementMixin {
 
         if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
             VoxelShape shape = Shapes.create(aabb);
+            if (!shape.isEmpty()) {
+                octree.addShape(shape, this);
+            }
             octree.addShape(shape, this);
         }
     }

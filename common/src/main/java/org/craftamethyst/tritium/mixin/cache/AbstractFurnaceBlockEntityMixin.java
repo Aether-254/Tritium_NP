@@ -57,9 +57,6 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     }
     @Unique
     private boolean tritium$isInputChanged(ItemStack currentInput) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return true;
-        }
         if (tritium$cachedInput == null) {
             return !currentInput.isEmpty();
         }

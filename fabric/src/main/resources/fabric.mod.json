@@ -24,7 +24,8 @@
   },
   "mixins": [
     "tritium.mixins.json",
-    "tritium.fabric.mixins.json"
+    "tritium.fabric.mixins.json",
+    "tritium.gpuplus.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${fabric_loader_version}",
