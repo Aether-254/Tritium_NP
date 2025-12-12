@@ -1,4 +1,4 @@
-<h1 align="center">Tritium (氚)</h1>
+<h1 align="center">Tritium</h1>
 <img height="207" alt="Tritium Logo" src="logo.png" />
 
 An all-in-one optimization mod dedicated to improving client-side rendering performance and server-side stability.
