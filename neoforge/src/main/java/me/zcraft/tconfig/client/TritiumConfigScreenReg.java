@@ -1,10 +1,15 @@
-package org.craftamethyst.tritium;
+/*
+ * // Copyright (c) 2025 CraftAmethyst. Tritium Project. Licensed under MIT.
+ */
+
+package me.zcraft.tconfig.client;
 
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import org.craftamethyst.tritium.TritiumCommon;
 
 public class TritiumConfigScreenReg {
 

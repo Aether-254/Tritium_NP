@@ -5,6 +5,7 @@ import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
 import me.zcraft.tconfig.config.watcher.ConfigFileWatcher;
+import org.craftamethyst.tritium.platform.Services;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
@@ -134,13 +135,7 @@ public class TritiumConfig {
     }
 
     private boolean detectClientEnvironment() {
-        try {
-            // 神秘验证
-            Class.forName("net.minecraft.client.Minecraft");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
+        return Services.PLATFORM.isClientEnvironment();
     }
 
     private void validateModIdOwnership(String modId) {
@@ -267,10 +262,15 @@ public class TritiumConfig {
     }
 
     private void initializeConfigSystem() {
+        TritiumCommon.LOG.info("[Server DEBUG] Starting config system initialization");
         Path configPath = getConfigPath();
+        TritiumCommon.LOG.info("[Server DEBUG] Config path: {}", configPath);
         if (!Files.exists(configPath)) {
             createDefaultConfig(configPath);
-        }
+            TritiumCommon.LOG.info("[Server DEBUG] Config file not found, creating: {}", configPath);
+        } else {
+        TritiumCommon.LOG.info("[Server DEBUG] Config file already exists");
+    }
         configParser = new ConfigParser(configPath);
 
         if (!ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
@@ -407,6 +407,7 @@ public class TritiumConfig {
     }
 
     private String generateConfigFile() {
+        TritiumCommon.LOG.info("[Server DEBUG] Starting config file generation for mod: {}", modId);
         StringBuilder sb = new StringBuilder();
 
         sb.append("# ").append(modId).append(" Configuration\n");
@@ -427,7 +428,6 @@ public class TritiumConfig {
                 Object section = sectionField.get(configObj);
                 String sectionName = sectionField.getName();
 
-                // 递归生成所有层级的配置内容
                 generateSectionContent(sb, section, sectionName, "");
             }
         } catch (Exception e) {

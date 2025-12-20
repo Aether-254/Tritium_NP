@@ -1,6 +1,10 @@
-package org.craftamethyst.tritium;
+/*
+ * // Copyright (c) 2025 CraftAmethyst. Tritium Project. Licensed under MIT.
+ */
 
-import me.zcraft.tconfig.config.TritiumAutoConfig;
+package me.zcraft.tconfig.client;
+
+import me.zcraft.tconfig.config.autoconfig.TritiumAutoConfig;
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.client.gui.screens.Screen;
 

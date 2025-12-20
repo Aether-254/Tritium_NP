@@ -43,10 +43,6 @@ public class TritiumConfigBase {
         public FastFurnace fastFurnace = new FastFurnace();
         @SubCategory("BlockStateCache")
         public BlockStateCache blockStateCache = new BlockStateCache();
-        @SubCategory("EndIslandOptimization")
-        public EndIslandOptimization endIslandOptimization = new EndIslandOptimization();
-        @SubCategory("MathOptimizations")
-        public MathOptimizations mathOptimizations = new MathOptimizations();
         @SubCategory("LightingOptimizations")
         public LightingOptimizations lightingOptimizations = new LightingOptimizations();
 
@@ -55,15 +51,6 @@ public class TritiumConfigBase {
         }
         public static class BlockStateCache {
             public static boolean blockStatePairKeyCache = true;
-        }
-        public static class EndIslandOptimization {
-            public static boolean enableEndIslandOptimization = true;
-        }
-        public static class MathOptimizations {
-            public static boolean enableMathOptimizations = true;
-            public static boolean optimizeLerpFunctions = true;
-            public static boolean optimizeLengthSquared = true;
-            public static boolean optimizeRandomFunctions = true;
         }
         public static class LightingOptimizations {
             public static boolean enableLightingOptimizations = true;
@@ -149,7 +136,7 @@ public class TritiumConfigBase {
         public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class DynamicFPS{
-            public static boolean enable = true;
+            public static boolean enable = false;
             @Range(min = 1)
             public static int minimizedFPS = 1;
         }
@@ -221,7 +208,7 @@ public class TritiumConfigBase {
 
 
         public static class ButtonFix {
-            public static boolean buttonFix = true;
+            public static boolean buttonFix = false;
         }
 
         public static class NoGLog {

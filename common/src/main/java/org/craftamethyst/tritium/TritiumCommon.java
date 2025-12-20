@@ -26,13 +26,17 @@ public class TritiumCommon {
                         "Version: {} | Platform: {} | Environment: {}\n" +
                         "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
-
-        try {
+         try {
             TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
-            Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {
             TritiumCommon.LOG.warn("Failed to initialize config service: {}", t.toString());
+        }
+        try {
+            Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
+            TritiumCommon.LOG.info("Client ok");
+        } catch (Throwable t) {
+            TritiumCommon.LOG.warn("Failed to initialize Client: {}", t.toString());
         }
     }
 }

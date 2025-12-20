@@ -23,7 +23,6 @@ public class TritiumClient {
     public TritiumClient() {
         instance = this;
     }
-
     public static void shutdown() {
         if (instance != null) {
             instance.aabbCulling.dispose();
