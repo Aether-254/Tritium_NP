@@ -55,6 +55,7 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     private static int getTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
         throw new AssertionError();
     }
+
     @Unique
     private boolean tritium$isInputChanged(ItemStack currentInput) {
         if (tritium$cachedInput == null) {
@@ -121,20 +122,6 @@ public abstract class AbstractFurnaceBlockEntityMixin {
         this.tritium$cacheTicks = 0;
     }
 
-    @Unique
-    private void tritium$validateAndUpdateCache(Level level, ItemStack currentInput) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return;
-        }
-        if (level == null || currentInput.isEmpty()) {
-            tritium$resetCache();
-            return;
-        }
-        if (tritium$cachedRecipe == null && !tritium$cacheMissed) {
-            tritium$updateCache(level, currentInput);
-        }
-    }
-
     @Redirect(
             method = "serverTick",
             at = @At(
@@ -152,6 +139,13 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Unique
     private int tritium$getCachedTotalCookTime(Level level) {
         if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+            return getTotalCookTime(level, (AbstractFurnaceBlockEntity) (Object) this);
+        }
+
+        if (this.items.isEmpty()) {
+            if (tritium$cachedInput != null || !tritium$cacheMissed) {
+                tritium$resetCache();
+            }
             return DEFAULT_COOK_TIME;
         }
 
@@ -162,14 +156,20 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             }
             return DEFAULT_COOK_TIME;
         }
-        tritium$validateAndUpdateCache(level, currentInput);
         RecipeHolder<? extends AbstractCookingRecipe> recipe = tritium$getCachedRecipe(currentInput);
-        if (recipe == null && !tritium$cacheMissed) {
-            tritium$updateCache(level, currentInput);
-            recipe = tritium$cachedRecipe;
+
+        if (recipe == null) {
+            if (!tritium$cacheMissed) {
+                tritium$updateCache(level, currentInput);
+                recipe = tritium$cachedRecipe;
+            }
+
+            if (recipe == null) {
+                return DEFAULT_COOK_TIME;
+            }
         }
 
-        return recipe != null ? recipe.value().getCookingTime() : DEFAULT_COOK_TIME;
+        return recipe.value().getCookingTime();
     }
 
     @Inject(
