@@ -1,16 +1,8 @@
 {
   "config.tritium.title": "⚙ Tritium 配置",
 
-  "config.tritium.category.performance": "性能优化",
-  "config.tritium.performance.mathOptimizations": "数学优化",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "启用数学优化",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "所有数学函数优化的主开关",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "优化线性插值函数",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "使用FMA指令优化线性插值函数",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "优化距离平方计算",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "使用FMA指令优化距离计算",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "优化随机函数",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "优化随机数生成函数",
+  "config.tritium.category.performance": "性能",
+
 
   "config.tritium.performance.lightingOptimizations": "光照优化",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "启用光照优化",
@@ -28,12 +20,8 @@
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "启用方块状态对键缓存",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "缓存方块状态对的哈希计算以提高性能",
 
-  "config.tritium.performance.endIslandOptimization": "末地岛屿优化",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "启用末地岛屿优化",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "优化末地岛屿密度函数计算以提高性能",
 
-
-  "config.tritium.category.rendering": "渲染优化",
+  "config.tritium.category.rendering": "渲染",
   "config.tritium.rendering.entityCulling": "实体剔除",
   "config.tritium.rendering.reflex": "Reflex",
   "config.tritium.rendering.fastBlit": "FastBlit",
@@ -88,7 +76,7 @@
   "config.tritium.rendering.GpuPlus_gpuPlusIndex": "GPU Plus 索引缓冲",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex.tooltip": "在可用时对索引缓冲使用不可变缓冲存储 / DSA。",
 
-  "config.tritium.category.clientOptimizations": "客户端优化",
+  "config.tritium.category.clientOptimizations": "客户端内容",
   "config.tritium.clientOptimizations.FL": "快速语言",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch": "快速语言切换",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch.tooltip": "通过跳过完整资源包重新加载来优化语言切换速度",
@@ -102,8 +90,8 @@
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "最低帧率",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "动态帧率功能的最低帧率配置项(最低: 1)",
 
-  "config.tritium.category.network": "网络优化",
-  "config.tritium.category.entities": "实体优化",
+  "config.tritium.category.network": "网络",
+  "config.tritium.category.entities": "实体",
   "config.tritium.entities.entityOpt": "实体性能优化",
   "config.tritium.entities.entityOpt_optimizeEntities": "启用实体刻优化",
   "config.tritium.entities.entityOpt_optimizeEntities.tooltip": "优化实体刻处理以提升性能",
@@ -121,7 +109,7 @@
   "config.tritium.entities.entityStacking": "实体堆叠",
   "config.tritium.entities.entityStacking_lockMaxedStacks": "最大堆叠限制锁",
   "config.tritium.entities.entityStacking_lockMaxedStacks.tooltip": "修复与机械动力等模组同时使用的情况下导致的问题",
-  "config.tritium.entities.entityStacking_enable": "启用",
+  "config.tritium.entities.entityStacking_enable": "启用掉落物优化",
   "config.tritium.entities.entityStacking_enable.tooltip": "是否启用实体堆叠功能(仅针对 物品实体 和 经验球实体)",
   "config.tritium.entities.entityStacking_showStackCount": "显示掉落物数量",
   "config.tritium.entities.entityStacking_showStackCount.tooltip": "掉落物上方会显示掉落物的数量",
@@ -137,7 +125,7 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "一个列表，按示例格式填写，模式根据你在上设置的列表模式决定",
 
 
-  "config.tritium.category.techOptimizations": "技术优化",
+  "config.tritium.category.techOptimizations": "技术",
   "config.tritium.techOptimizations.createOptimizations": "机械动力优化",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "启用铁路卸载",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "将铁路系统刻处理移至独立线程以提升服务器性能",
@@ -167,7 +155,7 @@
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg": "MC-248332",
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg.tooltip": "修复MC-248332：蜜蜂会破坏海龟蛋",
 
-  "config.tritium.category.serverPerformance": "服务器性能",
+  "config.tritium.category.serverPerformance": "服务器",
   "config.tritium.serverPerformance.noiseSamplingCache": "噪声采样缓存",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache": "启用噪声采样缓存",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "缓存噪声采样以提高服务器性能",

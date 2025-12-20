@@ -2,15 +2,6 @@
   "config.tritium.title": "⚙ Tritium 設定",
 
   "config.tritium.category.performance": "效能最佳化",
-  "config.tritium.performance.mathOptimizations": "數學最佳化",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "啟用數學最佳化",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "所有數學函數最佳化的主開關",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "最佳化線性插值函數",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "使用FMA指令最佳化線性插值函數",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "最佳化距離平方計算",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "使用FMA指令最佳化距離計算",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "最佳化隨機函數",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "最佳化隨機數生成函數",
 
   "config.tritium.performance.lightingOptimizations": "光照最佳化",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "啟用光照最佳化",
@@ -27,10 +18,6 @@
   "config.tritium.performance.blockStateCache": "方塊狀態快取",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "啟用方塊狀態對鍵快取",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "快取方塊狀態對的雜湊計算以提升效能",
-
-  "config.tritium.performance.endIslandOptimization": "終界島嶼最佳化",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "啟用終界島嶼最佳化",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "最佳化終界島嶼密度函數計算以提升效能",
 
   "config.tritium.category.rendering": "渲染最佳化",
   "config.tritium.rendering.entityCulling": "實體剔除",
