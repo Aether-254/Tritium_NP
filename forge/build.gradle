@@ -103,15 +103,20 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+    //Embeddium
+    implementation 'maven.modrinth:embeddium:J7b96IEd'
+
     //AE2WTLib
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
+
     //Create
     implementation 'maven.modrinth:create:88L641Un'
+
     // Config UI + AutoConfig
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    //Shadow
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    implementation "maven.modrinth:tritiumconfiguration:${tc}"
+
     // Forge's hack fix
     implementation('net.sf.jopt-simple:jopt-simple:5.0.4') { version { strictly '5.0.4' } }
 }

@@ -36,20 +36,27 @@ repositories {
     maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/releases/' }
 }
 dependencies {
+    //MJ
     minecraft "com.mojang:minecraft:${minecraft_version}"
     mappings loom.layered {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
+    //Embeddium
+    implementation 'maven.modrinth:embeddium:J7b96IEd'
+
     //Create
     modImplementation 'maven.modrinth:create:88L641Un'
-   // modImplementation "maven.modrinth:tritiumconfiguration:${tc_fabric}"
+
+    //Fabric
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
+
     // Config UI + AutoConfig (Fabric)
     modImplementation("me.shedaniel.cloth:cloth-config-fabric:${fabric_cloth_config_version}")
-    modImplementation "com.github.ben-manes.caffeine:caffeine:3.2.0"
+
+    // Occlusion Culling
     modImplementation('com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT') {
         exclude(group: "org.lwjgl")
         exclude(group: "org.lwjgl.lwjgl")
@@ -58,9 +65,8 @@ dependencies {
     //Mod Menu
     modImplementation("com.terraformersmc:modmenu:${mod_menu_version}")
 
-    //shadow "maven.modrinth:tritiumconfiguration:${tc_fabric}"
+//Shadow
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }
 
 loom {

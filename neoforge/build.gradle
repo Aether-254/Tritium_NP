@@ -69,12 +69,15 @@ neoForge {
 }
 
 dependencies {
+    //Embeddium
+    implementation 'maven.modrinth:embeddium:J7b96IEd'
+    //AE2
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
     //Create
     implementation 'maven.modrinth:create:88L641Un'
     // Config UI + AutoConfig (NeoForge)
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
-    shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    //shadow 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
     //implementation "maven.modrinth:tritiumconfiguration:${tc}"
 }
