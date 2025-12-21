@@ -31,7 +31,7 @@ public class TritiumNeoForge {
         TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
     }
     private static boolean isEmbLoaded() {
-        return ModList.get().isLoaded("sodium");
+        return ModList.get().isLoaded("embeddium");
     }
     private void onRegisterCommands(RegisterCommandsEvent event) {
         KillMobsCommand.register(event.getDispatcher());
