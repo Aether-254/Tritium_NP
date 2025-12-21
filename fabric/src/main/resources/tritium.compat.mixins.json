@@ -5,7 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
-
+    "sodium.SodiumBlockOcclusionCacheMixin"
   ],
   "server": [],
   "injectors": {
