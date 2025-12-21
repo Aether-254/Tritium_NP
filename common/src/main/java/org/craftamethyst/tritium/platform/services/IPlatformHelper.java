@@ -25,6 +25,13 @@ public interface IPlatformHelper {
     boolean isDevelopmentEnvironment();
 
     /**
+     * Check if the game is currently running on the client side.
+     *
+     * @return True if running on client, false if running on server/dedicated server.
+     */
+    boolean isClientEnvironment();
+
+    /**
      * Gets the name of the environment type as a string.
      *
      * @return The name of the environment type.
@@ -39,6 +46,7 @@ public interface IPlatformHelper {
      * @return The mod version.
      */
     String getModVersion();
+
     /**
      * Checks if the Create mod is loaded.
      *

@@ -7,7 +7,6 @@
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
     "cache.BlockStatePairKeyLazyCache",
-    "chunk.EndIslandDensityFunctionMixin",
     "chunk.ImprovedNoiseMixin",
     "chunk.NoiseSamplingCacheMixin",
     "entity.stack.ExperienceOrbMixin",
@@ -24,7 +23,6 @@
     "jigsaw.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
-    "math.MthMixin",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
@@ -54,9 +52,6 @@
     "client.renderer.immediate.DirectionMixin",
     "memory.client.PoseStackMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
-    "client.renderer.vc.FramebufferCleanerMixin",
-    "client.renderer.vertex.VertexBufferMixin",
-    "client.renderer.vertex.VertexConsumerMixin",
     "MCBUG.button.AbstractWidgetMixin"
   ],
   "server": [],

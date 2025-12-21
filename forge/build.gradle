@@ -8,6 +8,7 @@ mixin {
     add(sourceSets.main, "${mod_id}.refmap.json")
 
     config("${mod_id}.mixins.json")
+    config("${mod_id}.compat.mixins.json")
     config("${mod_id}.forge.mixins.json")
     config("${mod_id}.gpuplus.mixins.json")
 }
@@ -57,6 +58,9 @@ repositories {
 dependencies {
     // Compile common sources directly; repeat its runtime deps here for compilation
     compileOnly project(":common")
+
+    //Embeddium
+    implementation 'maven.modrinth:embeddium:UTbfe5d1'
 
     //Create
     implementation 'maven.modrinth:create:8amzvn9x'

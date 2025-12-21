@@ -16,10 +16,14 @@ import java.util.Set;
 public class CompatPlugin implements IMixinConfigPlugin {
     private static final String IMMEDIATELY_FAST_MODID = "immediatelyfast";
     private static final String ENTITY_TEXTURE_FEATURES_MODID = "entity_texture_features";
+    private static final String BBS_MODID = "bbs";
 
-    private static final String TARGET_MIXIN_CLASS = "org.craftamethyst.tritium.mixin.client.renderer.vertex.VertexBufferMixin";
+    private static final String VERTEX_BUFFER_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.vertex.VertexBufferMixin";
+    private static final String FAST_BLIT_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.fast_blit.FastBlit";
 
-    private Boolean shouldDisableTargetMixin = null;
+    private Boolean hasImmFast;
+    private Boolean hasETF;
+    private Boolean hasBBS;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -32,24 +36,42 @@ public class CompatPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals(TARGET_MIXIN_CLASS)) {
-            if (shouldDisableTargetMixin == null) {
-                boolean isImmediatelyFastLoaded = FabricLoader.getInstance().isModLoaded(IMMEDIATELY_FAST_MODID);
-                boolean isEntityTextureFeaturesLoaded = FabricLoader.getInstance().isModLoaded(ENTITY_TEXTURE_FEATURES_MODID);
+        if (mixinClassName.equals(VERTEX_BUFFER_MIXIN)) {
+            return !shouldDisableVertexBufferMixin();
+        }
 
-                shouldDisableTargetMixin = isImmediatelyFastLoaded || isEntityTextureFeaturesLoaded;
-
-                if (shouldDisableTargetMixin) {
-                    System.out.println("[TritiumMixinPlugin] Is ImmediaitlyFast/ETF endable?: " + mixinClassName);
-                } else {
-                    System.out.println("[TritiumMixinPlugin] Can't Find ImmediaitlyFast/ETF,Mixin load: " + mixinClassName);
-                }
-            }
-
-            return !shouldDisableTargetMixin;
+        if (mixinClassName.equals(FAST_BLIT_MIXIN)) {
+            return !shouldDisableFastBlitMixin();
         }
 
         return true;
+    }
+
+    private boolean shouldDisableVertexBufferMixin() {
+        if (hasImmFast == null || hasETF == null) {
+            hasImmFast = FabricLoader.getInstance().isModLoaded(IMMEDIATELY_FAST_MODID);
+            hasETF = FabricLoader.getInstance().isModLoaded(ENTITY_TEXTURE_FEATURES_MODID);
+
+            if (hasImmFast || hasETF) {
+                System.out.println("[Tritium Compat] Disabling VertexBufferMixin due to compatibility with: " +
+                        (hasImmFast ? "ImmediatelyFast" : "") +
+                        (hasETF ? (hasImmFast ? "/ETF" : "ETF") : ""));
+            }
+        }
+
+        return hasImmFast || hasETF;
+    }
+
+    private boolean shouldDisableFastBlitMixin() {
+        if (hasBBS == null) {
+            hasBBS = FabricLoader.getInstance().isModLoaded(BBS_MODID);
+
+            if (hasBBS) {
+                System.out.println("[Tritium Compat] Disabling FastBlit due to compatibility issues with BBS screen recording");
+            }
+        }
+
+        return hasBBS;
     }
 
     @Override

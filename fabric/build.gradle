@@ -24,6 +24,10 @@ dependencies {
     // Compile common sources directly, plus match its runtime deps needed by those sources
     implementation project(":common")
 
+    //Sodium
+    implementation 'maven.modrinth:sodium:OihdIimA'
+    implementation 'maven.modrinth:sodium-options-api:nww69hqs'
+
     //Create
     implementation 'maven.modrinth:create:8amzvn9x'
 

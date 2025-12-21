@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.integration;
+package org.craftamethyst.tritium.integration.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

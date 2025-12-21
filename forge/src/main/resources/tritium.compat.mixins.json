@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.craftamethyst.tritium.compat",
+  "mixins": [],
+  "client": [
+    "embeddium.EmbeddiumBlockOcclusionCacheMixin"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

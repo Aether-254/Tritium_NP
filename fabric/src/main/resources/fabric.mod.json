@@ -14,15 +14,19 @@
     "icon": "assets/${mod_id}/logo.png",
     "environment": "*",
   "entrypoints": {
-        "main": [
-          "org.craftamethyst.tritium.tritium"
+    "main": [
+      "org.craftamethyst.tritium.Tritium"
+    ],
+    "client": [
+      "org.craftamethyst.tritium.client.TritiumFabricClient"
         ],
     "modmenu": [
-      "org.craftamethyst.tritium.integration.ModMenuIntegration"
+      "org.craftamethyst.tritium.integration.modmenu.ModMenuIntegration"
         ]
     },
     "mixins": [
         "${mod_id}.mixins.json",
+        "${mod_id}.compat.mixins.json",
         "${mod_id}.fabric.mixins.json",
         "${mod_id}.gpuplus.mixins.json"
     ],

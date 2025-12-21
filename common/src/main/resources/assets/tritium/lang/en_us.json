@@ -2,15 +2,6 @@
   "config.tritium.title": "⚙ Tritium Configuration",
 
   "config.tritium.category.performance": "Performance",
-  "config.tritium.performance.mathOptimizations": "Math Optimizations",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "Enable Math Optimizations",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "Master switch for all math function optimizations",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "Optimize Lerp Functions",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "Optimize linear interpolation functions using FMA instructions",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "Optimize Length Squared",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "Optimize distance calculations using FMA instructions",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "Optimize Random Functions",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "Optimize random number generation functions",
 
   "config.tritium.performance.lightingOptimizations": "Lighting Optimizations",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "Enable Lighting Optimizations",
@@ -27,10 +18,6 @@
   "config.tritium.performance.blockStateCache": "Block State Cache",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "Enable Block State Pair Key Cache",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "Cache block state pair hash computations to improve performance",
-
-  "config.tritium.performance.endIslandOptimization": "End Island Optimization",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "Enable End Island Optimization",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "Optimize end island density function calculations to improve performance",
 
 
   "config.tritium.category.rendering": "Rendering",
@@ -129,7 +116,6 @@
   "config.tritium.entities.entityStacking_maxStackSize.tooltip": "Maximum number of items per stack",
   "config.tritium.entities.entityStacking_mergeCooldown": "Merge Cooldown",
   "config.tritium.entities.entityStacking_mergeCooldown.tooltip": "The cooldown of merging items(ticks)",
-  "config.tritium.entities.entityStacking_mergeDistance.tooltip": "Merge similar items within this block range into one stack",
   "config.tritium.entities.entityStacking_mergeDistance": "Merge Distance",
   "config.tritium.entities.entityStacking_mergeDistance.tooltip": "Merge similar items within this block range into one stack",
   "config.tritium.entities.entityStacking_listMode": "List Mode",
@@ -138,10 +124,6 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "A list, fill in according to example format, mode determined by your list mode setting",
 
   "config.tritium.category.techOptimizations": "Technical Optimizations",
-  "config.tritium.techOptimizations.lambdaEventListeners": "Lambda Event Listeners",
-  "config.tritium.techOptimizations.lambdaEventListeners.tooltip": "Optimize event listener performance using Lambda expressions",
-  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners": "Enable Lambda Event Listeners",
-  "config.tritium.techOptimizations.lambdaEventListeners_lambdaEventListeners.tooltip": "Enable Lambda event listeners to improve Forge event performance (Forge only)",
   "config.tritium.techOptimizations.createOptimizations": "Create Optimizations",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "Enable Rail Offloading",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "Move rail system tick processing to separate thread to improve server performance",
@@ -186,12 +168,5 @@
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering": "Enable Structure Block Filtering",
   "config.tritium.serverPerformance.jigsawOptimizations_enableStructureBlockFiltering.tooltip": "Filter structure blocks outside bounding boxes to improve performance",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck": "Enable Jigsaw Generation Check",
-  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "Perform pre-generation checks to avoid unnecessary jigsaw placement",
-
-  "config.tritium.serverPerformance.asyncWorldSave": "Async World Save",
-  "config.tritium.serverPerformance.asyncWorldSave.tooltip": "Reduce server lag",
-  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave": "Enable Async World Save",
-  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSave.tooltip": "Enable asynchronous world saving to reduce server lag",
-  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds": "Async Save Timeout",
-  "config.tritium.serverPerformance.asyncWorldSave_asyncWorldSaveTimeoutSeconds.tooltip": "Timeout duration for asynchronous world saving (in seconds)"
+  "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawGenerationCheck.tooltip": "Perform pre-generation checks to avoid unnecessary jigsaw placement"
 }

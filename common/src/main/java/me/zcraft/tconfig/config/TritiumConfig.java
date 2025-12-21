@@ -5,6 +5,7 @@ import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
 import me.zcraft.tconfig.config.watcher.ConfigFileWatcher;
+import org.craftamethyst.tritium.platform.Services;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandle;
@@ -26,14 +27,14 @@ public class TritiumConfig {
 
     private final String modId;
     private final Class<?> configClass;
-    private final Map<String, me.zcraft.tconfig.config.ConfigValue<?>> configCache = new ConcurrentHashMap<>();
+    private final Map<String, ConfigValue<?>> configCache = new ConcurrentHashMap<>();
     private final Map<String, FieldAccessor> fieldAccessors = new ConcurrentHashMap<>();
     private final Object configLock = new Object();
     private final AtomicReference<Object> configRef = new AtomicReference<>();
     private String configFileName;
     private boolean isClient = true;
     private boolean registered = false;
-    private me.zcraft.tconfig.config.ConfigParser configParser;
+    private ConfigParser configParser;
     private ConfigFileWatcher fileWatcher;
     private final List<Runnable> reloadListeners = new ArrayList<>();
     public TritiumConfig(String modId, Class<?> configClass) {
@@ -134,13 +135,7 @@ public class TritiumConfig {
     }
 
     private boolean detectClientEnvironment() {
-        try {
-            // 神秘验证
-            Class.forName("net.minecraft.client.Minecraft");
-            return true;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
+        return Services.PLATFORM.isClientEnvironment();
     }
 
     private void validateModIdOwnership(String modId) {
@@ -179,7 +174,7 @@ public class TritiumConfig {
             Object newConfig = rebuildConfigObject();
             configRef.set(newConfig);
 
-            me.zcraft.tconfig.config.ConfigValidator.validateConfig(newConfig);
+            ConfigValidator.validateConfig(newConfig);
             TritiumCommon.LOG.info("Default configuration validation passed for mod: {}", modId);
         } catch (Exception e) {
             TritiumCommon.LOG.error("Default configuration validation failed for mod {}: {}", modId, e.getMessage());
@@ -197,12 +192,12 @@ public class TritiumConfig {
             Path configPath = getConfigPath();
 
             try {
-                configCache.values().forEach(me.zcraft.tconfig.config.ConfigValue::refresh);
+                configCache.values().forEach(ConfigValue::refresh);
                 configCache.clear();
 
                 if (configParser != null) {
                     configParser.load();
-                    if (!me.zcraft.tconfig.config.ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
+                    if (!ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
                         throw new RuntimeException("Config migration failed");
                     }
                 }
@@ -210,7 +205,7 @@ public class TritiumConfig {
                 Object newConfig = rebuildConfigObject();
                 configRef.set(newConfig);
 
-                me.zcraft.tconfig.config.ConfigValidator.validateConfig(newConfig);
+                ConfigValidator.validateConfig(newConfig);
                 TritiumCommon.LOG.info("Configuration reloaded successfully for mod: {}", modId);
 
             } catch (Exception e) {
@@ -267,9 +262,14 @@ public class TritiumConfig {
     }
 
     private void initializeConfigSystem() {
+        TritiumCommon.LOG.info("[Server DEBUG] Starting config system initialization");
         Path configPath = getConfigPath();
+        TritiumCommon.LOG.info("[Server DEBUG] Config path: {}", configPath);
         if (!Files.exists(configPath)) {
             createDefaultConfig(configPath);
+            TritiumCommon.LOG.info("[Server DEBUG] Config file not found, creating: {}", configPath);
+        } else {
+            TritiumCommon.LOG.info("[Server DEBUG] Config file already exists");
         }
         configParser = new ConfigParser(configPath);
 
@@ -349,7 +349,7 @@ public class TritiumConfig {
                     FieldAccessor accessor = fieldAccessors.get(fieldPath);
                     if (accessor != null) {
                         Object defaultValue = accessor.getDefaultValue();
-                        me.zcraft.tconfig.config.ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
+                        ConfigValue<?> configValue = getCachedConfigValue(fieldPath, field.getType(), defaultValue);
                         Object value = configValue.get();
 
                         if (value instanceof Number) {
@@ -366,25 +366,25 @@ public class TritiumConfig {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private me.zcraft.tconfig.config.ConfigValue<?> getCachedConfigValue(String key, Class<?> type, Object defaultValue) {
+    private ConfigValue<?> getCachedConfigValue(String key, Class<?> type, Object defaultValue) {
         return configCache.computeIfAbsent(key, k -> createConfigValueSupplier(key, type, defaultValue));
     }
 
-    private me.zcraft.tconfig.config.ConfigValue<?> createConfigValueSupplier(String key, Class<?> type, Object defaultValue) {
+    private ConfigValue<?> createConfigValueSupplier(String key, Class<?> type, Object defaultValue) {
         if (type == boolean.class || type == Boolean.class) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
+            return new ConfigValue<>(configParser.getBoolean(key, (Boolean) defaultValue));
         } else if (type == int.class || type == Integer.class) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
+            return new ConfigValue<>(configParser.getInt(key, (Integer) defaultValue));
         } else if (type == long.class || type == Long.class) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
+            return new ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
         } else if (type == double.class || type == Double.class) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
+            return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
         } else if (type == String.class) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getString(key, (String) defaultValue));
+            return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
         } else if (type.isEnum()) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getEnum(key, (Enum) defaultValue));
+            return new ConfigValue<>(configParser.getEnum(key, (Enum) defaultValue));
         } else if (List.class.isAssignableFrom(type)) {
-            return new me.zcraft.tconfig.config.ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
+            return new ConfigValue<>(configParser.getStringList(key, (List<String>) defaultValue));
         } else {
             TritiumCommon.LOG.warn("Unsupported configuration type: {} for key: {} in mod: {}", type, key, modId);
             return new ConfigValue<>(() -> defaultValue);
@@ -407,6 +407,7 @@ public class TritiumConfig {
     }
 
     private String generateConfigFile() {
+        TritiumCommon.LOG.info("[Server DEBUG] Starting config file generation for mod: {}", modId);
         StringBuilder sb = new StringBuilder();
 
         sb.append("# ").append(modId).append(" Configuration\n");
@@ -427,7 +428,6 @@ public class TritiumConfig {
                 Object section = sectionField.get(configObj);
                 String sectionName = sectionField.getName();
 
-                // 递归生成所有层级的配置内容
                 generateSectionContent(sb, section, sectionName, "");
             }
         } catch (Exception e) {

@@ -7,8 +7,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class CullCache {
-    private static final long ENTITY_CACHE_TIMEOUT = 200;
-    private static final long BLOCK_ENTITY_CACHE_TIMEOUT = 500;
     private final Int2BooleanOpenHashMap entityCullCache = new Int2BooleanOpenHashMap(8192);
     private final Long2BooleanOpenHashMap blockEntityCullCache = new Long2BooleanOpenHashMap(8192);
     private final Long2LongOpenHashMap entityCacheTimestamps = new Long2LongOpenHashMap(8192);
@@ -16,24 +14,19 @@ public class CullCache {
     private final CullResult cachedTrueResult = new CullResult(true, true);
     private final CullResult cachedFalseResult = new CullResult(true, false);
     private final CullResult uncachedResult = new CullResult(false, false);
-    private int entityCacheHits = 0;
-    private int entityCacheMisses = 0;
-    private int blockEntityCacheHits = 0;
-    private int blockEntityCacheMisses = 0;
 
     public CullResult checkEntity(Entity entity) {
         if (entity == null) return uncachedResult;
 
         int entityId = entity.getId();
-        long cacheKey = entityHash(entityId);
+        long currentTime = System.currentTimeMillis();
+        long lastTime = entityCacheTimestamps.get(entityId);
 
-        if (isEntityCached(cacheKey)) {
-            entityCacheHits++;
+        if (lastTime != 0 && currentTime - lastTime < 250) {
             boolean culled = entityCullCache.get(entityId);
             return culled ? cachedTrueResult : cachedFalseResult;
         }
 
-        entityCacheMisses++;
         return uncachedResult;
     }
 
@@ -41,24 +34,23 @@ public class CullCache {
         if (entity == null) return;
 
         int entityId = entity.getId();
-        long cacheKey = entityHash(entityId);
-
-        cacheEntityInternal(cacheKey, entityId, culled);
+        long currentTime = System.currentTimeMillis();
+        entityCullCache.put(entityId, culled);
+        entityCacheTimestamps.put(entityId, currentTime);
     }
 
     public CullResult checkBlockEntity(BlockEntity blockEntity) {
         if (blockEntity == null) return uncachedResult;
 
         long blockPos = blockEntity.getBlockPos().asLong();
-        long cacheKey = blockEntityHash(blockPos);
+        long currentTime = System.currentTimeMillis();
+        long lastTime = blockEntityCacheTimestamps.get(blockPos);
 
-        if (isBlockEntityCached(cacheKey)) {
-            blockEntityCacheHits++;
+        if (lastTime != 0 && currentTime - lastTime < 500) {
             boolean culled = blockEntityCullCache.get(blockPos);
             return culled ? cachedTrueResult : cachedFalseResult;
         }
 
-        blockEntityCacheMisses++;
         return uncachedResult;
     }
 
@@ -66,9 +58,9 @@ public class CullCache {
         if (blockEntity == null) return;
 
         long blockPos = blockEntity.getBlockPos().asLong();
-        long cacheKey = blockEntityHash(blockPos);
-
-        cacheBlockEntityInternal(cacheKey, blockPos, culled);
+        long currentTime = System.currentTimeMillis();
+        blockEntityCullCache.put(blockPos, culled);
+        blockEntityCacheTimestamps.put(blockPos, currentTime);
     }
 
     public void clear() {
@@ -76,55 +68,6 @@ public class CullCache {
         blockEntityCullCache.clear();
         entityCacheTimestamps.clear();
         blockEntityCacheTimestamps.clear();
-
-        entityCacheHits = 0;
-        entityCacheMisses = 0;
-        blockEntityCacheHits = 0;
-        blockEntityCacheMisses = 0;
-    }
-
-    public double getEntityCacheHitRate() {
-        int total = entityCacheHits + entityCacheMisses;
-        return total == 0 ? 0 : (double) entityCacheHits / total;
-    }
-
-    public double getBlockEntityCacheHitRate() {
-        int total = blockEntityCacheHits + blockEntityCacheMisses;
-        return total == 0 ? 0 : (double) blockEntityCacheHits / total;
-    }
-
-    private boolean isEntityCached(long cacheKey) {
-        if (!entityCacheTimestamps.containsKey(cacheKey)) return false;
-
-        long currentTime = System.currentTimeMillis();
-        return currentTime - entityCacheTimestamps.get(cacheKey) < ENTITY_CACHE_TIMEOUT;
-    }
-
-    private void cacheEntityInternal(long cacheKey, int entityId, boolean culled) {
-        long currentTime = System.currentTimeMillis();
-        entityCullCache.put(entityId, culled);
-        entityCacheTimestamps.put(cacheKey, currentTime);
-    }
-
-    private boolean isBlockEntityCached(long cacheKey) {
-        if (!blockEntityCacheTimestamps.containsKey(cacheKey)) return false;
-
-        long currentTime = System.currentTimeMillis();
-        return currentTime - blockEntityCacheTimestamps.get(cacheKey) < BLOCK_ENTITY_CACHE_TIMEOUT;
-    }
-
-    private void cacheBlockEntityInternal(long cacheKey, long blockPos, boolean culled) {
-        long currentTime = System.currentTimeMillis();
-        blockEntityCullCache.put(blockPos, culled);
-        blockEntityCacheTimestamps.put(cacheKey, currentTime);
-    }
-
-    private long entityHash(int entityId) {
-        return (long) entityId * 0x9e3775b9L;
-    }
-
-    private long blockEntityHash(long blockPos) {
-        return blockPos * 0x9e3775b9L;
     }
 
     public static class CullResult {
@@ -144,5 +87,4 @@ public class CullCache {
             return culled;
         }
     }
-
 }

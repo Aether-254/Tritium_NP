@@ -9,16 +9,8 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
-import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
 public class AABBCullingManager {
-    private static final double HITBOX_LIMIT = 10.0D;
-    private static final double MANHATTAN_THRESHOLD = 1.732;
-    private static final long CAMERA_UPDATE_INTERVAL = 50;
-    private static final long DISTANCE_UPDATE_INTERVAL = 1000;
-    private static final double RESET_DISTANCE_THRESHOLD = 2.0;
-    private static final long MIN_RESET_INTERVAL = 1000;
     private final OcclusionCullingInstance occlusionCulling;
     private final CullCache cullCache = new CullCache();
     private final Minecraft mc;
@@ -27,32 +19,21 @@ public class AABBCullingManager {
     private final Vec3d reusableAabbMax = new Vec3d(0, 0, 0);
     private final Vec3d reusableCamera = new Vec3d(0, 0, 0);
     private Vec3 cachedCameraPos = Vec3.ZERO;
-    private double cachedCullingDistance = 128.0;
+    private double cachedCullingDistance = 16.0;
     private long lastCameraUpdate = 0;
     private long lastDistanceUpdate = 0;
-    private Vec3 lastResetCameraPos = Vec3.ZERO;
-    private long lastResetTime = 0;
 
     public AABBCullingManager() {
         this.mc = Minecraft.getInstance();
-        this.occlusionCulling = new OcclusionCullingInstance(64, new OcclusionProvider());
+        this.occlusionCulling = new OcclusionCullingInstance(16, new OcclusionProvider());
     }
 
     public boolean shouldCullEntity(Entity entity) {
-        if (isPlayerSprinting()) return false;
-        if (entity == null) return false;
-        if (mc.level == null) return false;
+        if (entity == null || mc.level == null) return false;
 
         CullCache.CullResult cached = cullCache.checkEntity(entity);
         if (cached.isCached()) {
             return cached.isCulled();
-        }
-
-        if (entity instanceof EntityVisibility cullable) {
-            if (cullable.tritium$isForcedVisible()) {
-                cullCache.cacheEntity(entity, false);
-                return false;
-            }
         }
 
         if (!needsDetailedEntityCheck(entity)) {
@@ -62,14 +43,19 @@ public class AABBCullingManager {
 
         Vec3 cameraPos = getCachedCameraPos();
         double cullingDistance = getCachedCullingDistance();
+        Vec3 entityPos = entity.getEyePosition();
 
-        if (isWithinDistanceOptimized(entity.getEyePosition(), cameraPos, cullingDistance)) {
+        double dx = entityPos.x - cameraPos.x;
+        double dy = entityPos.y - cameraPos.y;
+        double dz = entityPos.z - cameraPos.z;
+        double distanceSq = dx * dx + dy * dy + dz * dz;
+
+        if (distanceSq > (cullingDistance * cullingDistance)) {
             cullCache.cacheEntity(entity, true);
             return true;
         }
 
         AABB boundingBox = entity.getBoundingBox();
-
         if (isLargeEntity(boundingBox)) {
             cullCache.cacheEntity(entity, false);
             return false;
@@ -82,30 +68,27 @@ public class AABBCullingManager {
     }
 
     public boolean shouldCullBlockEntity(BlockEntity blockEntity) {
-        if (isPlayerSprinting()) return false;
-        if (blockEntity == null) return false;
-
-        if (mc.level == null) return false;
+        if (blockEntity == null || mc.level == null) return false;
 
         CullCache.CullResult cached = cullCache.checkBlockEntity(blockEntity);
         if (cached.isCached()) {
             return cached.isCulled();
         }
 
-        if (blockEntity instanceof BlockEntityVisibility cullable) {
-            if (cullable.tritium$isForcedVisible()) {
-                cullCache.cacheBlockEntity(blockEntity, false);
-                return false;
-            }
-        }
-
         Vec3 cameraPos = getCachedCameraPos();
         double cullingDistance = getCachedCullingDistance();
+        Vec3 blockPos = blockEntity.getBlockPos().getCenter();
 
-        if (isWithinDistanceOptimized(blockEntity.getBlockPos().getCenter(), cameraPos, cullingDistance)) {
+        double dx = blockPos.x - cameraPos.x;
+        double dy = blockPos.y - cameraPos.y;
+        double dz = blockPos.z - cameraPos.z;
+        double distanceSq = dx * dx + dy * dy + dz * dz;
+
+        if (distanceSq > (cullingDistance * cullingDistance)) {
             cullCache.cacheBlockEntity(blockEntity, true);
             return true;
         }
+
         net.minecraft.core.BlockPos pos = blockEntity.getBlockPos();
         reusableAABB.set(pos.getX(), pos.getY(), pos.getZ(),
                 pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
@@ -118,32 +101,15 @@ public class AABBCullingManager {
 
     private boolean needsDetailedEntityCheck(Entity entity) {
         if (entity.isInvisible()) return false;
-        if (entity == mc.getCameraEntity()) return false;
-        if (entity == mc.player) return false;
         if (entity.isSpectator()) return false;
-        if (entity.isVehicle()) return false;
-        if (entity.isPassenger()) return false;
-
-        return !(entity instanceof ArmorStand armorStand) || !armorStand.isMarker();
-    }
-
-    private boolean isWithinDistanceOptimized(Vec3 entityPos, Vec3 cameraPos, double distance) {
-        double manhattan = Math.abs(entityPos.x - cameraPos.x) +
-                Math.abs(entityPos.y - cameraPos.y) +
-                Math.abs(entityPos.z - cameraPos.z);
-        if (manhattan > distance * MANHATTAN_THRESHOLD) return true;
-        double dx = entityPos.x - cameraPos.x;
-        double dy = entityPos.y - cameraPos.y;
-        double dz = entityPos.z - cameraPos.z;
-        double distanceSq = dx * dx + dy * dy + dz * dz;
-        return !(distanceSq <= (distance * distance));
+        if (entity instanceof ArmorStand armorStand && armorStand.isMarker()) return false;
+        return true;
     }
 
     private boolean performOcclusionCheck(AABB boundingBox, Vec3 cameraPos) {
         reusableAabbMin.set(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
         reusableAabbMax.set(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
         reusableCamera.set(cameraPos.x, cameraPos.y, cameraPos.z);
-
         return occlusionCulling.isAABBVisible(reusableAabbMin, reusableAabbMax, reusableCamera);
     }
 
@@ -151,19 +117,16 @@ public class AABBCullingManager {
         reusableAabbMin.set(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
         reusableAabbMax.set(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
         reusableCamera.set(cameraPos.x, cameraPos.y, cameraPos.z);
-
         return occlusionCulling.isAABBVisible(reusableAabbMin, reusableAabbMax, reusableCamera);
     }
 
     private boolean isLargeEntity(AABB boundingBox) {
-        return boundingBox.getXsize() > HITBOX_LIMIT ||
-                boundingBox.getYsize() > HITBOX_LIMIT ||
-                boundingBox.getZsize() > HITBOX_LIMIT;
+        return boundingBox.getXsize() > 10.0 || boundingBox.getYsize() > 10.0 || boundingBox.getZsize() > 10.0;
     }
 
     private Vec3 getCachedCameraPos() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastCameraUpdate > CAMERA_UPDATE_INTERVAL) {
+        if (currentTime - lastCameraUpdate > 50) {
             Camera mainCamera = mc.gameRenderer.getMainCamera();
             cachedCameraPos = mainCamera.getPosition();
             lastCameraUpdate = currentTime;
@@ -173,50 +136,20 @@ public class AABBCullingManager {
 
     private double getCachedCullingDistance() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastDistanceUpdate > DISTANCE_UPDATE_INTERVAL) {
-            cachedCullingDistance = mc.level == null ? 128.0D :
-                    (mc.level.getServerSimulationDistance() * 16) * 1.1;
+        if (currentTime - lastDistanceUpdate > 1000) {
+            cachedCullingDistance = mc.level == null ? 64.0 : 48.0;
             lastDistanceUpdate = currentTime;
         }
         return cachedCullingDistance;
     }
 
     public void updateCameraPosition() {
-        Vec3 currentCameraPos = getCachedCameraPos();
-        long currentTime = System.currentTimeMillis();
-
-        boolean shouldReset = false;
-
-        if (lastResetCameraPos == Vec3.ZERO) {
-            shouldReset = true;
-        } else {
-            double distanceMoved = currentCameraPos.distanceTo(lastResetCameraPos);
-            if (distanceMoved > RESET_DISTANCE_THRESHOLD) {
-                shouldReset = true;
-            }
-        }
-
-        if (currentTime - lastResetTime > MIN_RESET_INTERVAL) {
-            shouldReset = true;
-        }
-
-        if (shouldReset) {
-            occlusionCulling.resetCache();
-            lastResetCameraPos = currentCameraPos;
-            lastResetTime = currentTime;
-        }
-
+        occlusionCulling.resetCache();
         lastCameraUpdate = 0;
     }
 
     public void dispose() {
         cullCache.clear();
-        lastResetCameraPos = Vec3.ZERO;
-        lastResetTime = 0;
-    }
-
-    private boolean isPlayerSprinting() {
-        return mc.player != null && mc.player.isSprinting();
     }
 
     public double getCurrentCullingDistance() {
@@ -229,8 +162,10 @@ public class AABBCullingManager {
 
     public void forceResetCache() {
         occlusionCulling.resetCache();
-        lastResetCameraPos = getCachedCameraPos();
-        lastResetTime = System.currentTimeMillis();
+    }
+
+    public CullCache getCullCache() {
+        return cullCache;
     }
 
     public static class AABBOBJ {

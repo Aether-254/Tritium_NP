@@ -2,15 +2,7 @@
   "config.tritium.title": "⚙ Конфигурация Tritium",
 
   "config.tritium.category.performance": "Производительность",
-  "config.tritium.performance.mathOptimizations": "Математические оптимизации",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations": "Включить математические оптимизации",
-  "config.tritium.performance.mathOptimizations_enableMathOptimizations.tooltip": "Главный переключатель всех оптимизаций математических функций",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions": "Оптимизировать функции линейной интерполяции",
-  "config.tritium.performance.mathOptimizations_optimizeLerpFunctions.tooltip": "Использовать инструкции FMA для оптимизации функций линейной интерполяции",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared": "Оптимизировать вычисление квадрата расстояния",
-  "config.tritium.performance.mathOptimizations_optimizeLengthSquared.tooltip": "Использовать инструкции FMA для оптимизации вычислений расстояния",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions": "Оптимизировать случайные функции",
-  "config.tritium.performance.mathOptimizations_optimizeRandomFunctions.tooltip": "Оптимизировать функции генерации случайных чисел",
+
 
   "config.tritium.performance.lightingOptimizations": "Оптимизации освещения",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "Включить оптимизации освещения",
@@ -27,10 +19,6 @@
   "config.tritium.performance.blockStateCache": "Кэш состояний блоков",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "Включить кэш ключей пар состояний блоков",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "Кэширует вычисления хэша пар состояний блоков для повышения производительности",
-
-  "config.tritium.performance.endIslandOptimization": "Оптимизация островов Энда",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization": "Включить оптимизацию островов Энда",
-  "config.tritium.performance.endIslandOptimization_enableEndIslandOptimization.tooltip": "Оптимизирует вычисления функций плотности островов Энда для повышения производительности",
 
 
   "config.tritium.category.rendering": "Рендеринг",

@@ -1,15 +1,16 @@
 package org.craftamethyst.tritium.platform;
 
-import org.craftamethyst.tritium.TritiumCommon;
-import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 
 public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public String getPlatformName() {
-
         return "Forge";
     }
 
@@ -24,8 +25,12 @@ public class ForgePlatformHelper implements IPlatformHelper {
 
     @Override
     public boolean isDevelopmentEnvironment() {
-
         return !FMLLoader.isProduction();
+    }
+
+    @Override
+    public boolean isClientEnvironment() {
+        return FMLEnvironment.dist.isClient();
     }
 
     @Override

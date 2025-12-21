@@ -43,10 +43,6 @@ public class TritiumConfigBase {
         public FastFurnace fastFurnace = new FastFurnace();
         @SubCategory("BlockStateCache")
         public BlockStateCache blockStateCache = new BlockStateCache();
-        @SubCategory("EndIslandOptimization")
-        public EndIslandOptimization endIslandOptimization = new EndIslandOptimization();
-        @SubCategory("MathOptimizations")
-        public MathOptimizations mathOptimizations = new MathOptimizations();
         @SubCategory("LightingOptimizations")
         public LightingOptimizations lightingOptimizations = new LightingOptimizations();
 
@@ -55,15 +51,6 @@ public class TritiumConfigBase {
         }
         public static class BlockStateCache {
             public static boolean blockStatePairKeyCache = true;
-        }
-        public static class EndIslandOptimization {
-            public static boolean enableEndIslandOptimization = true;
-        }
-        public static class MathOptimizations {
-            public static boolean enableMathOptimizations = true;
-            public static boolean optimizeLerpFunctions = true;
-            public static boolean optimizeLengthSquared = true;
-            public static boolean optimizeRandomFunctions = true;
         }
         public static class LightingOptimizations {
             public static boolean enableLightingOptimizations = true;
@@ -241,7 +228,6 @@ public class TritiumConfigBase {
         public static class BeeFixes {
             public static boolean enableBeeFixes = true;
             public static boolean fixWeatherInNether = true;
-            public static boolean fixBeeRandomPos = true;
             public static boolean fixBeeGravity = true;
             public static boolean fixBeeTurtleEgg = true;
         }
