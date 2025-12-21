@@ -8,7 +8,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
-import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -25,24 +24,17 @@ import java.util.Optional;
 public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Unique
-    private static final int CACHE_INVALIDATION_TICKS = 200;
-
-    @Unique
     private static final int DEFAULT_COOK_TIME = 200;
-
-    @Unique
-    private int tritium$cacheTicks = 0;
 
     @Unique
     @Nullable
     private RecipeHolder<? extends AbstractCookingRecipe> tritium$cachedRecipe;
 
     @Unique
-    @Nullable
-    private ItemStack tritium$cachedInput;
+    private ItemStack tritium$cachedInput = ItemStack.EMPTY;
 
     @Unique
-    private boolean tritium$cacheMissed = false;
+    private boolean tritium$cacheMissed;
 
     @Shadow
     @Final
@@ -51,75 +43,34 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Shadow
     protected NonNullList<ItemStack> items;
 
-    @Shadow
-    private static int getTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
-        throw new AssertionError();
-    }
-
-    @Unique
-    private boolean tritium$isInputChanged(ItemStack currentInput) {
-        if (tritium$cachedInput == null) {
-            return !currentInput.isEmpty();
-        }
-        if (currentInput.isEmpty()) {
-            return true;
-        }
-        return !ItemStack.isSameItem(tritium$cachedInput, currentInput) ||
-                !ItemStack.isSameItemSameComponents(tritium$cachedInput, currentInput);
-    }
-
     @Unique
     @Nullable
-    private RecipeHolder<? extends AbstractCookingRecipe> tritium$getCachedRecipe(ItemStack currentInput) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
+    private RecipeHolder<? extends AbstractCookingRecipe> tritium$getCachedRecipe(ItemStack currentInput, Level level) {
+        if (ItemStack.isSameItemSameComponents(this.tritium$cachedInput, currentInput)) {
+            return this.tritium$cacheMissed ? null : this.tritium$cachedRecipe;
+        }
+
+        this.tritium$cachedInput = currentInput.copy();
+
+        if (currentInput.isEmpty()) {
+            this.tritium$cacheMissed = false;
+            this.tritium$cachedRecipe = null;
             return null;
         }
 
-        tritium$cacheTicks++;
-        if (tritium$cacheTicks >= CACHE_INVALIDATION_TICKS || tritium$isInputChanged(currentInput)) {
-            tritium$resetCache();
-            return null;
-        }
-
-        return tritium$cacheMissed ? null : tritium$cachedRecipe;
-    }
-
-    @Unique
-    private void tritium$updateCache(Level level, ItemStack input) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return;
-        }
-        tritium$resetCache();
-
-        if (input.isEmpty()) {
-            return;
-        }
-
-        SingleRecipeInput recipeInput = new SingleRecipeInput(input);
+        SingleRecipeInput recipeInput = new SingleRecipeInput(currentInput);
         Optional<? extends RecipeHolder<? extends AbstractCookingRecipe>> recipe =
                 this.quickCheck.getRecipeFor(recipeInput, level);
 
         if (recipe.isPresent()) {
             this.tritium$cachedRecipe = recipe.get();
-            this.tritium$cachedInput = input.copy();
             this.tritium$cacheMissed = false;
+            return this.tritium$cachedRecipe;
         } else {
+            this.tritium$cachedRecipe = null;
             this.tritium$cacheMissed = true;
-            this.tritium$cachedInput = input.copy();
+            return null;
         }
-
-        this.tritium$cacheTicks = 0;
-    }
-
-    @Unique
-    private void tritium$resetCache() {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return;
-        }
-        this.tritium$cachedRecipe = null;
-        this.tritium$cachedInput = null;
-        this.tritium$cacheMissed = false;
-        this.tritium$cacheTicks = 0;
     }
 
     @Redirect(
@@ -130,46 +81,25 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             )
     )
     private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return getTotalCookTime(level, blockEntity);
-        }
-        return ((AbstractFurnaceBlockEntityMixin) (Object) blockEntity).tritium$getCachedTotalCookTime(level);
-    }
+        AbstractFurnaceBlockEntityMixin self = (AbstractFurnaceBlockEntityMixin) (Object) blockEntity;
 
-    @Unique
-    private int tritium$getCachedTotalCookTime(Level level) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return getTotalCookTime(level, (AbstractFurnaceBlockEntity) (Object) this);
-        }
-
-        if (this.items.isEmpty()) {
-            if (tritium$cachedInput != null || !tritium$cacheMissed) {
-                tritium$resetCache();
-            }
+        if (self != null && self.items.isEmpty()) {
+            self.tritium$cachedInput = ItemStack.EMPTY;
+            self.tritium$cacheMissed = false;
             return DEFAULT_COOK_TIME;
         }
 
-        ItemStack currentInput = this.items.getFirst();
+        assert self != null;
+        ItemStack currentInput = self.items.getFirst();
         if (currentInput.isEmpty()) {
-            if (tritium$cachedInput != null || !tritium$cacheMissed) {
-                tritium$resetCache();
-            }
+            self.tritium$cachedInput = ItemStack.EMPTY;
+            self.tritium$cacheMissed = false;
             return DEFAULT_COOK_TIME;
         }
-        RecipeHolder<? extends AbstractCookingRecipe> recipe = tritium$getCachedRecipe(currentInput);
 
-        if (recipe == null) {
-            if (!tritium$cacheMissed) {
-                tritium$updateCache(level, currentInput);
-                recipe = tritium$cachedRecipe;
-            }
+        RecipeHolder<? extends AbstractCookingRecipe> recipe = self.tritium$getCachedRecipe(currentInput, level);
 
-            if (recipe == null) {
-                return DEFAULT_COOK_TIME;
-            }
-        }
-
-        return recipe.value().getCookingTime();
+        return recipe == null ? DEFAULT_COOK_TIME : recipe.value().getCookingTime();
     }
 
     @Inject(
@@ -177,24 +107,10 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             at = @At("HEAD")
     )
     private void onSetItem(int pIndex, ItemStack pStack, CallbackInfo ci) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return;
+        if (pIndex == 0 && !ItemStack.isSameItemSameComponents(this.tritium$cachedInput, pStack)) {
+            this.tritium$cachedInput = ItemStack.EMPTY;
+            this.tritium$cacheMissed = false;
+            this.tritium$cachedRecipe = null;
         }
-        if (pIndex == 0) {
-            if (tritium$cachedInput == null || !ItemStack.isSameItemSameComponents(tritium$cachedInput, pStack)) {
-                tritium$resetCache();
-            }
-        }
-    }
-
-    @Inject(
-            method = "setItems",
-            at = @At("HEAD")
-    )
-    private void onSetItems(NonNullList<ItemStack> pItems, CallbackInfo ci) {
-        if (!TritiumConfigBase.Performance.FastFurnace.fastFurnace) {
-            return;
-        }
-        tritium$resetCache();
     }
 }
