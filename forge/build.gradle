@@ -103,8 +103,6 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
-    //Embeddium
-    implementation 'maven.modrinth:embeddium:J7b96IEd'
 
     //AE2WTLib
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'

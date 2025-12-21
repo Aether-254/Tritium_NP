@@ -18,12 +18,16 @@
     "main": [
       "org.craftamethyst.tritium.TritiumFabric"
     ],
+    "client": [
+      "org.craftamethyst.tritium.client.TritiumFabricClient"
+    ],
     "modmenu": [
       "org.craftamethyst.tritium.integration.ModMenuIntegration"
     ]
   },
   "mixins": [
     "tritium.mixins.json",
+    "tritium.compat.mixins.json",
     "tritium.fabric.mixins.json",
     "tritium.gpuplus.mixins.json"
   ],

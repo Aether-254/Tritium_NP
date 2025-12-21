@@ -42,8 +42,8 @@ dependencies {
         officialMojangMappings()
         parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
     }
-    //Embeddium
-    implementation 'maven.modrinth:embeddium:J7b96IEd'
+    //Sodium
+    implementation 'maven.modrinth:sodium:u1OEbNKx'
 
     //Create
     modImplementation 'maven.modrinth:create:88L641Un'
