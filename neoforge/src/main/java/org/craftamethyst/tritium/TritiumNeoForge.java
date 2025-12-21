@@ -7,6 +7,7 @@ import net.neoforged.fml.ModList;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.integration.embeddium.TritiumEmbIntegration;
 
 @Mod(TritiumCommon.MOD_ID)
@@ -19,6 +20,10 @@ public class TritiumNeoForge {
 
     public void onClientSideSetup(FMLClientSetupEvent event) {
         System.out.println("Client setup for Tritium");
+        event.enqueueWork(() -> {
+            new TritiumClient();
+            TritiumCommon.LOG.info("TritiumClient initialized");
+        });
         if (FMLEnvironment.dist == Dist.CLIENT) {
             if (isEmbLoaded()) {
                 TritiumEmbIntegration.init();

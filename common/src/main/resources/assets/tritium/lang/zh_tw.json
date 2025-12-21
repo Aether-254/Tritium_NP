@@ -69,9 +69,9 @@
   "config.tritium.rendering.GpuPlus": "GPU Plus",
   "config.tritium.rendering.GpuPlus_gpuPlus": "啟用GPU Plus",
   "config.tritium.rendering.GpuPlus_gpuPlus.tooltip": "啟用進階 GPU 特性：幀緩衝洩漏修復、緩衝儲存、DSA 等。",
-  "config.tritium.rendering.GpuPlus_gpuPlusVbo": "GPU Plus 頂點緩衝",
+  "config.tritium.rendering.GpuPlus_gpuPlusVbo": "啟用頂點緩衝",
   "config.tritium.rendering.GpuPlus_gpuPlusVbo.tooltip": "在可用時對頂點緩衝使用不可變緩衝儲存 / DSA。",
-  "config.tritium.rendering.GpuPlus_gpuPlusIndex": "GPU Plus 索引緩衝",
+  "config.tritium.rendering.GpuPlus_gpuPlusIndex": "啟用索引緩衝",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex.tooltip": "在可用時對索引緩衝使用不可變緩衝儲存 / DSA。",
 
   "config.tritium.category.clientOptimizations": "用戶端最佳化",
