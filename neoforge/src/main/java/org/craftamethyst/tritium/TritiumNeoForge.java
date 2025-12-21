@@ -25,14 +25,13 @@ public class TritiumNeoForge {
         System.out.println("Client setup for Tritium");
         if (FMLEnvironment.dist == Dist.CLIENT) {
             if (isEmbLoaded()) {
-                System.out.println("Embeddium is loaded, enabling Embeddium integration");
                 TritiumEmbIntegration.init();
             }
         }
         TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
     }
     private static boolean isEmbLoaded() {
-        return ModList.get().isLoaded("embeddium");
+        return ModList.get().isLoaded("sodium");
     }
     private void onRegisterCommands(RegisterCommandsEvent event) {
         KillMobsCommand.register(event.getDispatcher());
