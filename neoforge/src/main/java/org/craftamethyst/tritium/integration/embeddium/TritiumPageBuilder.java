@@ -5,6 +5,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.embeddedt.embeddium.api.options.control.ControlValueFormatter;
 import org.embeddedt.embeddium.api.options.control.SliderControl;
 import org.embeddedt.embeddium.api.options.control.TickBoxControl;
 import org.embeddedt.embeddium.api.options.structure.OptionGroup;
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-import java.util.function.IntFunction;
 
 public class TritiumPageBuilder {
     private final String pageId;
@@ -26,8 +26,8 @@ public class TritiumPageBuilder {
         this.title = title;
     }
 
-    public TritiumPageBuilder addGroup(String groupId, GroupConfigurator configurator) {
-        GroupBuilder builder = new GroupBuilder(groupId);
+    public TritiumPageBuilder addGroup(String groupId, Component groupName, GroupConfigurator configurator) {
+        GroupBuilder builder = new GroupBuilder(groupId, groupName);
         configurator.configure(builder);
         groups.add(builder.build());
         return this;
@@ -46,7 +46,7 @@ public class TritiumPageBuilder {
         private final OptionGroup.Builder builder;
         private final TritiumOptionStorage optionStorage;
 
-        public GroupBuilder(String groupId) {
+        public GroupBuilder(String groupId, Component groupName) {
             this.builder = OptionGroup.createBuilder()
                     .setId(ResourceLocation.fromNamespaceAndPath(TritiumCommon.MOD_ID, groupId));
             this.optionStorage = TritiumOptionStorage.getInstance();
@@ -67,19 +67,40 @@ public class TritiumPageBuilder {
 
         public GroupBuilder addInteger(String id, String translationKey,
                                        int min, int max, int step,
-                                       IntFunction<Component> formatter,
+                                       ControlValueFormatter formatter,
                                        BiConsumer<TritiumConfigBase, Integer> setter,
                                        Function<TritiumConfigBase, Integer> getter) {
             builder.add(OptionImpl.createBuilder(int.class, optionStorage)
                     .setId(ResourceLocation.fromNamespaceAndPath(TritiumCommon.MOD_ID, id))
                     .setName(Component.translatable(translationKey))
                     .setTooltip(Component.translatable(translationKey + ".tooltip"))
-                    .setControl(option -> new SliderControl(option, min, max, step, formatter::apply))
+                    .setControl(option -> new SliderControl(option, min, max, step, formatter))
                     .setBinding(setter, getter)
                     .build());
             return this;
         }
 
+        public GroupBuilder addFloat(String id, String translationKey,
+                                     float min, float max, float step,
+                                     ControlValueFormatter formatter,
+                                     BiConsumer<TritiumConfigBase, Float> setter,
+                                     Function<TritiumConfigBase, Float> getter) {
+            int intMin = Math.round(min * 100);
+            int intMax = Math.round(max * 100);
+            int intStep = Math.round(step * 100);
+
+            builder.add(OptionImpl.createBuilder(int.class, optionStorage)
+                    .setId(ResourceLocation.fromNamespaceAndPath(TritiumCommon.MOD_ID, id))
+                    .setName(Component.translatable(translationKey))
+                    .setTooltip(Component.translatable(translationKey + ".tooltip"))
+                    .setControl(option -> new SliderControl(option, intMin, intMax, intStep, formatter))
+                    .setBinding(
+                            (config, intValue) -> setter.accept(config, intValue / 100f),
+                            config -> Math.round(getter.apply(config) * 100)
+                    )
+                    .build());
+            return this;
+        }
         public OptionGroup build() {
             return builder.build();
         }
