@@ -89,6 +89,54 @@
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "Minimum FPS",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "Minimum FPS for dynamic FPS feature (Minimum: 1)",
 
+  "config.tritium.category.fpsdisplan": "FPS Display",
+  "config.tritium.fpsdisplan.fpsDisplay": "FPS Display Setting",
+
+  "config.tritium.fpsdisplan.fpsDisplay_enabled": "Enabled",
+  "config.tritium.fpsdisplan.fpsDisplay_enabled.tooltip": "Enable FPS display overlay",
+
+  "config.tritium.fpsdisplan.fpsDisplay_position": "Position",
+  "config.tritium.fpsdisplan.fpsDisplay_position.tooltip": "0Top Left｜1Top Right｜2Bottom Left｜3Bottom Right｜4Center",
+
+  "config.tritium.fpsdisplan.fpsDisplay_displayMode": "Display Mode",
+  "config.tritium.fpsdisplan.fpsDisplay_displayMode.tooltip": "What FPS information to display",
+
+  "config.tritium.fpsdisplan.fpsDisplay_textColor": "Text Color",
+  "config.tritium.fpsdisplan.fpsDisplay_textColor.tooltip": "Set text color，Example #FFFFFF is white",
+  "config.tritium.fpsdisplan.fpsDisplay_shadow": "Text Shadow",
+  "config.tritium.fpsdisplan.fpsDisplay_shadow.tooltip": "Add shadow to the FPS text",
+  "config.tritium.fpsdisplan.fpsDisplay_backgroundOpacity": "Background Opacity",
+  "config.tritium.fpsdisplan.fpsDisplay_backgroundOpacity.tooltip": "Set the transparency of the FPS display background (0 = fully transparent, 1 = fully opaque)",
+  "config.tritium.fpsdisplan.fpsDisplay_showUnit": "Show Unit",
+  "config.tritium.fpsdisplan.fpsDisplay_showUnit.tooltip": "Show 'FPS' unit after the number",
+
+  "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces": "DecimalPlaces",
+  "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces.tooltip": "0 x.x|1 x.xx",
+
+  "config.tritium.fpsDisplay.position.topLeft": "Top Left",
+  "config.tritium.fpsDisplay.position.topRight": "Top Right",
+  "config.tritium.fpsDisplay.position.bottomLeft": "Bottom Left",
+  "config.tritium.fpsDisplay.position.bottomRight": "Bottom Right",
+  "config.tritium.fpsDisplay.position.center": "Center",
+
+  "config.tritium.fpsDisplay.mode.currentOnly": "Current Only",
+  "config.tritium.fpsDisplay.mode.avgOnly": "Average Only",
+  "config.tritium.fpsDisplay.mode.all": "Current/Min/Avg/Max",
+  "config.tritium.fpsDisplay.mode.maxOnly": "Maximum Only",
+  "config.tritium.fpsDisplay.mode.minOnly": "Minimum Only",
+
+  "config.tritium.fpsDisplay.label.min": "Min",
+  "config.tritium.fpsDisplay.label.avg": "Avg",
+  "config.tritium.fpsDisplay.label.max": "Max",
+
+  "config.tritium.fpsDisplay.updateInterval.ms": "%d ms",
+
+  "config.tritium.category.particleLimit": "Particle Limit",
+  "config.tritium.particleLimit.enableParticleLimit": "Enable Particle Limit",
+  "config.tritium.particleLimit.enableParticleLimit.tooltip": "Enable or disable particle limiting system",
+  "config.tritium.particleLimit.maxParticles": "Max Particles",
+  "config.tritium.particleLimit.maxParticles.tooltip": "Maximum total particles allowed (100-50000)",
+
   "config.tritium.category.network": "Network",
   "config.tritium.category.entities": "Entities",
   "config.tritium.entities.entityOpt": "Entity Performance Optimization",
@@ -104,6 +152,9 @@
   "config.tritium.entities.entityOpt_verticalRange.tooltip": "Vertical detection range for entity tick optimization (1-256 blocks)",
   "config.tritium.entities.entityOpt_entityWhitelist": "Entity Whitelist",
   "config.tritium.entities.entityOpt_entityWhitelist.tooltip": "List of entities that are never optimized (always keep ticking)",
+  "config.tritium.entities.entityStacking.listMode.0": "Disable",
+  "config.tritium.entities.entityStacking.listMode.1": "White list Mode",
+  "config.tritium.entities.entityStacking.listMode.2": "Black list Mode",
 
   "config.tritium.entities.entityStacking": "Entity Stacking",
   "config.tritium.entities.entityStacking_lockMaxedStacks": "Lock Max Stacks",
