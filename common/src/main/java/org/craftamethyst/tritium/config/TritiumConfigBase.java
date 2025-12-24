@@ -22,6 +22,14 @@ public class TritiumConfigBase {
     @SubCategory("Client Optimizations")
     public ClientOptimizations clientOptimizations = new ClientOptimizations();
 
+    @ClientOnly
+    @SubCategory("FPSDisplay")
+    public FPSDisplan fpsdisplan = new FPSDisplan();
+
+    @ClientOnly
+    @SubCategory("Particle Limit")
+    public ParticleLimit particleLimit = new ParticleLimit();
+
     @SubCategory("Network")
     public Network network = new Network();
 
@@ -124,6 +132,8 @@ public class TritiumConfigBase {
         public static FL FL= new FL();
         @SubCategory("FastResourcePack")
         public static FastResourcePack FastResourcePack= new FastResourcePack();
+        @SubCategory("dynamicFPS")
+        public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class FL {
             public static boolean fastLanguageSwitch = true;
@@ -132,15 +142,46 @@ public class TritiumConfigBase {
         public static class FastResourcePack {
             public static boolean resourcePackCache = true;
         }
-        @SubCategory("dynamicFPS")
-        public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class DynamicFPS{
             public static boolean enable = false;
             @Range(min = 1)
             public static int minimizedFPS = 1;
         }
+    }
 
+    @ClientOnly
+    public static class FPSDisplan {
+        @SubCategory("FPSDisplay")
+        public static FPSDisplay fpsDisplay = new FPSDisplay();
+
+        public static class FPSDisplay {
+            public static boolean enabled = true;
+
+            @Range(min = 0, max = 4)
+            public static int position = 0;
+            @Range(min = 0, max = 4)
+            public static int displayMode = 1;
+
+            public static String textColor = "#FFFFFF";
+
+            public static boolean shadow = true;
+
+            @Range(min = 0, max = 1)
+            public static float backgroundOpacity = 0.3f;
+
+            @Range(min = 0, max = 2)
+            public static int decimalPlaces = 1;
+
+            public static boolean showUnit = true;
+        }
+    }
+
+    @ClientOnly
+    public static class ParticleLimit {
+        public static boolean enableParticleLimit = true;
+        @Range(min = 100, max = 50000)
+        public static int maxParticles = 16384;
     }
 
     public static class Network {

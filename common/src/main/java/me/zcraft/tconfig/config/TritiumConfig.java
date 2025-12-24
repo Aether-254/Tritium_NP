@@ -80,6 +80,7 @@ public class TritiumConfig {
         if (type == int.class) return 0;
         if (type == long.class) return 0L;
         if (type == double.class) return 0.0;
+        if (type == float.class) return 0.0f;
         if (type == String.class) return "";
         return null;
     }
@@ -111,6 +112,7 @@ public class TritiumConfig {
                 type == Integer.class ||
                 type == Long.class ||
                 type == Double.class ||
+                type == Float.class ||
                 type == String.class ||
                 type.isEnum() ||
                 type == List.class;
@@ -598,6 +600,11 @@ public class TritiumConfig {
                     if (value instanceof Number) return ((Number) value).longValue();
                     if (value instanceof String) return Long.parseLong((String) value);
                     return 0L;
+                } else if (targetType == float.class || targetType == Float.class) {
+                    if (value instanceof Float) return value;
+                    if (value instanceof Number) return ((Number) value).floatValue();
+                    if (value instanceof String) return Float.parseFloat((String) value);
+                    return 0.0f;
                 } else if (targetType == String.class) {
                     return value.toString();
                 } else if (targetType.isEnum()) {
@@ -616,7 +623,6 @@ public class TritiumConfig {
 
             return getTypeDefaultValue(targetType);
         }
-
         @Override
         public Object getDefaultValue() throws Exception {
             return defaultValueSupplier.get();
