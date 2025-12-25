@@ -13,8 +13,8 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSetting
 import net.minecraft.world.phys.AABB;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.octree.BoxOctree;
-import org.craftamethyst.tritium.util.OctreeHolder;
-import org.craftamethyst.tritium.util.RotationFailMask;
+import org.craftamethyst.tritium.util.octree.OctreeHolder;
+import org.craftamethyst.tritium.util.octree.RotationFailMask;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

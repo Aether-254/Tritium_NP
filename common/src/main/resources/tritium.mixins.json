@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
+  "plugin": "org.craftamethyst.tritium.mixin.plugin.MixinPlugin",
   "refmap": "tritium.refmap.json",
   "priority": 2000,
   "mixins": [
@@ -28,8 +29,7 @@
     "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
-    "packs.CompositePackResourcesMixin",
-    "packs.FilePackResourcesMixin",
+    "packs.FileResourcesSupplierMixin",
     "stack.DataComponentsMixin",
     "stack.ItemStackMixin",
     "tickstop.EntityTypeMixin",

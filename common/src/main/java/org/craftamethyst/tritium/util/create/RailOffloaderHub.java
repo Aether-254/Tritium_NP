@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.util;
+package org.craftamethyst.tritium.util.create;
 
 import com.simibubi.create.Create;
 import net.minecraft.server.MinecraftServer;

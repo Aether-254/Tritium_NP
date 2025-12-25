@@ -20,8 +20,10 @@ public class FPSCounter {
     private double avgFPS = 0;
     private boolean isFirstUpdate = true;
     private long lastUpdateTime = 0;
-    private double currentIntervalMinFPS = Double.MAX_VALUE;
-    private double currentIntervalMaxFPS = 0;
+    private double dynamicMinFPS = Double.MAX_VALUE;
+    private double dynamicMaxFPS = 0;
+    private double intervalMinFPS = Double.MAX_VALUE;
+    private double intervalMaxFPS = 0;
 
     private FPSCounter() {}
 
@@ -31,7 +33,7 @@ public class FPSCounter {
 
     public void update() {
         currentFPS = Minecraft.getInstance().getFps();
-
+        updateDynamicStats();
         recentFpsBuffer.addLast(currentFPS);
 
         long currentTime = System.currentTimeMillis();
@@ -47,7 +49,6 @@ public class FPSCounter {
         }
 
         fpsHistory.addLast(currentFPS);
-
         int historySize = 100;
         while (fpsHistory.size() > historySize) {
             fpsHistory.removeFirst();
@@ -59,6 +60,16 @@ public class FPSCounter {
                 sum += fps;
             }
             avgFPS = sum / fpsHistory.size();
+        }
+    }
+
+    private void updateDynamicStats() {
+        if (currentFPS < dynamicMinFPS) {
+            dynamicMinFPS = currentFPS;
+        }
+
+        if (currentFPS > dynamicMaxFPS) {
+            dynamicMaxFPS = currentFPS;
         }
     }
 
@@ -78,8 +89,9 @@ public class FPSCounter {
                 intervalMax = fps;
             }
         }
-        currentIntervalMinFPS = intervalMin;
-        currentIntervalMaxFPS = intervalMax;
+
+        intervalMinFPS = intervalMin;
+        intervalMaxFPS = intervalMax;
         recentFpsBuffer.clear();
     }
 
@@ -128,7 +140,6 @@ public class FPSCounter {
     }
 
     private String getFPSString() {
-        Minecraft mc = Minecraft.getInstance();
         String format = "%.0f";
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces > 0) {
             format = "%." + TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces + "f";
@@ -143,18 +154,17 @@ public class FPSCounter {
         return switch (TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode) {
             case 0 ->
                     avgLabel + String.format(" " + format + unit, avgFPS);
-            case 1 ->
-                    String.format(format + unit, currentFPS);
             case 2 ->
                     String.format(format + "｜" + minLabel + " " + format + "｜" + avgLabel + " " + format + "｜" + maxLabel + " " + format + unit,
-                            currentFPS, currentIntervalMinFPS, avgFPS, currentIntervalMaxFPS);
+                            currentFPS, intervalMinFPS, avgFPS, intervalMaxFPS);
             case 3 ->
-                    maxLabel + String.format(" " + format + unit, currentIntervalMaxFPS);
+                    maxLabel + String.format(" " + format + unit, intervalMaxFPS);
             case 4 ->
-                    minLabel + String.format(" " + format + unit, currentIntervalMinFPS);
+                    minLabel + String.format(" " + format + unit, intervalMinFPS);
             default -> String.format(format + unit, currentFPS);
         };
     }
+
     private int parseColor(String hexColor) {
         try {
             if (hexColor.startsWith("#")) {
@@ -171,8 +181,10 @@ public class FPSCounter {
         recentFpsBuffer.clear();
         avgFPS = 0;
         currentFPS = 0;
-        currentIntervalMinFPS = Double.MAX_VALUE;
-        currentIntervalMaxFPS = 0;
+        dynamicMinFPS = Double.MAX_VALUE;
+        dynamicMaxFPS = 0;
+        intervalMinFPS = Double.MAX_VALUE;
+        intervalMaxFPS = 0;
         isFirstUpdate = true;
         lastUpdateTime = 0;
     }

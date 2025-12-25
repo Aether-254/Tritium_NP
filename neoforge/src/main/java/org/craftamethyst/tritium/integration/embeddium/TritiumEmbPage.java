@@ -150,11 +150,6 @@ public class TritiumEmbPage extends OptionPage {
                                 v -> v > 1 ? Component.literal(v + " FPS") : Component.literal("1 FPS"),
                                 (c, v) -> TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS = v,
                                 c -> TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS))
-                .build();
-    }
-
-    public static TritiumEmbPage createFPSDisplayPage() {
-        return new TritiumPageBuilder("group_fps_display", Component.translatable("config.tritium.category.fpsdisplan"))
                 .addGroup("fps_display", Component.translatable("config.tritium.fpsdisplan.fpsDisplay"), builder -> builder
                         .addBoolean("fps_display_enabled",
                                 "config.tritium.fpsdisplan.fpsDisplay_enabled",
@@ -206,11 +201,6 @@ public class TritiumEmbPage extends OptionPage {
                                 "config.tritium.fpsdisplan.fpsDisplay_showUnit",
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.showUnit = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.showUnit))
-                .build();
-    }
-
-    public static TritiumEmbPage createParticleLimitPage() {
-        return new TritiumPageBuilder("particle_limit", Component.translatable("config.tritium.category.particleLimit"))
                 .addGroup("group_particle_limit", Component.translatable("config.tritium.category.particleLimit"), builder -> builder
                         .addBoolean("enable_particle_limit",
                                 "config.tritium.particleLimit.enableParticleLimit",

@@ -27,7 +27,7 @@ public class TritiumCommon {
                         "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
          try {
-            TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
+            //TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {
             TritiumCommon.LOG.warn("Failed to initialize config service: {}", t.toString());

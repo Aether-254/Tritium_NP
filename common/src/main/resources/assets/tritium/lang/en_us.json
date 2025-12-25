@@ -92,7 +92,7 @@
   "config.tritium.category.fpsdisplan": "FPS Display",
   "config.tritium.fpsdisplan.fpsDisplay": "FPS Display Setting",
 
-  "config.tritium.fpsdisplan.fpsDisplay_enabled": "Enabled",
+  "config.tritium.fpsdisplan.fpsDisplay_enabled": "Enabled Fps Display",
   "config.tritium.fpsdisplan.fpsDisplay_enabled.tooltip": "Enable FPS display overlay",
 
   "config.tritium.fpsdisplan.fpsDisplay_position": "Position",

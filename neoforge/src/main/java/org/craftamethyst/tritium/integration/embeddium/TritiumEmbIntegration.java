@@ -26,8 +26,6 @@ public class TritiumEmbIntegration {
         event.addPage(TritiumEmbPage.createPerformancePage());
         event.addPage(TritiumEmbPage.createRenderingPage());
         event.addPage(TritiumEmbPage.createClientOptimizationsPage());
-        event.addPage(TritiumEmbPage.createFPSDisplayPage());
-        event.addPage(TritiumEmbPage.createParticleLimitPage());
         event.addPage(TritiumEmbPage.createEntitiesPage());
         event.addPage(TritiumEmbPage.createFixesPage());
         event.addPage(TritiumEmbPage.createServerPerformancePage());

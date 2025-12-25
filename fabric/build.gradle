@@ -110,3 +110,6 @@ tasks.remapJar {
     inputFile = shadowJar.archiveFile
     archiveClassifier = ''
 }
+tasks.javadoc {
+    exclude '**/mixin/**'
+}

@@ -93,7 +93,7 @@
   "config.tritium.category.fpsdisplan": "FPS显示",
   "config.tritium.fpsdisplan.fpsDisplay": "FPS显示设置",
 
-  "config.tritium.fpsdisplan.fpsDisplay_enabled": "启用",
+  "config.tritium.fpsdisplan.fpsDisplay_enabled": "启用FPS显示",
   "config.tritium.fpsdisplan.fpsDisplay_enabled.tooltip": "启用FPS显示叠加层",
 
   "config.tritium.fpsdisplan.fpsDisplay_position": "位置",

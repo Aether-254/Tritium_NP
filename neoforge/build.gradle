@@ -95,3 +95,6 @@ tasks.shadowJar {
     relocationPrefix = 'org.craftamethyst.tritium.libs'
     configurations = [project.configurations.shadow]
 }
+tasks.javadoc {
+    exclude '**/mixin/**'
+}

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.util;
+package org.craftamethyst.tritium.util.vertex;
 
 import org.joml.Vector3f;
 
