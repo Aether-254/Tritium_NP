@@ -1,8 +1,15 @@
-package org.craftamethyst.tritium.mixin.client.fps;
+/*
+ * // Copyright (c) 2025 ZCRAFT. Tritium Project. Licensed under MIT.
+ */
+
+package org.craftamethyst.tritium.mixin.client.fps.minecraft;
 
 import com.mojang.blaze3d.platform.Window;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.main.GameConfig;
+import org.craftamethyst.tritium.client.fps.FPSCounter;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.lwjgl.glfw.GLFW;
 import org.spongepowered.asm.mixin.Final;
@@ -41,5 +48,17 @@ public abstract class MinecraftMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void tritium$gpuPlusTick(CallbackInfo ci) {
         org.craftamethyst.tritium.gpu.GpuPlus.processQueue();
+    }
+
+    @Inject(method = "runTick", at = @At("HEAD"))
+    private void onRunTickHead(CallbackInfo ci) {
+        FPSCounter.getInstance().update();
+    }
+
+    @Inject(method = "setScreen", at = @At("HEAD"))
+    private void onSetScreen(Screen newScreen, CallbackInfo ci) {
+        if (newScreen instanceof TitleScreen) {
+            FPSCounter.getInstance().resetHistory();
+        }
     }
 }

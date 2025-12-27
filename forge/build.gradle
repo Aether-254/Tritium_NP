@@ -147,3 +147,6 @@ tasks.named('jar') {
 }
 tasks.build.dependsOn tasks.shadowJar, tasks.reobfJar
 tasks.assemble.dependsOn tasks.shadowJar, tasks.reobfJar
+tasks.javadoc {
+    exclude '**/mixin/**'
+}

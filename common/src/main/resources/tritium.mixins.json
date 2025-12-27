@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
+  "plugin": "org.craftamethyst.tritium.mixin.plugin.MixinPlugin",
   "refmap": "tritium.refmap.json",
   "priority": 2000,
   "mixins": [
@@ -27,18 +28,18 @@
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
-    "packs.FilePackResourcesMixin",
+    "packs.FolderRepositorySourceMixin",
     "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],
   "client": [
-    "client.fps.MinecraftMixin",
+    "client.fps.count.GuiMixin",
+    "client.fps.minecraft.MinecraftMixin",
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
-    "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
-    "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
+    "client.particle.ParticleEngineMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
     "client.renderer.culling.ChestRendererMixin",
@@ -50,9 +51,12 @@
     "client.renderer.culling.LevelTKMixin",
     "client.renderer.fast_blit.FastBlit",
     "client.renderer.immediate.DirectionMixin",
-    "memory.client.PoseStackMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
-    "MCBUG.button.AbstractWidgetMixin"
+    "MCBUG.button.AbstractWidgetMixin",
+    "memory.client.PoseStackMixin",
+    "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
+    "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
+    "occfix.ArrayOcclusionCacheMixin"
   ],
   "server": [],
   "injectors": {

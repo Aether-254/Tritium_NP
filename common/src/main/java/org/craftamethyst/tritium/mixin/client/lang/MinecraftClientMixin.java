@@ -2,7 +2,7 @@ package org.craftamethyst.tritium.mixin.client.lang;
 
 import net.minecraft.client.Minecraft;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.craftamethyst.tritium.util.LanguageLoadOptimizer;
+import org.craftamethyst.tritium.util.lang.LanguageLoadOptimizer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

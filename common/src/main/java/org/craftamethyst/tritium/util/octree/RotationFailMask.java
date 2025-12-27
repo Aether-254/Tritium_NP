@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.util;
+package org.craftamethyst.tritium.util.octree;
 
 import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap;
 

@@ -2,7 +2,7 @@ package org.craftamethyst.tritium.mixin.create;
 
 import net.minecraft.server.MinecraftServer;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.craftamethyst.tritium.util.RailOffloaderHub;
+import org.craftamethyst.tritium.util.create.RailOffloaderHub;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

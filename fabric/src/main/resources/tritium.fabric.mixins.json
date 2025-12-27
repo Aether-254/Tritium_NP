@@ -6,7 +6,10 @@
     "compatibilityLevel": "JAVA_17",
     "mixins": [
     ],
-    "client": [],
+    "client": [
+        "sodium.SodiumOptionsGUIAccessor",
+        "sodium.SodiumOptionsGUIMixin"
+    ],
     "server": [
     ],
     "injectors": {

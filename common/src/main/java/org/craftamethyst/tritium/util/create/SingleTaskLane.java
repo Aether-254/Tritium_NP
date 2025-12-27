@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.util;
+package org.craftamethyst.tritium.util.create;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;

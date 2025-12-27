@@ -5,13 +5,24 @@ import org.embeddedt.embeddium.api.OptionGUIConstructionEvent;
 
 public class TritiumEmbIntegration {
 
+    private static boolean initialized = false;
 
     public static void init() {
-            OptionGUIConstructionEvent.BUS.addListener(TritiumEmbIntegration::onGuiConstruction);
-            TritiumCommon.LOG.info("Embeddium integration initialized");
+        if (initialized) {
+            return;
+        }
+
+        OptionGUIConstructionEvent.BUS.addListener(TritiumEmbIntegration::onGuiConstruction);
+        TritiumCommon.LOG.info("Embeddium integration initialized");
+        initialized = true;
     }
 
     private static void onGuiConstruction(OptionGUIConstructionEvent event) {
+        if (event.getPages().stream().anyMatch(page ->
+                page.getId().getPath().equals(TritiumCommon.MOD_ID))) {
+            return;
+        }
+
         event.addPage(TritiumEmbPage.createPerformancePage());
         event.addPage(TritiumEmbPage.createRenderingPage());
         event.addPage(TritiumEmbPage.createClientOptimizationsPage());

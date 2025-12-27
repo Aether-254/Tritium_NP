@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.util;
+package org.craftamethyst.tritium.util.lang;
 
 /**
  * Coordinates language switching optimization between mixins.

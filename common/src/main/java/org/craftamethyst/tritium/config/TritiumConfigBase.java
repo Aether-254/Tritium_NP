@@ -22,6 +22,14 @@ public class TritiumConfigBase {
     @SubCategory("Client Optimizations")
     public ClientOptimizations clientOptimizations = new ClientOptimizations();
 
+    @ClientOnly
+    @SubCategory("FPSDisplay")
+    public FPSDisplan fpsdisplan = new FPSDisplan();
+
+    @ClientOnly
+    @SubCategory("Particle Limit")
+    public ParticleLimit particleLimit = new ParticleLimit();
+
     @SubCategory("Network")
     public Network network = new Network();
 
@@ -143,6 +151,40 @@ public class TritiumConfigBase {
 
     }
 
+    @ClientOnly
+    public static class FPSDisplan {
+        @SubCategory("FPSDisplay")
+        public static FPSDisplay fpsDisplay = new FPSDisplay();
+
+        public static class FPSDisplay {
+            public static boolean enabled = true;
+
+            @Range(min = 0, max = 4)
+            public static int position = 0;
+            @Range(min = 0, max = 4)
+            public static int displayMode = 1;
+
+            public static String textColor = "#FFFFFF";
+
+            public static boolean shadow = true;
+
+            @Range(min = 0, max = 1)
+            public static float backgroundOpacity = 0.3f;
+
+            @Range(min = 0, max = 2)
+            public static int decimalPlaces = 1;
+
+            public static boolean showUnit = true;
+        }
+    }
+
+    @ClientOnly
+    public static class ParticleLimit {
+        public static boolean enableParticleLimit = true;
+        @Range(min = 100, max = 50000)
+        public static int maxParticles = 16384;
+    }
+
     public static class Network {
         // Future network optimizations will be added here
     }
@@ -214,7 +256,7 @@ public class TritiumConfigBase {
 
 
         public static class ButtonFix {
-            public static boolean buttonFix = true;
+            public static boolean buttonFix = false;
         }
 
         public static class NoGLog {

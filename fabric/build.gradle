@@ -25,8 +25,7 @@ dependencies {
     implementation project(":common")
 
     //Sodium
-    implementation 'maven.modrinth:sodium:OihdIimA'
-    implementation 'maven.modrinth:sodium-options-api:nww69hqs'
+    modImplementation 'maven.modrinth:sodium:OihdIimA'
 
     //Create
     implementation 'maven.modrinth:create:8amzvn9x'
@@ -92,4 +91,7 @@ tasks.shadowJar {
     relocationPrefix = "${mod_id}.libs"
     configurations = [project.configurations.shadow]
     exclude 'META-INF/maven/**'
+}
+tasks.javadoc {
+    exclude '**/mixin/**'
 }

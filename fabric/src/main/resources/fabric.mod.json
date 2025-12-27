@@ -11,11 +11,11 @@
         "sources": "https://github.com/CraftAmethyst/Tritium/"
     },
     "license": "${license}",
-    "icon": "assets/${mod_id}/logo.png",
+    "icon": "icon.png",
     "environment": "*",
   "entrypoints": {
     "main": [
-      "org.craftamethyst.tritium.Tritium"
+      "org.craftamethyst.tritium.TritiumFabric"
     ],
     "client": [
       "org.craftamethyst.tritium.client.TritiumFabricClient"

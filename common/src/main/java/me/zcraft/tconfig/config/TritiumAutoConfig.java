@@ -4,12 +4,11 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import me.shedaniel.clothconfig2.impl.builders.SubCategoryBuilder;
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
-import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import org.craftamethyst.tritium.TritiumCommon;
 
 import java.lang.reflect.Field;
 import java.util.List;
