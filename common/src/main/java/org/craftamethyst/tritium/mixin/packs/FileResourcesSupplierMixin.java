@@ -1,6 +1,8 @@
 package org.craftamethyst.tritium.mixin.packs;
 
-import net.minecraft.server.packs.*;
+import net.minecraft.server.packs.FilePackResources;
+import net.minecraft.server.packs.PackLocationInfo;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.Pack;
 import org.craftamethyst.tritium.util.resources.ResourcePackFactory;
 import org.spongepowered.asm.mixin.Final;

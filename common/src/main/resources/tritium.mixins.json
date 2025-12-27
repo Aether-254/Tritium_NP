@@ -36,13 +36,12 @@
     "tickstop.LevelMixin"
   ],
   "client": [
-    "occfix.ArrayOcclusionCacheMixin",
-    "client.particle.ParticleEngineMixin",
-    "client.fps.minecraft.MinecraftMixin",
     "client.fps.count.GuiMixin",
+    "client.fps.minecraft.MinecraftMixin",
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
+    "client.particle.ParticleEngineMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
     "client.renderer.culling.ChestRendererMixin",
@@ -59,10 +58,11 @@
     "client.renderer.vertex.PoseStackPoseAccessor",
     "client.renderer.vertex.VertexBufferMixin",
     "client.renderer.vertex.VertexConsumerMixin",
+    "MCBUG.button.AbstractWidgetMixin",
+    "memory.client.PoseStackMixin",
     "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
     "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
-    "memory.client.PoseStackMixin",
-    "MCBUG.button.AbstractWidgetMixin"
+    "occfix.ArrayOcclusionCacheMixin"
   ],
   "server": [],
   "injectors": {

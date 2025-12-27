@@ -2,10 +2,14 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
+  "plugin": "org.craftamethyst.tritium.compat.plugin.CompatPlugin",
   "refmap": "${mod_id}.refmap.json",
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
-  "client": [],
+  "client": [
+    "sodium.SodiumOptionsGUIAccessor",
+    "sodium.SodiumOptionsGUIMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 1

@@ -11,7 +11,7 @@ class ResourceIndexer {
     private final ZipResourceCache.OverlayStrategy overlayStrategy;
 
     ResourceIndexer(Map<PackType, Set<String>> namespaceCache,
-                    ZipResourceCache.OverlayStrategy overlayStrategy) {
+                            ZipResourceCache.OverlayStrategy overlayStrategy) {
         this.namespaceCache = namespaceCache;
         this.overlayStrategy = overlayStrategy;
     }
@@ -27,17 +27,19 @@ class ResourceIndexer {
 
     private String extractNamespaceFromPath(String path, PackType type) {
         String remainingPath = path;
+
         if (overlayStrategy.isOverlayPath(path)) {
             int firstSlash = path.indexOf('/');
             if (firstSlash == -1) return null;
             remainingPath = path.substring(firstSlash + 1);
         }
+
         String typeDir = type.getDirectory() + "/";
         int typeIndex = remainingPath.indexOf(typeDir);
         if (typeIndex == -1) return null;
+
         String afterType = remainingPath.substring(typeIndex + typeDir.length());
         int namespaceEnd = afterType.indexOf('/');
-        if (namespaceEnd == -1) return null;
-        return afterType.substring(0, namespaceEnd);
+        return namespaceEnd == -1 ? null : afterType.substring(0, namespaceEnd);
     }
 }

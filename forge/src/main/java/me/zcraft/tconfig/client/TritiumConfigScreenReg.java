@@ -1,11 +1,11 @@
 package me.zcraft.tconfig.client;
 
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraftforge.client.ConfigScreenHandler;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
+import org.craftamethyst.tritium.TritiumCommon;
 
 public class TritiumConfigScreenReg {
 

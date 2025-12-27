@@ -2,8 +2,8 @@ package org.craftamethyst.tritium;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.zcraft.tconfig.config.autoconfig.TritiumAutoConfig;
 import me.zcraft.tconfig.config.TritiumConfig;
+import me.zcraft.tconfig.config.autoconfig.TritiumAutoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;

@@ -1,9 +1,9 @@
 package org.craftamethyst.tritium.integration.embeddium;
 
+import me.zcraft.tconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.embeddedt.embeddium.api.options.structure.OptionStorage;
-import me.zcraft.tconfig.config.TritiumConfig;
 
 public class TritiumOptionStorage implements OptionStorage<TritiumConfigBase> {
 

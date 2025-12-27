@@ -1,9 +1,8 @@
 package org.craftamethyst.tritium.platform;
 
 import net.neoforged.fml.ModList;
-import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.loading.FMLLoader;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.platform.services.IPlatformHelper;
 

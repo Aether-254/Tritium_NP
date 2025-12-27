@@ -1,10 +1,10 @@
 package me.zcraft.tconfig.config;
 
-import org.craftamethyst.tritium.TritiumCommon;
 import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
 import me.zcraft.tconfig.config.watcher.ConfigFileWatcher;
+import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.platform.Services;
 
 import java.io.IOException;

@@ -22,7 +22,7 @@
       "org.craftamethyst.tritium.client.TritiumFabricClient"
     ],
     "modmenu": [
-      "org.craftamethyst.tritium.integration.ModMenuIntegration"
+      "org.craftamethyst.tritium.integration.modmenu.ModMenuIntegration"
     ]
   },
   "mixins": [

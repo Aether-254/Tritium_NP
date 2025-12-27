@@ -1,8 +1,6 @@
 package org.craftamethyst.tritium;
 
-import me.zcraft.tconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
-import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

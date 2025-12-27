@@ -4,6 +4,7 @@ pluginManagement {
         mavenLocal()
         gradlePluginPortal()
         mavenCentral()
+        maven { url = "https://maven.lwjgl.org/releases" }
         maven {
             url = ('https://maven.fabricmc.net')
         }

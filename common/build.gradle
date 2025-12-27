@@ -53,6 +53,10 @@ dependencies {
     implementation 'org.ow2.asm:asm:9.5'
     implementation 'org.ow2.asm:asm-tree:9.5'
     implementation 'org.ow2.asm:asm-commons:9.5'
+    // LWJGL OpenCL
+    implementation("org.lwjgl:lwjgl")
+    implementation "org.lwjgl:lwjgl-opencl:${lwjgl_version}"
+
     //emb
     implementation 'maven.modrinth:embeddium:J7b96IEd'
     //joml

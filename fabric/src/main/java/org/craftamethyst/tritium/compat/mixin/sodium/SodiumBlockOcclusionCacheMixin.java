@@ -4,11 +4,11 @@ import net.caffeinemc.mods.sodium.client.render.chunk.compile.pipeline.BlockOccl
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.LeavesBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.BlockFaceOcclusionCuller;
 import org.craftamethyst.tritium.cull.LeafCulling;
-import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;

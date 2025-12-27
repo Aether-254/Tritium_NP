@@ -1,13 +1,13 @@
-package org.craftamethyst.tritium.integration;
+package org.craftamethyst.tritium.integration.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import org.craftamethyst.tritium.TritiumConfigScreenFactory;
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screens.Screen;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.TritiumConfigScreenFactory;
 
 @Environment(EnvType.CLIENT)
 public class ModMenuIntegration implements ModMenuApi {
