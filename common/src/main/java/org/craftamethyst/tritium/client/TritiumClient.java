@@ -9,6 +9,8 @@ import net.minecraft.world.phys.Vec3;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.AABBCullingManager;
 import org.craftamethyst.tritium.cull.CullCache;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
+import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
 
 import java.util.List;
 
@@ -38,17 +40,42 @@ public class TritiumClient {
         if (e.isVehicle()) return false;
         if (e.isPassenger()) return false;
         if (e.hasCustomName()) return false;
+        if (e.isCurrentlyGlowing()) return false;
 
-        updateCameraPosition();
-        return aabbCulling.shouldCullEntity(e);
+        if (e instanceof EntityVisibility cullable) {
+            return cullable.tritium$isCulled();
+        }
+
+        return false;
     }
 
     public boolean shouldSkipBlockEntity(BlockEntity be) {
         if (be == null) return false;
         if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return false;
 
-        updateCameraPosition();
-        return aabbCulling.shouldCullBlockEntity(be);
+        if (be instanceof BlockEntityVisibility cullable) {
+            return cullable.tritium$isCulled();
+        }
+
+        return false;
+    }
+
+    public void requestCullUpdate() {
+        aabbCulling.requestCull();
+    }
+
+    public void clientTick() {
+        requestCullUpdate();
+
+        Minecraft mc = Minecraft.getInstance();
+        Vec3 currentCameraPos = mc.gameRenderer.getMainCamera().getPosition();
+        framesSinceLastUpdate++;
+
+        if (framesSinceLastUpdate >= 20 || currentCameraPos.distanceToSqr(lastCameraPos) > 16.0) {
+            lastCameraPos = currentCameraPos;
+            aabbCulling.updateCameraPosition();
+            framesSinceLastUpdate = 0;
+        }
     }
 
     public CullCache getCullCache() {
@@ -73,18 +100,5 @@ public class TritiumClient {
             if (entityName.equals(pattern)) return true;
         }
         return false;
-    }
-
-    private void updateCameraPosition() {
-        Minecraft mc = Minecraft.getInstance();
-        Vec3 currentCameraPos = mc.gameRenderer.getMainCamera().getPosition();
-        framesSinceLastUpdate++;
-
-        if (framesSinceLastUpdate >= 20 ||
-                currentCameraPos.distanceToSqr(lastCameraPos) > 16.0) {
-            lastCameraPos = currentCameraPos;
-            aabbCulling.updateCameraPosition();
-            framesSinceLastUpdate = 0;
-        }
     }
 }

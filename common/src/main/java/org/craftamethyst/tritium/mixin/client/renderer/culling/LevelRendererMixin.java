@@ -1,7 +1,6 @@
 package org.craftamethyst.tritium.mixin.client.renderer.culling;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
@@ -23,9 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
-
-    @Unique
-    private final Minecraft tritium$mc = Minecraft.getInstance();
     @Final
     @Shadow
     private EntityRenderDispatcher entityRenderDispatcher;
@@ -44,6 +40,7 @@ public class LevelRendererMixin {
             cullable.tritium$setOutOfCamera(false);
             return;
         }
+
         if (client.shouldSkipEntity(entity)) {
             if (!TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling
                     && matrices != null
@@ -54,6 +51,7 @@ public class LevelRendererMixin {
             ci.cancel();
             return;
         }
+
         cullable.tritium$setOutOfCamera(false);
     }
 
@@ -66,7 +64,7 @@ public class LevelRendererMixin {
 
     @Unique
     private void tritium$renderNameTag(Entity entity, double camX, double camY, double camZ,
-                                        float tickDelta, PoseStack matrices, MultiBufferSource consumers) {
+                                       float tickDelta, PoseStack matrices, MultiBufferSource consumers) {
         EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) entityRenderDispatcher.getRenderer(entity);
         if (!(renderer instanceof EntityRendererAccessor accessor)) return;
 

@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BlockEntityRenderDispatcher.class)
 public abstract class BlockEntityRenderDispatcherMixin {
-
     @Shadow
     public abstract <E extends BlockEntity> BlockEntityRenderer<E> getRenderer(E blockEntity);
 
@@ -29,9 +28,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
     private <E extends BlockEntity> void tritium$earlyCullingCheck(
             E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
             CallbackInfo ci) {
-
         if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return;
-
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;
 
@@ -47,34 +44,6 @@ public abstract class BlockEntityRenderDispatcherMixin {
         BlockEntityRenderer<E> renderer = getRenderer(blockEntity);
         if (renderer != null && renderer.shouldRenderOffScreen(blockEntity)) return;
         if (client.shouldSkipBlockEntity(blockEntity)) {
-            ci.cancel();
-        }
-    }
-
-    @Inject(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderDispatcher;getRenderer("
-                            + "Lnet/minecraft/world/level/block/entity/BlockEntity;"
-                            + ")Lnet/minecraft/client/renderer/blockentity/BlockEntityRenderer;",
-                    shift = At.Shift.AFTER
-            ),
-            cancellable = true
-    )
-    private <E extends BlockEntity> void tritium$skipCulledBlockEntity(
-            E blockEntity, float partialTicks, PoseStack pose, MultiBufferSource buffer,
-            CallbackInfo ci) {
-
-        if (!TritiumConfigBase.Rendering.EntityCulling.enableBlockEntityCulling) return;
-
-        TritiumClient client = TritiumClient.instance;
-        if (client == null || !(blockEntity instanceof BlockEntityVisibility cullable)) return;
-
-        BlockEntityRenderer<E> renderer = getRenderer(blockEntity);
-        if (renderer != null && renderer.shouldRenderOffScreen(blockEntity)) return;
-
-        if (!cullable.tritium$isForcedVisible() && client.shouldSkipBlockEntity(blockEntity)) {
             ci.cancel();
         }
     }
