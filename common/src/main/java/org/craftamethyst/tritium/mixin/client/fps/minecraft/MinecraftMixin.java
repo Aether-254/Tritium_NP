@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.main.GameConfig;
+import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.client.fps.FPSCounter;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.lwjgl.glfw.GLFW;
@@ -20,10 +21,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/**
- * &#064;Author: KSmc_brigade
- * &#064;Date: 2025/11/9 上午7:14
- */
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
@@ -48,6 +45,13 @@ public abstract class MinecraftMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void tritium$gpuPlusTick(CallbackInfo ci) {
         org.craftamethyst.tritium.gpu.GpuPlus.processQueue();
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void tritium$culling(CallbackInfo ci) {
+        if (TritiumClient.instance != null) {
+            TritiumClient.instance.clientTick();
+        }
     }
 
     @Inject(method = "runTick", at = @At("HEAD"))

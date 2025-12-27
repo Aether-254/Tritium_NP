@@ -13,7 +13,6 @@ import java.util.function.Consumer;
 
 @Mixin(Level.class)
 public abstract class LevelTKMixin {
-
     @Inject(
             method = "guardEntityTick",
             at = @At("HEAD"),
@@ -21,7 +20,8 @@ public abstract class LevelTKMixin {
     )
     private void ConEntityTick(Consumer<Entity> consumer, Entity entity, CallbackInfo ci) {
         if (!TritiumConfigBase.Rendering.EntityCulling.enableTickStopping) return;
-        if (TritiumClient.instance != null && TritiumClient.instance.shouldSkipEntity(entity)) {
+        TritiumClient client = TritiumClient.instance;
+        if (client != null && client.shouldSkipEntity(entity)) {
             ci.cancel();
         }
     }

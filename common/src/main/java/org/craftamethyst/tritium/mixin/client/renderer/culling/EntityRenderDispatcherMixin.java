@@ -14,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntityRenderDispatcherMixin {
-
     @Inject(
             method = "shouldRender",
             at = @At("HEAD"),
@@ -23,9 +22,7 @@ public abstract class EntityRenderDispatcherMixin {
     private <E extends Entity> void tritium$earlyCullingCheck(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
-
         if (!TritiumConfigBase.Entities.EntityOpt.ite) return;
-
         TritiumClient client = TritiumClient.instance;
         if (client == null) return;
         if (client.getCullCache() != null) {
@@ -51,8 +48,13 @@ public abstract class EntityRenderDispatcherMixin {
         if (!TritiumConfigBase.Entities.EntityOpt.ite) return;
         if (!cir.getReturnValue()) return;
 
-        if (EntityTickHelper.shouldSkipTick(entity) ||
-                (TritiumClient.instance != null && TritiumClient.instance.shouldSkipEntity(entity))) {
+        if (EntityTickHelper.shouldSkipTick(entity)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
+        TritiumClient client = TritiumClient.instance;
+        if (client != null && client.shouldSkipEntity(entity)) {
             cir.setReturnValue(false);
         }
     }
