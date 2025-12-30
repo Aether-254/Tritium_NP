@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GuiMixin {
     @Inject(
             method = "render",
-            at = @At("HEAD")
+            at = @At("TAIL")
     )
     private void onRenderAfterChat(GuiGraphics pGuiGraphics, DeltaTracker pDeltaTracker, CallbackInfo ci) {
         tritium$renderFPSCounter(pGuiGraphics);
