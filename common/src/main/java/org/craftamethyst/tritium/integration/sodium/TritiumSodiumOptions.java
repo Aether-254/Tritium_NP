@@ -576,6 +576,13 @@ public class TritiumSodiumOptions {
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));
         beeFixes.add(new TritiumOptionDefinition<>(
+                "fixes.beeFixes_fixBeeRandomPos",
+                "config.tritium.fixes.beeFixes_fixBeeRandomPos",
+                c -> TritiumConfigBase.Fixes.BeeFixes.fixBeeRandomPos,
+                (c, v) -> TritiumConfigBase.Fixes.BeeFixes.fixBeeRandomPos = v,
+                TritiumOptionDefinition.ControlType.BOOLEAN
+        ));
+        beeFixes.add(new TritiumOptionDefinition<>(
                 "fixes.beeFixes_fixBeeGravity",
                 "config.tritium.fixes.beeFixes_fixBeeGravity",
                 c -> TritiumConfigBase.Fixes.BeeFixes.fixBeeGravity,

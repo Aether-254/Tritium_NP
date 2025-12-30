@@ -17,17 +17,12 @@ public class CompatPlugin implements IMixinConfigPlugin {
     private static final String IMMEDIATELY_FAST_MODID = "immediatelyfast";
     private static final String ENTITY_TEXTURE_FEATURES_MODID = "entity_texture_features";
     private static final String BBS_MODID = "bbs";
-    private static final String SODIUM_MODID = "sodium";
 
     private static final String VERTEX_BUFFER_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.vertex.VertexBufferMixin";
     private static final String FAST_BLIT_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.fast_blit.FastBlit";
-    private static final String SODIUM_MIXIN = "org.craftamethyst.tritium.mixin.sodium.SodiumOptionsGUIMixin";
-    private static final String SODIUM_ACC_MIXIN = "org.craftamethyst.tritium.mixin.sodium.SodiumOptionsGUIAccessor";
-
     private Boolean hasImmFast;
     private Boolean hasETF;
     private Boolean hasBBS;
-    private Boolean hasSod;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -43,7 +38,6 @@ public class CompatPlugin implements IMixinConfigPlugin {
         return switch (mixinClassName) {
             case VERTEX_BUFFER_MIXIN -> !shouldDisableVertexBufferMixin();
             case FAST_BLIT_MIXIN -> !shouldDisableFastBlitMixin();
-            case SODIUM_MIXIN, SODIUM_ACC_MIXIN -> shouldDisableSodiumMixin();
             default -> true;
         };
 
@@ -74,18 +68,6 @@ public class CompatPlugin implements IMixinConfigPlugin {
         }
 
         return hasBBS;
-    }
-
-    private boolean shouldDisableSodiumMixin() {
-        if (hasSod == null) {
-            hasSod = FabricLoader.getInstance().isModLoaded(SODIUM_MODID);
-
-            if (hasSod) {
-                System.out.println("[Tritium Compat] Disabling SodiumOptionsGUIMixin");
-            }
-        }
-
-        return hasSod;
     }
 
     @Override

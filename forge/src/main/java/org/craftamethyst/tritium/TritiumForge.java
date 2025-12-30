@@ -1,14 +1,10 @@
 package org.craftamethyst.tritium;
 
 import me.zcraft.tconfig.client.TritiumConfigScreenReg;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.craftamethyst.tritium.client.TritiumClient;
-import org.craftamethyst.tritium.integration.embeddium.TritiumEmbIntegration;
 
 @Mod(TritiumCommon.MOD_ID)
 public class TritiumForge {
@@ -23,14 +19,6 @@ public class TritiumForge {
             new TritiumClient();
             TritiumCommon.LOG.info("TritiumClient initialized");
         });
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            if (isEmbLoaded()) {
-                TritiumEmbIntegration.init();
-            }
-        }
         TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
-    }
-    private static boolean isEmbLoaded() {
-        return ModList.get().isLoaded("embeddium");
     }
 }

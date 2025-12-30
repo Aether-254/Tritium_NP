@@ -26,6 +26,7 @@
     "light.FastBamboo",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
+    "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
     "packs.FolderRepositorySourceMixin",
@@ -34,7 +35,6 @@
     "tickstop.LevelMixin"
   ],
   "client": [
-    "client.fps.count.GuiMixin",
     "client.fps.minecraft.MinecraftMixin",
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",

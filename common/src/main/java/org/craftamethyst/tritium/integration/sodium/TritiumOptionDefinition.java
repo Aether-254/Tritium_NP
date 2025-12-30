@@ -2,7 +2,6 @@ package org.craftamethyst.tritium.integration.sodium;
 
 import me.jellysquid.mods.sodium.client.gui.options.OptionImpact;
 import me.jellysquid.mods.sodium.client.gui.options.control.ControlValueFormatter;
-import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.function.BiConsumer;

@@ -270,6 +270,7 @@ public class TritiumConfigBase {
         public static class BeeFixes {
             public static boolean enableBeeFixes = true;
             public static boolean fixWeatherInNether = true;
+            public static boolean fixBeeRandomPos = true;
             public static boolean fixBeeGravity = true;
             public static boolean fixBeeTurtleEgg = true;
         }
