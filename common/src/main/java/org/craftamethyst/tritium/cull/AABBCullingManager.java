@@ -46,12 +46,10 @@ public class AABBCullingManager {
     private void cullLoop() {
         while (running && mc.isRunning()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(33);
                 if (requestCull || !isCameraStationary()) {
                     requestCull = false;
-
                     updateCameraCache();
-
                     Vec3 cameraPos = getCameraPos();
                     lastCameraPos.set(cameraPos.x, cameraPos.y, cameraPos.z);
 
@@ -135,7 +133,6 @@ public class AABBCullingManager {
                     cullCache.cacheEntity(entity, shouldCull);
 
                 } catch (NullPointerException e) {
-                    continue;
                 }
             }
         } catch (Exception e) {
@@ -187,7 +184,6 @@ public class AABBCullingManager {
                         cullCache.cacheBlockEntity(blockEntity, shouldCull);
                     }
                 } catch (Exception e) {
-                    continue;
                 }
             }
         }
