@@ -8,21 +8,26 @@ import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
 
 public class FPSCounter {
     private static final FPSCounter INSTANCE = new FPSCounter();
     private static final long UPDATE_INTERVAL_MS = 2000;
+    private static final double ONE_PERCENT_THRESHOLD = 0.01;
 
     private final Deque<Double> fpsHistory = new ArrayDeque<>();
     private final Deque<Double> recentFpsBuffer = new ArrayDeque<>();
+    private final List<Double> fpsForOnePercentLow = new ArrayList<>();
     private double currentFPS = 0;
     private double avgFPS = 0;
     private boolean isFirstUpdate = true;
     private long lastUpdateTime = 0;
     private double dynamicMinFPS = Double.MAX_VALUE;
     private double dynamicMaxFPS = 0;
-    private double intervalMinFPS = Double.MAX_VALUE;
+    private double intervalOnePercentLowFPS = Double.MAX_VALUE;
     private double intervalMaxFPS = 0;
 
     private FPSCounter() {}
@@ -35,6 +40,7 @@ public class FPSCounter {
         currentFPS = Minecraft.getInstance().getFps();
         updateDynamicStats();
         recentFpsBuffer.addLast(currentFPS);
+        fpsForOnePercentLow.add(currentFPS);
 
         long currentTime = System.currentTimeMillis();
 
@@ -74,25 +80,29 @@ public class FPSCounter {
     }
 
     private void updateIntervalStats() {
-        if (recentFpsBuffer.isEmpty()) {
+        if (fpsForOnePercentLow.isEmpty()) {
             return;
         }
 
-        double intervalMin = Double.MAX_VALUE;
-        double intervalMax = 0;
+        List<Double> sortedFps = new ArrayList<>(fpsForOnePercentLow);
+        Collections.sort(sortedFps);
 
+        int onePercentIndex = (int) Math.ceil(sortedFps.size() * ONE_PERCENT_THRESHOLD);
+        if (onePercentIndex >= sortedFps.size()) {
+            onePercentIndex = sortedFps.size() - 1;
+        }
+
+        intervalOnePercentLowFPS = sortedFps.get(onePercentIndex);
+
+        double intervalMax = 0;
         for (double fps : recentFpsBuffer) {
-            if (fps < intervalMin) {
-                intervalMin = fps;
-            }
             if (fps > intervalMax) {
                 intervalMax = fps;
             }
         }
-
-        intervalMinFPS = intervalMin;
         intervalMaxFPS = intervalMax;
         recentFpsBuffer.clear();
+        fpsForOnePercentLow.clear();
     }
 
     public void render(GuiGraphics guiGraphics, Font font, int screenWidth, int screenHeight) {
@@ -156,11 +166,11 @@ public class FPSCounter {
                     avgLabel + String.format(" " + format + unit, avgFPS);
             case 2 ->
                     String.format(format + "｜" + minLabel + " " + format + "｜" + avgLabel + " " + format + "｜" + maxLabel + " " + format + unit,
-                            currentFPS, intervalMinFPS, avgFPS, intervalMaxFPS);
+                            currentFPS, intervalOnePercentLowFPS, avgFPS, intervalMaxFPS);
             case 3 ->
                     maxLabel + String.format(" " + format + unit, intervalMaxFPS);
             case 4 ->
-                    minLabel + String.format(" " + format + unit, intervalMinFPS);
+                    minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
             default -> String.format(format + unit, currentFPS);
         };
     }
@@ -179,11 +189,12 @@ public class FPSCounter {
     public void resetHistory() {
         fpsHistory.clear();
         recentFpsBuffer.clear();
+        fpsForOnePercentLow.clear();
         avgFPS = 0;
         currentFPS = 0;
         dynamicMinFPS = Double.MAX_VALUE;
         dynamicMaxFPS = 0;
-        intervalMinFPS = Double.MAX_VALUE;
+        intervalOnePercentLowFPS = Double.MAX_VALUE;
         intervalMaxFPS = 0;
         isFirstUpdate = true;
         lastUpdateTime = 0;
