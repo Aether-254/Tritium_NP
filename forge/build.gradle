@@ -4,6 +4,7 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+    id 'com.gradleup.shadow' version '9.0.0-beta12'
 }
 
 version = version
@@ -15,7 +16,7 @@ base {
 
 minecraft {
     mappings channel: 'official', version: minecraft_version
-    
+
     if (project.hasProperty('forge_ats_enabled') && project.findProperty('forge_ats_enabled').toBoolean()) {
         // This location is hardcoded in Forge and can not be changed.
         // https://github.com/MinecraftForge/MinecraftForge/blob/be1698bb1554f9c8fa2f58e32b9ab70bc4385e60/fmlloader/src/main/java/net/minecraftforge/fml/loading/moddiscovery/ModFile.java#L123
@@ -33,7 +34,7 @@ minecraft {
             mods {
                 modClientRun {
                     source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source project(":common").sourceSets.main
                 }
             }
         }
@@ -47,7 +48,7 @@ minecraft {
             mods {
                 modServerRun {
                     source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source project(":common").sourceSets.main
                 }
             }
         }
@@ -62,7 +63,7 @@ minecraft {
             mods {
                 modDataRun {
                     source sourceSets.main
-                    source project(":Common").sourceSets.main
+                    source project(":common").sourceSets.main
                 }
             }
         }
@@ -81,38 +82,45 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    compileOnly project(":Common")
+    compileOnly project(":common")
+
+    //Mods
+    implementation 'maven.modrinth:embeddium:AYqEbec0'
     implementation 'maven.modrinth:guideme:9YGnKYDF'
+    implementation 'maven.modrinth:create:tJVykywJ'
     implementation 'maven.modrinth:ae2:7KVs6HMQ'
     implementation 'maven.modrinth:curios:IPQlZkz1'
     implementation 'maven.modrinth:architectury-api:1MKTLiiG'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation "maven.modrinth:cloth-config:${cloth_config_version}"
 
-    // Core libs for culling features
+    //JOML
     implementation 'org.joml:joml:1.10.5'
 
-    // Config UI + AutoConfig (Forge)
-    implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
-
-    // MixinExtras
-    implementation 'io.github.llamalad7:mixinextras-common:0.3.5'
-    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.3.5'
+    //Mixin
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
 
 tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
+    source(project(":common").sourceSets.main.allSource)
 }
 
 processResources {
-    from project(":Common").sourceSets.main.resources
-    
+    from project(":common").sourceSets.main.resources
+
     def expandProps = [
-        'version': project.version
+            'version': project.version,
+            'mod_id': mod_id,
+            'mod_name': mod_name,
+            'mod_author': mod_author,
+            'description': description,
+            'forge_version': forge_version,
+            'minecraft_version_range': minecraft_version_range,
+            'license': license
     ]
-    
+
     inputs.properties(expandProps)
-    
+
     filesMatching('META-INF/mods.toml') {
         expand(expandProps)
     }
@@ -133,13 +141,16 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
+jar {finalizedBy('reobfJar')}
 
 mixin {
     // Generate and use refmap name that matches tritium.mixins.json ("refmap": "tritium.refmap.json")
     add sourceSets.main, 'tritium.refmap.json'
     config 'tritium.mixins.json'
     config 'tritium.forge.mixins.json'
+    config 'tritium.compat.mixins.json'
+    config 'tritium.create.mixins.json'
+    config 'tritium.gpuplus.mixins.json'
 }
 
 publishing {
@@ -156,4 +167,7 @@ publishing {
             url "file://" + System.getenv("local_maven")
         }
     }
+}
+tasks.javadoc {
+    exclude '**/mixin/**'
 }

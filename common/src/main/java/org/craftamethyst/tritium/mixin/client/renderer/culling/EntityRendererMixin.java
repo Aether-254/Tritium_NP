@@ -16,8 +16,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
     protected abstract boolean shouldShowName(T entity);
 
 
-    @Shadow
-    protected abstract void renderNameTag(T entity, Component displayName, PoseStack poseStack, MultiBufferSource buffer, int packedLight);
+    @Shadow protected abstract void renderNameTag(T entity, Component displayName, PoseStack poseStack, MultiBufferSource buffer, int packedLight);
 
     @Unique
     public boolean tritium_shouldShowName(T entity) {

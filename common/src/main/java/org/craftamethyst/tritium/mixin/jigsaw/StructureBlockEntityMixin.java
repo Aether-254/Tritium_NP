@@ -6,6 +6,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,6 +28,10 @@ public class StructureBlockEntityMixin {
             StructurePlaceSettings settings,
             List<StructureBlockInfo> blockInfos,
             CallbackInfoReturnable<List<StructureBlockInfo>> cir) {
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
+                !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableStructureBlockFiltering) {
+            return;
+        }
 
         BoundingBox box = settings.getBoundingBox();
         if (box == null) {
@@ -34,7 +39,8 @@ public class StructureBlockEntityMixin {
         }
 
         blockInfos.removeIf(info -> {
-            BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos).offset(offset);
+            BlockPos transformedPos = StructureTemplate.transform(info.pos, settings.getMirror(), settings.getRotation(), settings.getRotationPivot());
+            BlockPos target = transformedPos.offset(offset);
             return !box.isInside(target);
         });
     }
@@ -51,6 +57,10 @@ public class StructureBlockEntityMixin {
             StructurePlaceSettings settings,
             List<StructureBlockInfo> original,
             CallbackInfoReturnable<List<StructureBlockInfo>> cir) {
+        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
+                !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableStructureBlockFiltering) {
+            return;
+        }
 
         List<StructureBlockInfo> firstCut = cir.getReturnValue();
         if (firstCut == null) {
@@ -64,7 +74,9 @@ public class StructureBlockEntityMixin {
 
         List<StructureBlockInfo> secondCut = new ArrayList<>(firstCut.size());
         for (StructureBlockInfo info : firstCut) {
-            if (box.isInside(info.pos)) {
+            BlockPos transformedPos = StructureTemplate.transform(info.pos, settings.getMirror(), settings.getRotation(), settings.getRotationPivot());
+            BlockPos target = transformedPos.offset(offset);
+            if (box.isInside(target)) {
                 secondCut.add(info);
             }
         }

@@ -1,12 +1,12 @@
 package org.craftamethyst.tritium.mixin.client.lang;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.language.LanguageInfo;
 import net.minecraft.client.resources.language.LanguageManager;
 import net.minecraft.server.packs.resources.ResourceManager;
 import org.craftamethyst.tritium.TritiumCommon;
-import org.craftamethyst.tritium.util.LanguageLoadOptimizer;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.craftamethyst.tritium.util.lang.LanguageLoadOptimizer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -27,27 +27,25 @@ public abstract class LanguageManagerMixin {
     private String tritium$previousLanguage;
 
     @Inject(method = "setSelected", at = @At("HEAD"))
-    private void onSetLanguageHead(LanguageInfo languageInfo, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+    private void onSetLanguageHead(LanguageInfo $$0, CallbackInfo ci) {
+        if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
 
         tritium$previousLanguage = this.currentCode;
-        String languageCode = languageInfo.getCode();
 
-        if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
+        if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(currentCode)) {
             LanguageLoadOptimizer.setLanguageChanging(true);
         }
     }
 
     @Inject(method = "setSelected", at = @At("TAIL"))
-    private void onSetLanguageTail(LanguageInfo languageInfo, CallbackInfo ci) {
-        if (!TritiumConfig.get().clientOptimizations.fastLanguageSwitch) {
+    private void onSetLanguageTail(LanguageInfo $$0, CallbackInfo ci) {
+        if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
 
-        String languageCode = languageInfo.getCode();
-        if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
+        if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(currentCode)) {
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft != null && minecraft.getResourceManager() != null) {
                 try {

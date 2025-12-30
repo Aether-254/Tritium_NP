@@ -1,9 +1,10 @@
 package org.craftamethyst.tritium.config;
 
-import me.zcraft.tritiumconfig.annotation.ClientOnly;
-import me.zcraft.tritiumconfig.annotation.ConfigVersion;
-import me.zcraft.tritiumconfig.annotation.Range;
-import me.zcraft.tritiumconfig.annotation.SubCategory;
+
+import me.zcraft.tconfig.annotation.ClientOnly;
+import me.zcraft.tconfig.annotation.ConfigVersion;
+import me.zcraft.tconfig.annotation.Range;
+import me.zcraft.tconfig.annotation.SubCategory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,6 +21,14 @@ public class TritiumConfigBase {
     @ClientOnly
     @SubCategory("Client Optimizations")
     public ClientOptimizations clientOptimizations = new ClientOptimizations();
+
+    @ClientOnly
+    @SubCategory("FPSDisplay")
+    public FPSDisplan fpsdisplan = new FPSDisplan();
+
+    @ClientOnly
+    @SubCategory("Particle Limit")
+    public ParticleLimit particleLimit = new ParticleLimit();
 
     @SubCategory("Network")
     public Network network = new Network();
@@ -38,18 +47,50 @@ public class TritiumConfigBase {
     public ServerPerformance serverPerformance = new ServerPerformance();
 
     public static class Performance {
-        //@SubCategory("FastBambooLight")
-        public boolean bambooLight = true;
+        @SubCategory("FastFurnace")
+        public FastFurnace fastFurnace = new FastFurnace();
+        @SubCategory("BlockStateCache")
+        public BlockStateCache blockStateCache = new BlockStateCache();
+        @SubCategory("LightingOptimizations")
+        public LightingOptimizations lightingOptimizations = new LightingOptimizations();
+
+        public static class FastFurnace {
+            public static boolean fastFurnace = true;
+        }
+        public static class BlockStateCache {
+            public static boolean blockStatePairKeyCache = true;
+        }
+        public static class LightingOptimizations {
+            public static boolean enableLightingOptimizations = true;
+            public static boolean optimizeDynamicGraph = true;
+            public static boolean bambooLight = true;
+        }
     }
 
     @ClientOnly
     public static class Rendering {
-        //@SubCategory("ChestRenderingOpt")
-        public boolean chest_rendering_optimization = false;
-        //@SubCategory("FastBlit")
-        public boolean fastBlit = true;
-        // GPU Plus (framebuffer cleanup only on 1.19.2)
-        public boolean gpuPlus = true;
+        @SubCategory("ChestRenderingOpt")
+        public CRO cro = new CRO();
+        @SubCategory("FastBlit")
+        public FastBlit fastBlit = new FastBlit();
+        // GPU Plus
+        @SubCategory("GPUPlus")
+        public static GpuPlus GpuPlus = new GpuPlus();
+
+        public static class CRO {
+            public static boolean chest_rendering_optimization = false;
+        }
+
+        public static class FastBlit {
+            public static boolean fastBlit = true;
+        }
+
+        public static class GpuPlus {
+            public static boolean gpuPlus = true;
+            public static boolean gpuPlusVbo = true;
+            public static boolean gpuPlusIndex = true;
+        }
+
         @SubCategory("Reflex")
         public Reflex reflex = new Reflex();
 
@@ -62,46 +103,81 @@ public class TritiumConfigBase {
         public LeafCulling leafCulling = new LeafCulling();
 
         public static class Reflex {
-            public boolean enableReflex = true;
-            public boolean reflexDebug = false;
-            @Range(min = -100000, max = 100000)
-            public int reflexOffsetNs = 0;
-            @Range(min = 0, max = 1000)
-            public int MAX_FPS = 0;
+            public static boolean enableReflex = true;
+            public static boolean reflexDebug = false;
+            @Range(min=-100000, max=100000)
+            public static int reflexOffsetNs = 0;
+            @Range(min=0, max=1000)
+            public static int MAX_FPS = 0;
         }
-
         public static class EntityCulling {
-            public boolean enableCulling = true;
-            public boolean enableBlockEntityCulling = true;
-            public boolean enableTickStopping = false;
-            public boolean enableNameTagCulling = true;
+            public static boolean enableCulling = true;
+            public static boolean enableBlockEntityCulling = true;
+            public static boolean enableTickStopping = false;
+            public static boolean enableNameTagCulling = true;
 
-            public List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
+            public static List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
         }
 
         public static class LeafCulling {
-            public boolean enableLeafCulling = true;
-            public boolean hideInnerLeaves = false;
-            public boolean enableFaceOcclusionCulling = true;
+            public static boolean enableLeafCulling = true;
+            public static boolean hideInnerLeaves = false;
+            public static boolean enableFaceOcclusionCulling = true;
         }
     }
 
     @ClientOnly
     public static class ClientOptimizations {
-        //@SubCategory("FastLanguage")
-        public boolean fastLanguageSwitch = true;
-        //@SubCategory("FastResourcePack")
-        public boolean resourcePackCache = true;
+        @SubCategory("FastLanguage")
+        public static FL FL= new FL();
+
+        public static class FL {
+            public static boolean fastLanguageSwitch = true;
+        }
 
         @SubCategory("dynamicFPS")
         public DynamicFPS dynamicFPS = new DynamicFPS();
 
-        public static class DynamicFPS {
-            public boolean enable = true;
+        public static class DynamicFPS{
+            public static boolean enable = true;
             @Range(min = 1)
-            public int minimizedFPS = 1;
+            public static int minimizedFPS = 1;
         }
 
+    }
+
+    @ClientOnly
+    public static class FPSDisplan {
+        @SubCategory("FPSDisplay")
+        public static FPSDisplay fpsDisplay = new FPSDisplay();
+
+        public static class FPSDisplay {
+            public static boolean enabled = true;
+
+            @Range(min = 0, max = 4)
+            public static int position = 0;
+            @Range(min = 0, max = 4)
+            public static int displayMode = 1;
+
+            public static String textColor = "#FFFFFF";
+
+            public static boolean shadow = true;
+
+            @Range(min = 0, max = 1)
+            public static float backgroundOpacity = 0.3f;
+
+            @Range(min = 0, max = 2)
+            public static int decimalPlaces = 1;
+
+            public static boolean showUnit = true;
+        }
+    }
+
+    @ClientOnly
+    public static class ParticleLimit {
+        public static boolean enableParticleLimit = true;
+        @Range(min = 100, max = 50000)
+        public static int maxParticles = 16384;
     }
 
     public static class Network {
@@ -109,53 +185,117 @@ public class TritiumConfigBase {
     }
 
     public static class Entities {
-        //@SubCategory("EntityOpt")
-        public boolean optimizeEntities = true;
-        public boolean tickRaidersInRaid = true;
-        public boolean ite = true;
+        @SubCategory("EntityOpt")
+        public EntityOpt entityOpt = new EntityOpt();
+        public static class EntityOpt {
+            public static boolean optimizeEntities = true;
+            public static boolean tickRaidersInRaid = true;
+            public static boolean ite = true;
 
-        @Range(min = 1, max = 256)
-        public int horizontalRange = 64;
+            @Range(min = 1, max = 256)
+            public static int horizontalRange = 64;
 
-        @Range(min = 1, max = 256)
-        public int verticalRange = 32;
+            @Range(min = 1, max = 256)
+            public static int verticalRange = 32;
 
-        public List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+            public static  List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+
+        }
 
         @SubCategory("entityStacking")
         public EntityStacking entityStacking = new EntityStacking();
 
-        public static class EntityStacking {
-            public boolean enable = true;
-
-            @Range(min = 1)
-            public int lagTicks = 20;
-            @Range(min = 2)
-            public int maxEntityCount = 4;
-            @Range(min = 0.01D)
-            public double range = 3.2D;
+        public static class EntityStacking{
+            public static boolean enable = true;
+            public static boolean lockMaxedStacks = true;
+            public static boolean showStackCount = true;
+            @Range(min = 0)
+            public static int maxStackSize = 0;
+            @Range(min = 0)
+            public static int mergeCooldown = 5;
+            @Range(min = 0.1,max = 10)
+            public static double mergeDistance = 1.5;
+            @Range(min = 0,max = 2)
+            public static int listMode=0;
+            public static List<String> itemList = Arrays.asList(
+                    "minecraft:item"
+            );
         }
     }
 
     public static class TechOptimizations {
-        public boolean lambdaEventListeners = true;
+        @SubCategory("Create Optimizations")
+        public CreateOptimizations createOptimizations = new CreateOptimizations();
+        @SubCategory("LambdaEventListeners")
+        public LambdaEventListeners lambdaEventListeners = new LambdaEventListeners();
+
+        public static class CreateOptimizations {
+            public static boolean enableRailOffloading = true;
+        }
+        public static class LambdaEventListeners {
+            public static boolean lambdaEventListeners = true;
+        }
+
     }
 
     @ClientOnly
     public static class Fixes {
-        //@SubCategory("Button Fix")
-        public boolean buttonFix = true;
-        // @SubCategory("No GLog")
-        public boolean noGLog = true;
-        //@SubCategory("Memory Leak Fix")
-        public boolean MemoryLeakFix_AE2WTLibCreativeTabLeakFix = true;
-        public boolean MemoryLeakFix_ScreenshotByteBufferLeakFix = true;
+        @SubCategory("Button Fix")
+        public ButtonFix buttonFix = new ButtonFix();
+       @SubCategory("No GLog")
+       public NoGLog noGLog = new NoGLog();
+        @SubCategory("Memory Leak Fix")
+        public MemoryLeakFix memoryLeakFix = new MemoryLeakFix();
+        @SubCategory("Bee Fixes")
+        public BeeFixes beeFixes = new BeeFixes();
+
+
+        public static class ButtonFix {
+            public static boolean buttonFix = false;
+        }
+
+        public static class NoGLog {
+            public static boolean noGLog = true;
+        }
+
+        public static class MemoryLeakFix {
+            public static boolean AE2WTLibCreativeTabLeakFix = true;
+            public static boolean ScreenshotByteBufferLeakFix = true;
+        }
+        public static class BeeFixes {
+            public static boolean enableBeeFixes = true;
+            public static boolean fixWeatherInNether = true;
+            public static boolean fixBeeGravity = true;
+            public static boolean fixBeeTurtleEgg = true;
+        }
     }
 
     public static class ServerPerformance {
-        public boolean noiseSamplingCache = true;
-        public boolean asyncWorldSave = true;
-        @Range(min = 1, max = 300)
-        public int asyncWorldSaveTimeoutSeconds = 30;
+        @SubCategory("Noise Sampling Cache")
+        public NoiseSamplingCache noiseSamplingCache = new NoiseSamplingCache();
+
+        @SubCategory("Jigsaw Optimizations")
+        public JigsawOptimizations jigsawOptimizations = new JigsawOptimizations();
+
+        @SubCategory("Async World Save")
+        public AsyncWorldSave asyncWorldSave = new AsyncWorldSave();
+
+        public static class NoiseSamplingCache {
+            public static boolean noiseSamplingCache = true;
+        }
+
+        public static class JigsawOptimizations {
+            public static boolean enableJigsawOptimizations = true;
+            public static boolean enableOctreeCollisionDetection = true;
+            public static boolean enableFastWeightedSampling = true;
+            public static boolean enableStructureBlockFiltering = true;
+            public static boolean enableJigsawGenerationCheck = true;
+        }
+        public static class AsyncWorldSave {
+            public static boolean asyncWorldSave = true;
+
+            @Range(min = 1, max = 60)
+            public static int asyncWorldSaveTimeoutSeconds = 30;
+        }
     }
 }

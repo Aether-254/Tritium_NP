@@ -16,5 +16,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'MultiLoader'
-include("Common", "Fabric", "Forge")
+rootProject.name = 'Tritium'
+include("common")
+include("fabric")
+include("forge")

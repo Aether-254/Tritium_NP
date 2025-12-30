@@ -1,8 +1,8 @@
 package org.craftamethyst.tritium.event;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
 import net.minecraftforge.eventbus.api.Event;
 import org.craftamethyst.tritium.TritiumCommon;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.lang.invoke.*;
 import java.lang.reflect.Method;
@@ -57,7 +57,7 @@ public class LambdaEventListenerFactory {
     }
     
     public static IEventListener createListener(Object instance, Method method) {
-        if (!TritiumConfig.get().techOptimizations.lambdaEventListeners) {
+        if (!TritiumConfigBase.TechOptimizations.LambdaEventListeners.lambdaEventListeners) {
             return new ReflectionFallbackListener(instance, method);
         }
         
@@ -75,21 +75,24 @@ public class LambdaEventListenerFactory {
             return new ReflectionFallbackListener(instance, method);
         }
     }
-
-    private record ReflectionFallbackListener(Object instance, Method method) implements IEventListener {
-            private ReflectionFallbackListener(Object instance, Method method) {
-                this.instance = instance;
-                this.method = method;
-                method.setAccessible(true);
-            }
-
+    
+    private static class ReflectionFallbackListener implements IEventListener {
+        private final Object instance;
+        private final Method method;
+        
+        ReflectionFallbackListener(Object instance, Method method) {
+            this.instance = instance;
+            this.method = method;
+            method.setAccessible(true);
+        }
+        
         @Override
-            public void invoke(Event event) {
-                try {
-                    method.invoke(instance, event);
-                } catch (Exception e) {
-                    TritiumCommon.LOG.error("Error invoking event listener: {}", method, e);
-                }
+        public void invoke(Event event) {
+            try {
+                method.invoke(instance, event);
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Error invoking event listener: {}", method, e);
             }
         }
+    }
 }

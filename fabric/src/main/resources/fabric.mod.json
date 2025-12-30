@@ -2,44 +2,42 @@
     "schemaVersion": 1,
     "id": "tritium",
     "version": "${version}",
-  
-    "name": "Tritium",
-    "description": "An all-in-one optimization module dedicated to optimizing client-side rendering and server-side stability and fluency.",
+    "name": "${mod_name}",
+    "description": "${description}",
     "authors": [
-      "QianMo_ProMax",
-      "ZCRAFT",
-      "KSmc_brigade"
+        "${mod_author}"
     ],
     "contact": {
-      "sources": "https://github.com/CraftAmethyst/Tritium/"
+        "sources": "https://github.com/CraftAmethyst/Tritium/"
     },
-    "license": "MIT",
-  "icon": "assets/tritium/logo.png",
-  
+    "license": "${license}",
+    "icon": "icon.png",
     "environment": "*",
-    "entrypoints": {
-      "main": [
-        "org.craftamethyst.tritium.tritium"
-      ],
-      "client": [
-        "org.craftamethyst.tritium.client.FabricClientInitializer"
-      ],
-      "modmenu": [
-        "org.craftamethyst.tritium.config.TritiumConfigScreenFactory"
-      ]
+  "entrypoints": {
+    "main": [
+      "org.craftamethyst.tritium.TritiumFabric"
+    ],
+    "client": [
+      "org.craftamethyst.tritium.client.TritiumFabricClient"
+        ],
+    "modmenu": [
+      "org.craftamethyst.tritium.integration.modmenu.ModMenuIntegration"
+        ]
     },
     "mixins": [
-      "tritium.mixins.json",
-      "tritium.fabric.mixins.json"
+        "tritium.mixins.json",
+        "tritium.compat.mixins.json",
+        "tritium.fabric.mixins.json",
+        "tritium.create.mixins.json",
+        "tritium.gpuplus.mixins.json"
     ],
-  
-    "depends": {
-      "fabricloader": ">=0.14",
-      "fabric-api": "*",
-      "minecraft": "1.19.x",
-      "cloth-config": ">=8",
-      "java": ">=17"
-    },
-  "suggests": {}
-  }
+   "depends": {
+     "fabricloader": ">=0.14",
+     "fabric-api": "*",
+     "minecraft": "1.19.x",
+     "cloth-config": ">=8",
+     "java": ">=17"
+   },
+    "suggests": {}
+}
   

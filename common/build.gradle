@@ -29,20 +29,28 @@ repositories {
 }
 
 dependencies {
-    // Core libs used by performance/culling features
+    //ASM
+    implementation 'org.ow2.asm:asm:9.5'
+    implementation 'org.ow2.asm:asm-tree:9.5'
+    implementation 'org.ow2.asm:asm-commons:9.5'
+
+    //JOML
     implementation 'org.joml:joml:1.10.5'
+
+    //Mods
+    implementation 'maven.modrinth:embeddium:AYqEbec0'
     implementation 'maven.modrinth:guideme:9YGnKYDF'
+    implementation 'maven.modrinth:create:tJVykywJ'
     implementation 'maven.modrinth:ae2:7KVs6HMQ'
     implementation 'maven.modrinth:curios:IPQlZkz1'
     implementation 'maven.modrinth:architectury-api:1MKTLiiG'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
-    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    implementation "maven.modrinth:cloth-config:${cloth_config_version}"
 
-    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    compileOnly "me.shedaniel.cloth:cloth-config:${cloth_config_version}"
-
+    //Mixin
+    compileOnly group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 }
@@ -72,4 +80,7 @@ publishing {
             url "file://" + System.getenv("local_maven")
         }
     }
+}
+tasks.javadoc {
+    exclude '**/mixin/**'
 }

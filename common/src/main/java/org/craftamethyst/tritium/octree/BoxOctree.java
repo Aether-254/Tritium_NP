@@ -13,33 +13,50 @@ public class BoxOctree {
     private static final int MAX_OBJECTS_PER_NODE = 8;
 
     private final OctreeNode root;
-    private final AABB bounds;
 
     public BoxOctree(AABB bounds) {
-        this.bounds = bounds;
         this.root = new OctreeNode(bounds, 0);
     }
 
     public void addShape(VoxelShape shape, Object owner) {
-        AABB shapeBounds = shape.bounds();
-        root.addObject(new OctreeObject(shapeBounds, shape, owner));
+        if (shape == null || shape.isEmpty()) {
+            return;
+        }
+
+        try {
+            AABB shapeBounds = shape.bounds();
+            if (shapeBounds == null ||
+                    Double.isNaN(shapeBounds.minX) || Double.isNaN(shapeBounds.maxX) ||
+                    Double.isNaN(shapeBounds.minY) || Double.isNaN(shapeBounds.maxY) ||
+                    Double.isNaN(shapeBounds.minZ) || Double.isNaN(shapeBounds.maxZ)) {
+                return;
+            }
+
+            root.addObject(new OctreeObject(shapeBounds, shape, owner));
+        } catch (UnsupportedOperationException e) {
+            System.err.println("Tritium: Skipping empty VoxelShape for " + owner);
+        }
     }
 
     public boolean intersects(AABB box) {
         return root.intersects(box);
     }
 
-    public boolean intersects(VoxelShape shape) {
-        return root.intersects(shape.bounds());
-    }
-
     public void getIntersectingShapes(AABB box, Consumer<VoxelShape> consumer) {
-        root.getIntersectingObjects(box, obj -> consumer.accept(obj.shape));
+        root.getIntersectingObjects(box, obj -> {
+            if (obj.shape != null && !obj.shape.isEmpty()) {
+                consumer.accept(obj.shape);
+            }
+        });
     }
 
     public void getNearbyShapes(AABB box, Consumer<VoxelShape> consumer, double maxDistance) {
         AABB expandedBox = box.inflate(maxDistance);
-        root.getIntersectingObjects(expandedBox, obj -> consumer.accept(obj.shape));
+        root.getIntersectingObjects(expandedBox, obj -> {
+            if (obj.shape != null && !obj.shape.isEmpty()) {
+                consumer.accept(obj.shape);
+            }
+        });
     }
 
     public void clear() {
@@ -127,8 +144,8 @@ public class BoxOctree {
 
             for (int i = 0; i < 8; i++) {
                 double childMinX = minX + ((i & 1) * halfX);
-                double childMinY = minY + ((i & 2) / 2 * halfY);
-                double childMinZ = minZ + ((i & 4) / 4 * halfZ);
+                double childMinY = minY + ((double) (i & 2) / 2 * halfY);
+                double childMinZ = minZ + ((double) (i & 4) / 4 * halfZ);
 
                 AABB childBounds = new AABB(
                         childMinX, childMinY, childMinZ,

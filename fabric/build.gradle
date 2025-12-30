@@ -24,25 +24,22 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
-    implementation project(":Common")
+    implementation project(":common")
+
+    //Mods
+    modImplementation 'maven.modrinth:sodium:rAfhHfow'
+    modImplementation 'maven.modrinth:create-fabric:XMiAOQvM'
     modImplementation 'teamreborn:energy:3.0.0'
     modImplementation 'maven.modrinth:ae2:kA3rm9EP'
     modImplementation 'maven.modrinth:applied-energistics-2-wireless-terminals:QewbGM3G'
+    modImplementation "maven.modrinth:cloth-config:${fb_cloth_config_version}"
+    modImplementation "com.terraformersmc:modmenu:4.0.6"
 
-    // Core libs for culling features
+    //JOML
     implementation 'org.joml:joml:1.10.5'
     include 'org.joml:joml:1.10.5'
 
-    // Config UI + AutoConfig (Fabric)
-    // Config UI + AutoConfig (Fabric)
-    modImplementation "me.shedaniel.cloth:cloth-config-fabric:${cloth_config_version}"
-
-    // Mod Menu for config screen integration
-    modImplementation "com.terraformersmc:modmenu:4.0.6"
-
-    // MixinExtras
-    implementation 'io.github.llamalad7:mixinextras-fabric:0.3.5'
-    annotationProcessor 'io.github.llamalad7:mixinextras-common:0.3.5'
+    //Mixin
     include 'io.github.llamalad7:mixinextras-fabric:0.3.5'
 }
 
@@ -68,16 +65,24 @@ loom {
 
 
 processResources {
-    from project(":Common").sourceSets.main.resources
+    from project(":common").sourceSets.main.resources
     inputs.property "version", project.version
+    inputs.property "mod_name", mod_name
+    inputs.property "description", description
+    inputs.property "mod_author", mod_author
+    inputs.property "license", license
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": project.version,
+                "mod_name": mod_name,
+                "description": description,
+                "mod_author": mod_author,
+                "license": license
     }
 }
 
 tasks.withType(JavaCompile) {
-    source(project(":Common").sourceSets.main.allSource)
+    source(project(":common").sourceSets.main.allSource)
 }
 
 publishing {
@@ -95,4 +100,7 @@ publishing {
             url "file://" + System.getenv("local_maven")
         }
     }
+}
+tasks.javadoc {
+    exclude '**/mixin/**'
 }

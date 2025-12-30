@@ -9,5 +9,5 @@ public interface EntityRendererAccessor<T extends Entity> {
     boolean tritium_shouldShowName(T entity);
 
     void tritium_renderNameTag(T entity, Component component, PoseStack poseStack,
-                               MultiBufferSource multiBufferSource, int light);
+                                MultiBufferSource multiBufferSource, int light);
 }

@@ -1,7 +1,8 @@
 package org.craftamethyst.tritium;
 
-import me.zcraft.tritiumconfig.config.TritiumConfig;
+import me.zcraft.tconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,10 @@ public class TritiumCommon {
     public static final Logger LOG = LoggerFactory.getLogger(MOD_NAME);
 
     public static void init() {
-        LOG.info("Loading...\n" +
-                        "\n" +
+        LOG.info("""
+                        Loading...
+                        
+                        """ +
                         "  ______       _  __   _                 \n" +
                         " /_  __/_____ (_)/ /_ (_)__  __ ____ ___ \n" +
                         "  / /  / ___// // __// // / / // __ `__ \\\n" +
@@ -23,19 +26,17 @@ public class TritiumCommon {
                         "Version: {} | Platform: {} | Environment: {}\n" +
                         "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
-
-        //Register configuration file
         try {
-            TritiumConfig.register();
-            Runtime.getRuntime().addShutdownHook(new Thread(TritiumConfig::stop));
-            Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
+            TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {
             TritiumCommon.LOG.warn("Failed to initialize config service: {}", t.toString());
         }
-
-        if (Services.PLATFORM.isModLoaded("tritium")) {
-            TritiumCommon.LOG.info("Loading completed!");
+        try {
+            Runtime.getRuntime().addShutdownHook(new Thread(TritiumClient::shutdown));
+            TritiumCommon.LOG.info("Client ok");
+        } catch (Throwable t) {
+            TritiumCommon.LOG.warn("Failed to initialize Client: {}", t.toString());
         }
     }
 }

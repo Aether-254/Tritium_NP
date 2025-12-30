@@ -2,15 +2,21 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
+  "plugin": "org.craftamethyst.tritium.compat.plugin.CompatPlugin",
   "refmap": "tritium.refmap.json",
-  "compatibilityLevel": "JAVA_17",
+  "priority": 2000,
   "mixins": [
-    "chunk.EndIslandDensityFunctionMixin",
+    "cache.AbstractFurnaceBlockEntityMixin",
+    "cache.BlockStatePairKeyLazyCache",
+    "chunk.ImprovedNoiseMixin",
     "chunk.NoiseSamplingCacheMixin",
-    "client.memleakfix.AE2WTLibCreativeTabLeakFix",
-    "entity.EntityCollisionContextMixin",
     "entity.stack.ExperienceOrbMixin",
-    "entity.stack.ItemEntityMixin",
+    "entity.stack.item.InventoryMixin",
+    "entity.stack.item.ItemEntityMixin",
+    "entity.stack.item.ItemStackMixin",
+    "entity.stack.item.SlotMixin",
+    "entity.stack.item.fix.BucketItem",
+    "entity.stack.item.fix.BucketItemAccessor",
     "jigsaw.JigsawBlockEntityMixin",
     "jigsaw.JigsawPlacementMixin",
     "jigsaw.SinglePoolElementMixin",
@@ -18,21 +24,20 @@
     "jigsaw.StructureTemplatePoolMixin",
     "light.DynamicGraphMinFixedPointMixin",
     "light.FastBamboo",
+    "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
-    "packs.FilePackResourcesMixin",
     "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
     "tickstop.LevelMixin"
   ],
   "client": [
-    "client.button.AbstractWidgetMixin",
-    "client.fps.MinecraftMixin",
+    "client.fps.minecraft.MinecraftMixin",
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
-    "client.memleakfix.ScreenshotByteBufferLeakFixMixin",
+    "client.particle.ParticleEngineMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
     "client.renderer.culling.ChestRendererMixin",
@@ -42,14 +47,20 @@
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
-    "client.renderer.fbo.FastBlit",
-    "client.renderer.fbo.FramebufferCleanerMixin",
-    "client.renderer.other.MixinPoseStack",
+    "client.renderer.fast_blit.FastBlit",
+    "client.renderer.immediate.DirectionMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
-    "MCBUG.button.AbstractWidgetMixin"
+    "MCBUG.button.AbstractWidgetMixin",
+    "memory.client.PoseStackMixin",
+    "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
+    "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin"
   ],
   "server": [],
   "injectors": {
-    "defaultRequire": 1
+    "defaultRequire": 1,
+    "maxShiftBy": 5
+  },
+  "overwrites": {
+    "requireAnnotations": true
   }
 }

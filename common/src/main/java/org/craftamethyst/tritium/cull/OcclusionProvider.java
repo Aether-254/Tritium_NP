@@ -1,6 +1,5 @@
 package org.craftamethyst.tritium.cull;
 
-import org.craftamethyst.tritium.DataProvider;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
