@@ -175,11 +175,34 @@ public abstract class ItemEntityMixin {
             }
         }
 
-        Component countText = Component.literal("×" + count)
-                .withStyle(ChatFormatting.DARK_GREEN)
-                .withStyle(ChatFormatting.BOLD);
+        String colorHex = TritiumConfigBase.Entities.EntityStacking.stackCountColor;
+        Component countText = tritium$createColoredCountText(count, colorHex);
+
         entity.setCustomName(countText);
         entity.setCustomNameVisible(true);
+    }
+
+    @Unique
+    private Component tritium$createColoredCountText(int count, String colorHex) {
+        String cleanHex = colorHex.startsWith("#") ? colorHex.substring(1) : colorHex;
+        if (cleanHex.length() == 3) {
+            cleanHex = "" +
+                    cleanHex.charAt(0) + cleanHex.charAt(0) +
+                    cleanHex.charAt(1) + cleanHex.charAt(1) +
+                    cleanHex.charAt(2) + cleanHex.charAt(2);
+        }
+
+        try {
+            int rgb = Integer.parseInt(cleanHex, 16);
+            return Component.literal("×" + count)
+                    .withStyle(style -> style
+                            .withColor(net.minecraft.network.chat.TextColor.fromRgb(rgb))
+                            .withBold(true));
+        } catch (IllegalArgumentException e) {
+            return Component.literal("×" + count)
+                    .withStyle(ChatFormatting.DARK_GREEN)
+                    .withStyle(ChatFormatting.BOLD);
+        }
     }
 
     @Unique

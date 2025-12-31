@@ -28,14 +28,11 @@ dependencies {
     implementation 'org.ow2.asm:asm-commons:9.5'
     //Embeddium
     implementation 'maven.modrinth:embeddium:UTbfe5d1'
-    //joml
+    //JOML
     implementation 'org.joml:joml:1.10.5'
 
-    //Create
+    //Mods
     implementation 'maven.modrinth:create:8amzvn9x'
-
-
-    //AE2
     implementation 'maven.modrinth:guideme:9YGnKYDF'
     implementation 'maven.modrinth:ae2:7KVs6HMQ'
     implementation 'maven.modrinth:curios:IPQlZkz1'

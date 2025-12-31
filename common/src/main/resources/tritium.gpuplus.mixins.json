@@ -8,6 +8,7 @@
   "client": [
     "client.renderer.vc.FramebufferCleanerMixin",
     "client.renderer.vertex.VertexBufferMixin",
-    "client.renderer.vertex.VertexConsumerMixin"
+    "client.renderer.vertex.VertexConsumerMixin",
+    "client.renderer.fast_blit.FastBlit"
   ]
 }

@@ -49,7 +49,6 @@
     "client.renderer.culling.LeafRenderMixin",
     "client.renderer.culling.LevelRendererMixin",
     "client.renderer.culling.LevelTKMixin",
-    "client.renderer.fast_blit.FastBlit",
     "client.renderer.immediate.DirectionMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
     "MCBUG.button.AbstractWidgetMixin",

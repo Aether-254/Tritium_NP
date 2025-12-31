@@ -225,6 +225,7 @@ public class TritiumConfigBase {
             public static List<String> itemList = Arrays.asList(
                     "minecraft:item"
             );
+            public static String stackCountColor = "#00FF00";
         }
     }
 
