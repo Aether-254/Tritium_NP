@@ -171,6 +171,8 @@
   "config.tritium.entities.entityStacking_listMode.tooltip": "0: Disable list 1: Whitelist mode 2: Blacklist mode",
   "config.tritium.entities.entityStacking_itemList": "List",
   "config.tritium.entities.entityStacking_itemList.tooltip": "A list, fill in according to example format, mode determined by your list mode setting",
+  "config.tritium.entities.entityStacking_stackCountColor": "Stack Count Color",
+  "config.tritium.entities.entityStacking_stackCountColor.tooltip": "Set the color of stack count display, Example #00FF00 is green",
 
   "config.tritium.category.techOptimizations": "Technical Optimizations",
   "config.tritium.techOptimizations.createOptimizations": "Create Optimizations",

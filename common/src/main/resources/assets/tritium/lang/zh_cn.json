@@ -168,7 +168,8 @@
   "config.tritium.entities.entityStacking_listMode.tooltip": "0: 禁用列表 1: 白名单模式 2: 黑名单模式",
   "config.tritium.entities.entityStacking_itemList": "列表",
   "config.tritium.entities.entityStacking_itemList.tooltip": "一个列表，按示例格式填写，模式根据你在上设置的列表模式决定",
-
+  "config.tritium.entities.entityStacking_stackCountColor": "堆叠数量颜色",
+  "config.tritium.entities.entityStacking_stackCountColor.tooltip": "设置堆叠数量显示的颜色，例如#00FF00为绿色",
 
   "config.tritium.category.techOptimizations": "技术",
   "config.tritium.techOptimizations.createOptimizations": "机械动力优化",

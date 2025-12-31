@@ -2,7 +2,7 @@ package org.craftamethyst.tritium.event;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGuiEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.craftamethyst.tritium.TritiumCommon;
@@ -12,7 +12,7 @@ import org.craftamethyst.tritium.client.fps.FPSCounter;
 public class ForgeFPSCounterRenderer {
 
     @SubscribeEvent
-    public static void onRenderGui(RenderGuiOverlayEvent.Post event) {
+    public static void onRenderGui(RenderGuiEvent.Post event) {
         FPSCounter.getInstance().render(
                 event.getPoseStack(),
                 Minecraft.getInstance().font,

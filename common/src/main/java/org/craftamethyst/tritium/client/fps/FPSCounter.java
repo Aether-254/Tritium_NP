@@ -3,6 +3,7 @@ package org.craftamethyst.tritium.client.fps;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
@@ -158,7 +159,7 @@ public class FPSCounter {
 
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity > 0) {
             int bgColor = (int)(TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
-            fill(poseStack, x - 2, y - 2, x + textWidth + 2, y + 12, bgColor);
+            GuiComponent.fill(poseStack, x - 2, y - 2, x + textWidth + 2, y + 12, bgColor);
         }
 
         int color = parseColor(TritiumConfigBase.FPSDisplan.FPSDisplay.textColor);
@@ -167,10 +168,6 @@ public class FPSCounter {
         } else {
             font.draw(poseStack, text, x, y, color);
         }
-    }
-
-    private void fill(PoseStack poseStack, int x1, int y1, int x2, int y2, int color) {
-        net.minecraft.client.gui.GuiComponent.fill(poseStack, x1, y1, x2, y2, color);
     }
 
     private String getFPSString() {
