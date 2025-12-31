@@ -53,28 +53,26 @@ dependencies {
     implementation 'org.ow2.asm:asm:9.5'
     implementation 'org.ow2.asm:asm-tree:9.5'
     implementation 'org.ow2.asm:asm-commons:9.5'
-    // LWJGL OpenCL
-    implementation("org.lwjgl:lwjgl")
-    implementation "org.lwjgl:lwjgl-opencl:${lwjgl_version}"
 
-    //emb
-    implementation 'maven.modrinth:embeddium:J7b96IEd'
-    //joml
+    //JOML
     implementation 'org.joml:joml:1.10.5'
-    //Create
-    implementation 'maven.modrinth:create:88L641Un'
 
+    //Mods
+    implementation 'maven.modrinth:embeddium:J7b96IEd'
+    implementation 'maven.modrinth:create:88L641Un'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
     implementation "maven.modrinth:tritiumconfiguration:${tc}"
-    //implementation 'maven.modrinth:create:88L641Un'
-    //implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
+    //Libraries
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+
+    //Mixin
     implementation group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
-    // fabric and neoforge both bundle mixinextras, so it is safe to use it in common
     compileOnly group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 
+    //implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
 }
 
 configurations {
