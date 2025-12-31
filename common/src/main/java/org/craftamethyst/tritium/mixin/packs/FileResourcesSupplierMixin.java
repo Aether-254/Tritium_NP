@@ -18,15 +18,19 @@ public abstract class FileResourcesSupplierMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Optimized resource pack loading
+     * @reason Memory-mapped resource pack loading
      */
     @Overwrite
     public PackResources openFull(PackLocationInfo packLocationInfo, Pack.Metadata metadata) {
-        return ResourcePackFactory.createFallbackPack(
-                packLocationInfo,
-                content.toPath(),
-                metadata.overlays(),
-                metadata
-        );
+        try {
+            return ResourcePackFactory.createOptimizedPack(
+                    packLocationInfo,
+                    content.toPath(),
+                    metadata.overlays()
+            );
+        } catch (Exception e) {
+            return new FilePackResources.FileResourcesSupplier(content)
+                    .openFull(packLocationInfo, metadata);
+        }
     }
 }

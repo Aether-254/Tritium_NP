@@ -10,23 +10,23 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public class ResourcePackFactory {
+public final class ResourcePackFactory {
 
-    public static PackResources createSmartPack(PackLocationInfo info,
-                                                Path zipPath,
-                                                List<String> overlays) throws IOException {
-        boolean useLazy = shouldUseLazyLoading(zipPath);
-        int cacheSize = calculateOptimalCacheSize(zipPath);
+    public static PackResources createOptimizedPack(PackLocationInfo info,
+                                                    Path zipPath,
+                                                    List<String> overlays) throws IOException {
+        boolean useLazyMapping = shouldUseLazyMapping(zipPath);
+        int cacheSize = determineCacheSize(zipPath);
 
-        ZipResourceCache cache = new ZipResourceCache(
+        MemoryMappedResourceCache cache = new MemoryMappedResourceCache(
                 zipPath,
                 overlays,
-                new ZipResourceCache.DefaultOverlayStrategy(),
-                useLazy,
+                new MemoryMappedResourceCache.HierarchicalOverlayLayout(overlays),
+                useLazyMapping,
                 cacheSize
         );
 
-        return new AbstractCachedPackResources(info, cache) {};
+        return new MappedPackResources(info, cache) {};
     }
 
     public static PackResources createFallbackPack(PackLocationInfo info,
@@ -34,22 +34,23 @@ public class ResourcePackFactory {
                                                    List<String> overlays,
                                                    Pack.Metadata metadata) {
         try {
-            return createSmartPack(info, zipPath, overlays);
+            return createOptimizedPack(info, zipPath, overlays);
         } catch (IOException e) {
             return new FilePackResources.FileResourcesSupplier(zipPath.toFile())
                     .openFull(info, metadata);
         }
     }
 
-    private static boolean shouldUseLazyLoading(Path zipPath) throws IOException {
+    private static boolean shouldUseLazyMapping(Path zipPath) throws IOException {
         long size = Files.size(zipPath);
-        return size > 50 * 1024 * 1024;
+        return size > 20 * 1024 * 1024;
     }
 
-    private static int calculateOptimalCacheSize(Path zipPath) throws IOException {
+    private static int determineCacheSize(Path zipPath) throws IOException {
         long size = Files.size(zipPath);
-        if (size < 10 * 1024 * 1024) return 4096;
-        if (size < 100 * 1024 * 1024) return 8192;
-        return 16384;
+        if (size < 5 * 1024 * 1024) return 4096;
+        if (size < 50 * 1024 * 1024) return 8192;
+        if (size < 200 * 1024 * 1024) return 16384;
+        return 32768;
     }
 }

@@ -24,12 +24,12 @@ This project is actively under development. Track progress at the [TODO List](TO
 <h2 align="center">Supported Minecraft Versions</h2>
 
 
-| Mod Loader | Supported Versions |
-|------------|--------------------|
-| NeoForge   | 1.20.1, 1.21, 1.21.1 |
-| Forge      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1 |
-| Fabric     | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21, 1.21.1 |
-| Quilt      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21 |
+| Mod Loader | Supported Versions                                                       |
+|------------|--------------------------------------------------------------------------|
+| NeoForge   | 1.20.1, 1.21, 1.21.1, 1.21.6, 1.21.7, 1.21.8                             |
+| Forge      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21, 1.21.1                         |
+| Fabric     | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21, 1.21.1, 1.21.6, 1.21.7, 1.21.8 |
+| Quilt      | 1.19, 1.19.1, 1.19.2, 1.20, 1.20.1, 1.21                                 |
 
 > **Note:** Available features vary by Minecraft version.
 

@@ -39,6 +39,7 @@ repositories {
     maven { name = 'Shedaniel'; url = 'https://maven.shedaniel.me/' }
     maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/releases/' }
 }
+
 mixin {
     config("${mod_id}.mixins.json")
     config("${mod_id}.forge.mixins.json")
@@ -104,14 +105,11 @@ dependencies {
     implementation(annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.5"))
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
-    //AE2WTLib
+    //Mods
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'
-
-    //Create
     implementation 'maven.modrinth:create:88L641Un'
-
-    // Config UI + AutoConfig
     implementation "me.shedaniel.cloth:cloth-config-neoforge:${cloth_config_version}"
+
     //Shadow
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
 

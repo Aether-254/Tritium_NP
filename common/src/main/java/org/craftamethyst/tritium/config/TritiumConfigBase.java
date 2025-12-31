@@ -219,6 +219,7 @@ public class TritiumConfigBase {
             public static int mergeCooldown = 5;
             @Range(min = 0.1,max = 10)
             public static double mergeDistance = 1.5;
+            public static String stackCountColor = "#00FF00";
             @Range(min = 0,max = 2)
             public static int listMode=0;
             public static List<String> itemList = java.util.Arrays.asList(

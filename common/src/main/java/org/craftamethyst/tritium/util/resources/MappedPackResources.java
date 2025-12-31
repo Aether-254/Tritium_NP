@@ -12,42 +12,42 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.Set;
 
-public abstract class AbstractCachedPackResources extends AbstractPackResources {
-    protected final IResourceCache resourceCache;
+public abstract class MappedPackResources extends AbstractPackResources {
+    protected final IResourceCache resourceMapper;
 
-    protected AbstractCachedPackResources(PackLocationInfo info, IResourceCache cache) {
+    protected MappedPackResources(PackLocationInfo info, IResourceCache mapper) {
         super(info);
-        this.resourceCache = cache;
+        this.resourceMapper = mapper;
     }
 
     @Nullable
     @Override
     public IoSupplier<InputStream> getRootResource(String @NotNull ... parts) {
-        byte[] data = resourceCache.getRootResource(parts);
+        byte[] data = resourceMapper.getRootResource(parts);
         return data != null ? () -> new ByteArrayInputStream(data) : null;
     }
 
     @Override
     public IoSupplier<InputStream> getResource(@NotNull PackType type,
                                                @NotNull ResourceLocation location) {
-        byte[] data = resourceCache.getResource(type, location);
+        byte[] data = resourceMapper.getResource(type, location);
         return data != null ? () -> new ByteArrayInputStream(data) : null;
     }
 
     @Override
     public @NotNull Set<String> getNamespaces(@NotNull PackType type) {
-        return resourceCache.getNamespaces(type);
+        return resourceMapper.getNamespaces(type);
     }
 
     @Override
     public void listResources(@NotNull PackType type, @NotNull String namespace,
                               @NotNull String path, @NotNull ResourceOutput output) {
-        resourceCache.listResources(type, namespace, path,
+        resourceMapper.listResources(type, namespace, path,
                 (location, data) -> output.accept(location, () -> new ByteArrayInputStream(data)));
     }
 
     @Override
     public void close() {
-        resourceCache.clear();
+        resourceMapper.clear();
     }
 }
