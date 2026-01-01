@@ -26,7 +26,6 @@
     "light.FastBamboo",
     "MCBUG.bee.BeeMixin",
     "MCBUG.bee.LevelMixin",
-    "MCBUG.bee.RandomPosMixin",
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
     "packs.FolderRepositorySourceMixin",

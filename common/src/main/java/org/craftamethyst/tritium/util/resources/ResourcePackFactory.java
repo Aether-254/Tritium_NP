@@ -23,13 +23,17 @@ public final class ResourcePackFactory {
                 cacheSize
         );
 
-        return new MappedPackResources(id, true, cache) {};
+        return new MappedPackResources(id, true, cache);
     }
 
     private static boolean shouldUseLazyMapping(Path zipPath) throws IOException {
+        if (Files.isRegularFile(zipPath) && zipPath.toString().toLowerCase().endsWith(".zip")) {
+            return false;
+        }
         long size = Files.size(zipPath);
         return size > 20 * 1024 * 1024;
     }
+
 
     private static int determineCacheSize(Path zipPath) throws IOException {
         long size = Files.size(zipPath);

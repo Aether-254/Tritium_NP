@@ -33,6 +33,7 @@ public final class EntityTickHelper {
     private static volatile boolean tickRaidersInRaid = true;
     private static volatile int horizontalRange = 32;
     private static volatile int verticalRange = 16;
+    private static final int renderMultiplier = 2;
 
     static {
         try {
@@ -44,7 +45,6 @@ public final class EntityTickHelper {
 
         reloadConfig();
     }
-
 
     public static boolean shouldSkipTick(Entity entity) {
         if (!enabled) return false;
@@ -67,11 +67,19 @@ public final class EntityTickHelper {
         return !isNearPlayer(living);
     }
 
+    public static boolean shouldSkipRender(Entity entity) {
+        if (!(entity instanceof LivingEntity living)) return false;
+        if (!living.isAlive()) return true;
+
+        return !isNearPlayerExtended(living);
+    }
+
     private static void reloadConfig() {
         enabled = TritiumConfigBase.Entities.EntityOpt.optimizeEntities;
         tickRaidersInRaid = TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid;
         horizontalRange = TritiumConfigBase.Entities.EntityOpt.horizontalRange;
         verticalRange = TritiumConfigBase.Entities.EntityOpt.verticalRange;
+
         List<String> whiteRaw = TritiumConfigBase.Entities.EntityOpt.entityWhitelist;
 
         Set<EntityType<?>> whiteIds = Sets.newHashSet();
@@ -121,6 +129,38 @@ public final class EntityTickHelper {
                 pos.getX() + horizontalRange,
                 pos.getY() + verticalRange,
                 pos.getZ() + horizontalRange
+        );
+
+        for (Player player : sl.players()) {
+            if (!player.isAlive()) continue;
+            BlockPos ppos = player.blockPosition();
+            int pcx = ppos.getX() >> 4;
+            int pcz = ppos.getZ() >> 4;
+            if (Math.abs(pcx - cx) > radius || Math.abs(pcz - cz) > radius) continue;
+            if (player.getBoundingBox().intersects(box)) return true;
+        }
+        return false;
+    }
+
+    private static boolean isNearPlayerExtended(LivingEntity entity) {
+        Level level = entity.level();
+        if (!(level instanceof ServerLevel sl)) return true;
+        BlockPos pos = entity.blockPosition();
+
+        int extendedHorizontalRange = horizontalRange * renderMultiplier;
+        int extendedVerticalRange = verticalRange * renderMultiplier;
+
+        int cx = pos.getX() >> 4;
+        int cz = pos.getZ() >> 4;
+        int radius = (extendedHorizontalRange >> 4) + 1;
+
+        AABB box = new AABB(
+                pos.getX() - extendedHorizontalRange,
+                pos.getY() - extendedVerticalRange,
+                pos.getZ() - extendedHorizontalRange,
+                pos.getX() + extendedHorizontalRange,
+                pos.getY() + extendedVerticalRange,
+                pos.getZ() + extendedHorizontalRange
         );
 
         for (Player player : sl.players()) {

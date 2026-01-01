@@ -9,7 +9,8 @@
     "client": [
         "client.fps.count.GuiMixin",
         "sodium.SodiumOptionsGUIAccessor",
-        "sodium.SodiumOptionsGUIMixin"
+        "sodium.SodiumOptionsGUIMixin",
+        "MCBUG.bee.RandomPosMixin"
     ],
     "server": [
     ],

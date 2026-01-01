@@ -12,7 +12,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Set;
 
-public abstract class MappedPackResources extends AbstractPackResources {
+public class MappedPackResources extends AbstractPackResources {
     protected final IResourceCache resourceMapper;
     public static File file;
 

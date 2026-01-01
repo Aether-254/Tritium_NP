@@ -13,6 +13,8 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public final class MemoryMappedResourceCache implements IResourceCache {
     private static final Cleaner CLEANER = Cleaner.create();
@@ -29,6 +31,8 @@ public final class MemoryMappedResourceCache implements IResourceCache {
 
     private final LayeredCache layeredCache;
     private final boolean useRegionMapping;
+    private final boolean isZipFile;
+    private final Map<String, byte[]> zipFileCache = new ConcurrentHashMap<>();
 
     public MemoryMappedResourceCache(Path zipPath, List<String> overlays,
                                      OverlayLayout layout) throws IOException {
@@ -39,11 +43,19 @@ public final class MemoryMappedResourceCache implements IResourceCache {
                                      OverlayLayout layout, boolean regionMapping,
                                      long mappingLimit) throws IOException {
         this.zipPath = zipPath;
-        this.zipChannel = FileChannel.open(zipPath, StandardOpenOption.READ);
-        this.overlayLayout = layout;
-        this.useRegionMapping = regionMapping;
+        this.isZipFile = Files.isRegularFile(zipPath) && zipPath.toString().toLowerCase().endsWith(".zip");
 
-        this.memoryMapper = new MemoryMapper(zipChannel, mappingLimit);
+        if (isZipFile) {
+            this.zipChannel = null;
+            this.memoryMapper = null;
+        } else {
+            this.zipChannel = FileChannel.open(zipPath, StandardOpenOption.READ);
+            this.memoryMapper = new MemoryMapper(zipChannel, mappingLimit);
+        }
+
+        this.overlayLayout = layout;
+        this.useRegionMapping = regionMapping && !isZipFile;
+
         this.layeredCache = new LayeredCache(8192, 1024 * 1024);
 
         for (PackType type : PackType.values()) {
@@ -54,6 +66,40 @@ public final class MemoryMappedResourceCache implements IResourceCache {
     }
 
     private void buildResourceCatalog() throws IOException {
+        if (isZipFile) {
+            buildResourceCatalogFromZip();
+        } else {
+            buildResourceCatalogFromFileSystem();
+        }
+    }
+
+    private void buildResourceCatalogFromZip() throws IOException {
+        try (ZipFile zipFile = new ZipFile(zipPath.toFile())) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                if (!entry.isDirectory()) {
+                    String relativePath = normalizePath(entry.getName());
+                    fileRegions.put(relativePath, new FileRegion(0, 0));
+                    indexResourcePath(relativePath);
+                    extractNamespace(relativePath);
+
+                    byte[] data = readZipEntry(zipFile, entry);
+                    if (data != null) {
+                        zipFileCache.put(relativePath, data);
+                    }
+                }
+            }
+        }
+    }
+
+    private byte[] readZipEntry(ZipFile zipFile, ZipEntry entry) throws IOException {
+        try (var inputStream = zipFile.getInputStream(entry)) {
+            return inputStream.readAllBytes();
+        }
+    }
+
+    private void buildResourceCatalogFromFileSystem() throws IOException {
         try (Stream<Path> walk = Files.walk(zipFileSystem().getPath("/"))) {
             walk.filter(Files::isRegularFile)
                     .parallel()
@@ -109,6 +155,7 @@ public final class MemoryMappedResourceCache implements IResourceCache {
             }
         }
     }
+
     private static boolean isValidNamespace(String s) {
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -163,6 +210,10 @@ public final class MemoryMappedResourceCache implements IResourceCache {
     }
 
     private byte @Nullable [] getResourceData(String path) {
+        if (isZipFile) {
+            return zipFileCache.get(path);
+        }
+
         ByteBuffer cached = layeredCache.get(path);
         if (cached != null && cached.hasArray()) {
             return cached.array();
@@ -186,7 +237,6 @@ public final class MemoryMappedResourceCache implements IResourceCache {
                 return buffer.array();
             }
         } catch (IOException e) {
-            // Fall through to file reading
         }
 
         return readFileContentFallback(path);
@@ -224,6 +274,10 @@ public final class MemoryMappedResourceCache implements IResourceCache {
     @Override
     public byte @Nullable [] getRootResource(String... parts) {
         String path = String.join("/", parts);
+
+        if (isZipFile) {
+            return zipFileCache.get(path);
+        }
 
         ByteBuffer cached = layeredCache.get(path);
         if (cached != null && cached.hasArray()) {
@@ -299,11 +353,14 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         fileRegions.clear();
         namespaceRegistry.clear();
         resourceRegistry.clear();
+        zipFileCache.clear();
 
-        memoryMapper.cleanup();
+        if (memoryMapper != null) {
+            memoryMapper.cleanup();
+        }
 
         try {
-            if (zipChannel.isOpen()) {
+            if (zipChannel != null && zipChannel.isOpen()) {
                 zipChannel.close();
             }
         } catch (IOException ignored) {}
@@ -331,7 +388,10 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         return str.startsWith("/") ? str.substring(1) : str;
     }
 
-    // Memory mapping implementation
+    private String normalizePath(String path) {
+        return path.startsWith("/") ? path.substring(1) : path;
+    }
+
     private static final class MemoryMapper {
         private final FileChannel channel;
         private final long mappingLimit;
@@ -407,7 +467,6 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         }
     }
 
-    // Layered cache implementation
     private static final class LayeredCache {
         private final Map<String, ByteBuffer> l1Cache;
         private final Map<String, ByteBuffer> l2Cache;
@@ -463,7 +522,6 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         }
     }
 
-    // Data structures
     private static final class FileRegion {
         final long offset;
         final int size;
@@ -520,6 +578,5 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         }
     }
 
-    // Volatile field for lazy initialization
     private volatile FileSystem zipFileSystem;
 }

@@ -41,8 +41,16 @@ public class MixinPlugin implements IMixinConfigPlugin {
     }
 
     private boolean shouldApplyMixinInternal(String mixinClassName) {
-        if (mixinClassName.contains("FolderRepositorySourceMixin")) {
-            return TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache;
+        if (mixinClassName.contains("FileResourcesSupplierMixin")) {
+            try {
+                return config != null &&
+                        config.clientOptimizations != null &&
+                        TritiumConfigBase.ClientOptimizations.FastResourcePack != null &&
+                        TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache;
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Failed to read config for mixin: " + mixinClassName, e);
+                return false;
+            }
         }
         return true;
     }
@@ -56,8 +64,13 @@ public class MixinPlugin implements IMixinConfigPlugin {
     }
 
     @Override
-    public void preApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
-
+    public void preApply(String targetClassName, ClassNode targetClass,
+                         String mixinClassName, IMixinInfo mixinInfo) {
+        if (mixinClassName.contains("FileResourcesSupplierMixin")) {
+            TritiumCommon.LOG.info("Applying FileResourcesSupplierMixin, config enabled: {}",
+                    shouldApplyMixinInternal(mixinClassName));
+        }
+    }
     @Override
     public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {}
 }

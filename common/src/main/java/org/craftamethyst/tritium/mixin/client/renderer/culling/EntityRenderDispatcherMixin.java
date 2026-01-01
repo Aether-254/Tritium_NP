@@ -53,6 +53,11 @@ public abstract class EntityRenderDispatcherMixin {
             return;
         }
 
+        if (EntityTickHelper.shouldSkipRender(entity)) {
+            cir.setReturnValue(false);
+            return;
+        }
+
         TritiumClient client = TritiumClient.instance;
         if (client != null && client.shouldSkipEntity(entity)) {
             cir.setReturnValue(false);
