@@ -10,6 +10,7 @@ import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -17,31 +18,36 @@ import java.util.List;
 
 @Mixin(StructureTemplate.class)
 public class StructureBlockEntityMixin {
-    @Inject(
+    @ModifyVariable(
             method = "processBlockInfos",
-            at = @At("HEAD")
+            at = @At("HEAD"),
+            argsOnly = true,
+            index = 4
     )
-    private static void tritium$filterBlocksOutsideBox(
+    private static List<StructureBlockInfo> tritium$filterBlocksOutsideBox(
+            List<StructureBlockInfo> blockInfos,
             ServerLevelAccessor level,
             BlockPos offset,
             BlockPos pos,
-            StructurePlaceSettings settings,
-            List<StructureBlockInfo> blockInfos,
-            CallbackInfoReturnable<List<StructureBlockInfo>> cir) {
+            StructurePlaceSettings settings) {
         if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
                 !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableStructureBlockFiltering) {
-            return;
+            return blockInfos;
         }
 
         BoundingBox box = settings.getBoundingBox();
-        if (box == null) {
-            return;
+        if (box == null || blockInfos.isEmpty()) {
+            return blockInfos;
         }
 
-        blockInfos.removeIf(info -> {
+        List<StructureBlockInfo> filtered = new ArrayList<>(blockInfos.size());
+        for (StructureBlockInfo info : blockInfos) {
             BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos()).offset(offset);
-            return !box.isInside(target);
-        });
+            if (box.isInside(target)) {
+                filtered.add(info);
+            }
+        }
+        return filtered;
     }
 
     @Inject(
