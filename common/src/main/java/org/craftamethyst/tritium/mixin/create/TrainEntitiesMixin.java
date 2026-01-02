@@ -20,7 +20,7 @@ public class TrainEntitiesMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/List;forEach(Ljava/util/function/Consumer;)V"
-            ),remap = false
+            ), remap = false
     )
     private void redirectCarriageEntityManagement(List<Carriage> carriages, Consumer<? super Carriage> action, Level level) {
         if (TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading && level instanceof ServerLevel serverLevel) {

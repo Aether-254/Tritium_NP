@@ -31,12 +31,13 @@ public class TritiumConfig {
     private final Map<String, FieldAccessor> fieldAccessors = new ConcurrentHashMap<>();
     private final Object configLock = new Object();
     private final AtomicReference<Object> configRef = new AtomicReference<>();
+    private final List<Runnable> reloadListeners = new ArrayList<>();
     private String configFileName;
     private boolean isClient = true;
     private boolean registered = false;
     private ConfigParser configParser;
     private ConfigFileWatcher fileWatcher;
-    private final List<Runnable> reloadListeners = new ArrayList<>();
+
     public TritiumConfig(String modId, Class<?> configClass) {
         this.modId = modId;
         this.configClass = configClass;
@@ -223,9 +224,11 @@ public class TritiumConfig {
             }
         }
     }
+
     public void addReloadListener(Runnable listener) {
         reloadListeners.add(listener);
     }
+
     @SuppressWarnings("unchecked")
     public <T> T get() {
         return (T) configRef.get();
@@ -271,8 +274,8 @@ public class TritiumConfig {
             createDefaultConfig(configPath);
             TritiumCommon.LOG.info("[Server DEBUG] Config file not found, creating: {}", configPath);
         } else {
-        TritiumCommon.LOG.info("[Server DEBUG] Config file already exists");
-    }
+            TritiumCommon.LOG.info("[Server DEBUG] Config file already exists");
+        }
         configParser = new ConfigParser(configPath);
 
         if (!ConfigMigration.migrateConfig(configPath, configParser, configClass)) {
@@ -623,6 +626,7 @@ public class TritiumConfig {
 
             return getTypeDefaultValue(targetType);
         }
+
         @Override
         public Object getDefaultValue() throws Exception {
             return defaultValueSupplier.get();

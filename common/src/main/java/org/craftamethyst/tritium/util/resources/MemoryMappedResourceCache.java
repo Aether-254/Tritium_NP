@@ -29,6 +29,8 @@ public final class MemoryMappedResourceCache implements IResourceCache {
 
     private final LayeredCache layeredCache;
     private final boolean useRegionMapping;
+    // Volatile field for lazy initialization
+    private volatile FileSystem zipFileSystem;
 
     public MemoryMappedResourceCache(Path zipPath, List<String> overlays,
                                      OverlayLayout layout) throws IOException {
@@ -296,12 +298,14 @@ public final class MemoryMappedResourceCache implements IResourceCache {
             if (zipChannel.isOpen()) {
                 zipChannel.close();
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         if (zipFileSystem != null && zipFileSystem.isOpen()) {
             try {
                 zipFileSystem.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
     }
 
@@ -319,6 +323,12 @@ public final class MemoryMappedResourceCache implements IResourceCache {
     private String normalizePath(Path path) {
         String str = path.toString();
         return str.startsWith("/") ? str.substring(1) : str;
+    }
+
+    public interface OverlayLayout {
+        boolean isOverlayPath(String path);
+
+        List<String> getSearchOrder();
     }
 
     // Memory mapping implementation
@@ -382,7 +392,8 @@ public final class MemoryMappedResourceCache implements IResourceCache {
                     if (unsafe != null) {
                         try {
                             unsafe.invokeCleaner(buffer);
-                        } catch (Exception ignored) {}
+                        } catch (Exception ignored) {
+                        }
                     }
                 }
             }
@@ -482,11 +493,6 @@ public final class MemoryMappedResourceCache implements IResourceCache {
         }
     }
 
-    public interface OverlayLayout {
-        boolean isOverlayPath(String path);
-        List<String> getSearchOrder();
-    }
-
     public static final class HierarchicalOverlayLayout implements OverlayLayout {
         private final List<String> overlays;
 
@@ -509,7 +515,4 @@ public final class MemoryMappedResourceCache implements IResourceCache {
             return order;
         }
     }
-
-    // Volatile field for lazy initialization
-    private volatile FileSystem zipFileSystem;
 }

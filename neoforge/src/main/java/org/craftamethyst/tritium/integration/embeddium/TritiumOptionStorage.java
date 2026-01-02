@@ -9,7 +9,8 @@ public class TritiumOptionStorage implements OptionStorage<TritiumConfigBase> {
 
     private static final TritiumOptionStorage INSTANCE = new TritiumOptionStorage();
 
-    private TritiumOptionStorage() {}
+    private TritiumOptionStorage() {
+    }
 
     public static TritiumOptionStorage getInstance() {
         return INSTANCE;

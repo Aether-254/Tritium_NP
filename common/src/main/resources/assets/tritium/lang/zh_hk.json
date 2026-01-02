@@ -1,6 +1,5 @@
 {
   "config.tritium.title": "⚙ Tritium 設定",
-
   "config.tritium.category.performance": "效能最佳化",
   "config.tritium.performance.lightingOptimizations": "光照最佳化",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "啟用光照最佳化",
@@ -9,15 +8,12 @@
   "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph.tooltip": "最佳化動態圖最小固定點演算法以提升光照效能",
   "config.tritium.performance.lightingOptimizations_bambooLight": "竹子光照最佳化",
   "config.tritium.performance.lightingOptimizations_bambooLight.tooltip": "跳過竹子的光照計算以提升效能",
-
   "config.tritium.performance.fastFurnace": "熔爐最佳化",
   "config.tritium.performance.fastFurnace_fastFurnace": "啟用熔爐最佳化",
   "config.tritium.performance.fastFurnace_fastFurnace.tooltip": "快取熔爐配方查詢以提升效能",
-
   "config.tritium.performance.blockStateCache": "方塊狀態快取",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "啟用方塊狀態對鍵快取",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "快取方塊狀態對的雜湊計算以提升效能",
-
   "config.tritium.category.rendering": "渲染最佳化",
   "config.tritium.rendering.entityCulling": "實體剔除",
   "config.tritium.rendering.reflex": "Reflex",
@@ -25,7 +21,6 @@
   "config.tritium.rendering.fastBlit_fastBlit": "FastBlit",
   "config.tritium.rendering.fastBlit_fastBlit.tooltip": "減少延遲，提升幀率穩定性",
   "config.tritium.rendering.leafCulling": "樹葉剔除",
-
   "config.tritium.rendering.reflex_enableReflex": "啟用Reflex",
   "config.tritium.rendering.reflex_enableReflex.tooltip": "啟用 Reflex 最佳化",
   "config.tritium.rendering.reflex_reflexDebug": "啟用偵錯",
@@ -54,14 +49,12 @@
   "config.tritium.rendering.entityCulling_entityBlacklist.tooltip": "始終剔除的實體列表",
   "config.tritium.rendering.entityCulling_entityWhitelist": "實體白名單",
   "config.tritium.rendering.entityCulling_entityWhitelist.tooltip": "永不剔除的實體列表",
-
   "config.tritium.rendering.leafCulling_enableLeafCulling": "啟用樹葉剔除",
   "config.tritium.rendering.leafCulling_enableLeafCulling.tooltip": "啟用樹葉剔除最佳化",
   "config.tritium.rendering.leafCulling_hideInnerLeaves": "隱藏內部樹葉",
   "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "當樹葉方塊被樹葉或實心方塊完全包圍時不渲染該方塊",
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "啟用面遮蔽剔除",
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "對樹葉面啟用非同步射線遮蔽偵測（帶快取，不確定時保守顯示）",
-
   "config.tritium.rendering.cro": "箱子渲染最佳化",
   "config.tritium.rendering.cro_chest_rendering_optimization": "箱子渲染最佳化開關",
   "config.tritium.rendering.cro_chest_rendering_optimization.tooltip": "沒有開箱動畫。",
@@ -72,7 +65,6 @@
   "config.tritium.rendering.GpuPlus_gpuPlusVbo.tooltip": "在可用時對頂點緩衝使用不可變緩衝儲存 / DSA。",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex": "啟用索引緩衝",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex.tooltip": "在可用時對索引緩衝使用不可變緩衝儲存 / DSA。",
-
   "config.tritium.category.clientOptimizations": "用戶端最佳化",
   "config.tritium.clientOptimizations.FL": "快速語言",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch": "快速語言切換",
@@ -80,13 +72,11 @@
   "config.tritium.clientOptimizations.FastResourcePack": "快速資源包",
   "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache": "資源包快取",
   "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache.tooltip": "快取檔案包資源的命名空間查詢以提升效能",
-
   "config.tritium.clientOptimizations.dynamicFPS": "動態幀率",
   "config.tritium.clientOptimizations.dynamicFPS_enable": "啟用動態幀率",
   "config.tritium.clientOptimizations.dynamicFPS_enable.tooltip": "當遊戲不聚焦時自動降低幀率（降至 最低幀率）或最小化（根本不渲染）",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "最低幀率",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "動態幀率功能的最低幀率設定項(最低: 1)",
-
   "config.tritium.category.network": "網路最佳化",
   "config.tritium.category.entities": "實體最佳化",
   "config.tritium.entities.entityOpt": "實體效能最佳化",
@@ -102,7 +92,6 @@
   "config.tritium.entities.entityOpt_verticalRange.tooltip": "實體刻最佳化的垂直偵測範圍（1-256格）",
   "config.tritium.entities.entityOpt_entityWhitelist": "實體白名單",
   "config.tritium.entities.entityOpt_entityWhitelist.tooltip": "永不進行最佳化（始終保持刻處理）的實體列表",
-
   "config.tritium.entities.entityStacking": "實體堆疊",
   "config.tritium.entities.entityStacking_lockMaxedStacks": "最大堆疊限制鎖",
   "config.tritium.entities.entityStacking_lockMaxedStacks.tooltip": "修復與機械動力等模組同時使用的情況下導致的問題",
@@ -118,12 +107,10 @@
   "config.tritium.entities.entityStacking_listMode.tooltip": "0: 停用列表 1: 白名單模式 2: 黑名單模式",
   "config.tritium.entities.entityStacking_itemList": "列表",
   "config.tritium.entities.entityStacking_itemList.tooltip": "一個列表，按範例格式填寫，模式根據你在上設定的列表模式決定",
-
   "config.tritium.category.techOptimizations": "技術最佳化",
   "config.tritium.techOptimizations.createOptimizations": "機械動力最佳化",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "啟用鐵路卸載",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "將鐵路系統刻處理移至獨立執行緒以提升伺服器效能",
-
   "config.tritium.category.fixes": "修復",
   "config.tritium.fixes.buttonFix": "按鈕修復",
   "config.tritium.fixes.buttonFix_buttonFix": "MC-259387",
@@ -136,7 +123,6 @@
   "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix.tooltip": "AE2WTLib創造標籤頁記憶體洩漏修復",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "ScreenshotByteBufferMemLeakFix",
-
   "config.tritium.fixes.beeFixes": "蜜蜂修復",
   "config.tritium.fixes.beeFixes_enableBeeFixes": "啟用蜜蜂修復",
   "config.tritium.fixes.beeFixes_enableBeeFixes.tooltip": "所有蜜蜂相關錯誤修復的主開關",
@@ -148,12 +134,10 @@
   "config.tritium.fixes.beeFixes_fixBeeGravity.tooltip": " 修復MC-229321：西北方向移動的傾向",
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg": "MC-248332",
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg.tooltip": "修復MC-248332：蜜蜂會破壞海龜蛋",
-
   "config.tritium.category.serverPerformance": "伺服器效能",
   "config.tritium.serverPerformance.noiseSamplingCache": "噪聲取樣快取",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache": "啟用噪聲取樣快取",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "快取噪聲取樣以提升伺服器效能",
-
   "config.tritium.serverPerformance.jigsawOptimizations": "拼圖最佳化",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations": "啟用拼圖最佳化",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations.tooltip": "所有拼圖結構生成最佳化的主開關",

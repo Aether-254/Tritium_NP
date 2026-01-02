@@ -11,10 +11,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public final class RailOffloaderHub {
+    private static final boolean CREATE_LOADED = Services.PLATFORM.isModLoaded("create");
     private static SingleTaskLane worker;
     private static volatile Future<?> currentFuture;
     private static boolean initialized = false;
-    private static final boolean CREATE_LOADED = Services.PLATFORM.isModLoaded("create");
 
     public static void initialize() {
         if (initialized || !CREATE_LOADED) return;
@@ -53,6 +53,7 @@ public final class RailOffloaderHub {
             }
         });
     }
+
     public static void onTickEnd() {
         if (!CREATE_LOADED || currentFuture == null) return;
 

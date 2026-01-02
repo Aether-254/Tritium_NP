@@ -1,8 +1,6 @@
 {
   "config.tritium.title": "⚙ Tritium Configuration",
-
   "config.tritium.category.performance": "Performance",
-
   "config.tritium.performance.lightingOptimizations": "Lighting Optimizations",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations": "Enable Lighting Optimizations",
   "config.tritium.performance.lightingOptimizations_enableLightingOptimizations.tooltip": "Master switch for lighting system optimizations",
@@ -10,16 +8,12 @@
   "config.tritium.performance.lightingOptimizations_optimizeDynamicGraph.tooltip": "Optimize dynamic graph minimum fixed-point algorithm to improve lighting performance",
   "config.tritium.performance.lightingOptimizations_bambooLight": "Bamboo Lighting Optimization",
   "config.tritium.performance.lightingOptimizations_bambooLight.tooltip": "Skip lighting calculations for bamboo to improve performance",
-
   "config.tritium.performance.fastFurnace": "Fast Furnace",
   "config.tritium.performance.fastFurnace_fastFurnace": "Enable Fast Furnace",
   "config.tritium.performance.fastFurnace_fastFurnace.tooltip": "Cache furnace recipe lookups to improve performance",
-
   "config.tritium.performance.blockStateCache": "Block State Cache",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache": "Enable Block State Pair Key Cache",
   "config.tritium.performance.blockStateCache_blockStatePairKeyCache.tooltip": "Cache block state pair hash computations to improve performance",
-
-
   "config.tritium.category.rendering": "Rendering",
   "config.tritium.rendering.entityCulling": "Entity Culling",
   "config.tritium.rendering.reflex": "Reflex",
@@ -27,7 +21,6 @@
   "config.tritium.rendering.fastBlit_fastBlit": "FastBlit",
   "config.tritium.rendering.fastBlit_fastBlit.tooltip": "Reduce latency and improve frame rate stability",
   "config.tritium.rendering.leafCulling": "Leaf Culling",
-
   "config.tritium.rendering.reflex_enableReflex": "Enable Reflex",
   "config.tritium.rendering.reflex_enableReflex.tooltip": "Enable Reflex optimization",
   "config.tritium.rendering.reflex_reflexDebug": "Enable Debug",
@@ -56,14 +49,12 @@
   "config.tritium.rendering.entityCulling_entityBlacklist.tooltip": "List of entities that are always culled",
   "config.tritium.rendering.entityCulling_entityWhitelist": "Entity Whitelist",
   "config.tritium.rendering.entityCulling_entityWhitelist.tooltip": "List of entities that are never culled",
-
   "config.tritium.rendering.leafCulling_enableLeafCulling": "Enable Leaf Culling",
   "config.tritium.rendering.leafCulling_enableLeafCulling.tooltip": "Enable leaf culling optimization",
   "config.tritium.rendering.leafCulling_hideInnerLeaves": "Hide Inner Leaves",
   "config.tritium.rendering.leafCulling_hideInnerLeaves.tooltip": "Don't render leaf blocks when completely surrounded by leaves or solid blocks",
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling": "Enable Face Occlusion Culling",
   "config.tritium.rendering.leafCulling_enableFaceOcclusionCulling.tooltip": "Enable async ray occlusion detection for leaf faces (cached, conservatively shown when uncertain)",
-
   "config.tritium.rendering.cro": "Chest Rendering Optimization",
   "config.tritium.rendering.cro_chest_rendering_optimization": "Chest Rendering Optimization",
   "config.tritium.rendering.cro_chest_rendering_optimization.tooltip": "No chest opening animation.",
@@ -74,7 +65,6 @@
   "config.tritium.rendering.GpuPlus_gpuPlusVbo.tooltip": "Use immutable buffer storage / DSA for vertex buffers when available.",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex": "GPU Plus Index Buffer",
   "config.tritium.rendering.GpuPlus_gpuPlusIndex.tooltip": "Use immutable buffer storage / DSA for index buffers when available.",
-
   "config.tritium.category.clientOptimizations": "Client Optimizations",
   "config.tritium.clientOptimizations.FL": "Fast Language",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch": "Fast Language Switch",
@@ -82,25 +72,19 @@
   "config.tritium.clientOptimizations.FastResourcePack": "Fast Resource Pack",
   "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache": "Resource Pack Cache",
   "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache.tooltip": "Cache namespace lookups for file package resources to improve performance",
-
   "config.tritium.clientOptimizations.dynamicFPS": "Dynamic FPS",
   "config.tritium.clientOptimizations.dynamicFPS_enable": "Enable Dynamic FPS",
   "config.tritium.clientOptimizations.dynamicFPS_enable.tooltip": "Automatically reduce FPS when game is unfocused (to Minimum FPS) or minimized (no rendering at all)",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS": "Minimum FPS",
   "config.tritium.clientOptimizations.dynamicFPS_minimizedFPS.tooltip": "Minimum FPS for dynamic FPS feature (Minimum: 1)",
-
   "config.tritium.category.fpsdisplan": "FPS Display",
   "config.tritium.fpsdisplan.fpsDisplay": "FPS Display Setting",
-
   "config.tritium.fpsdisplan.fpsDisplay_enabled": "Enabled Fps Display",
   "config.tritium.fpsdisplan.fpsDisplay_enabled.tooltip": "Enable FPS display overlay",
-
   "config.tritium.fpsdisplan.fpsDisplay_position": "Position",
   "config.tritium.fpsdisplan.fpsDisplay_position.tooltip": "0Top Left｜1Top Right｜2Bottom Left｜3Bottom Right｜4Center",
-
   "config.tritium.fpsdisplan.fpsDisplay_displayMode": "Display Mode",
   "config.tritium.fpsdisplan.fpsDisplay_displayMode.tooltip": "What FPS information to display",
-
   "config.tritium.fpsdisplan.fpsDisplay_textColor": "Text Color",
   "config.tritium.fpsdisplan.fpsDisplay_textColor.tooltip": "Set text color，Example #FFFFFF is white",
   "config.tritium.fpsdisplan.fpsDisplay_shadow": "Text Shadow",
@@ -109,34 +93,27 @@
   "config.tritium.fpsdisplan.fpsDisplay_backgroundOpacity.tooltip": "Set the transparency of the FPS display background (0 = fully transparent, 1 = fully opaque)",
   "config.tritium.fpsdisplan.fpsDisplay_showUnit": "Show Unit",
   "config.tritium.fpsdisplan.fpsDisplay_showUnit.tooltip": "Show 'FPS' unit after the number",
-
   "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces": "DecimalPlaces",
   "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces.tooltip": "0 x.x|1 x.xx",
-
   "config.tritium.fpsDisplay.position.topLeft": "Top Left",
   "config.tritium.fpsDisplay.position.topRight": "Top Right",
   "config.tritium.fpsDisplay.position.bottomLeft": "Bottom Left",
   "config.tritium.fpsDisplay.position.bottomRight": "Bottom Right",
   "config.tritium.fpsDisplay.position.center": "Center",
-
   "config.tritium.fpsDisplay.mode.currentOnly": "Current Only",
   "config.tritium.fpsDisplay.mode.avgOnly": "Average Only",
   "config.tritium.fpsDisplay.mode.all": "Current/Min/Avg/Max",
   "config.tritium.fpsDisplay.mode.maxOnly": "Maximum Only",
   "config.tritium.fpsDisplay.mode.minOnly": "Minimum Only",
-
   "config.tritium.fpsDisplay.label.min": "Min",
   "config.tritium.fpsDisplay.label.avg": "Avg",
   "config.tritium.fpsDisplay.label.max": "Max",
-
   "config.tritium.fpsDisplay.updateInterval.ms": "%d ms",
-
   "config.tritium.category.particleLimit": "Particle Limit",
   "config.tritium.particleLimit.enableParticleLimit": "Enable Particle Limit",
   "config.tritium.particleLimit.enableParticleLimit.tooltip": "Enable or disable particle limiting system",
   "config.tritium.particleLimit.maxParticles": "Max Particles",
   "config.tritium.particleLimit.maxParticles.tooltip": "Maximum total particles allowed (100-50000)",
-
   "config.tritium.category.network": "Network",
   "config.tritium.category.entities": "Entities",
   "config.tritium.entities.entityOpt": "Entity Performance Optimization",
@@ -155,7 +132,6 @@
   "config.tritium.entities.entityStacking.listMode.0": "Disable",
   "config.tritium.entities.entityStacking.listMode.1": "White list Mode",
   "config.tritium.entities.entityStacking.listMode.2": "Black list Mode",
-
   "config.tritium.entities.entityStacking": "Entity Stacking",
   "config.tritium.entities.entityStacking_lockMaxedStacks": "Lock Max Stacks",
   "config.tritium.entities.entityStacking_lockMaxedStacks.tooltip": "Fix issues when used with mods like Create",
@@ -175,12 +151,10 @@
   "config.tritium.entities.entityStacking_itemList.tooltip": "A list, fill in according to example format, mode determined by your list mode setting",
   "config.tritium.entities.entityStacking_stackCountColor": "Stack Count Color",
   "config.tritium.entities.entityStacking_stackCountColor.tooltip": "Set the color of stack count display, Example #00FF00 is green",
-
   "config.tritium.category.techOptimizations": "Technical Optimizations",
   "config.tritium.techOptimizations.createOptimizations": "Create Optimizations",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading": "Enable Rail Offloading",
   "config.tritium.techOptimizations.createOptimizations_enableRailOffloading.tooltip": "Move rail system tick processing to separate thread to improve server performance",
-
   "config.tritium.category.fixes": "Fixes",
   "config.tritium.fixes.buttonFix": "Button Fix",
   "config.tritium.fixes.buttonFix_buttonFix": "MC-259387",
@@ -193,7 +167,6 @@
   "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix.tooltip": "AE2WTLib creative tab memory leak fix",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix": "ScreenshotByteBufferLeakFix",
   "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix.tooltip": "Screenshot Byte Buffer Memory Leak Fix",
-
   "config.tritium.fixes.beeFixes": "Bee Fixes",
   "config.tritium.fixes.beeFixes_enableBeeFixes": "Enable Bee Fixes",
   "config.tritium.fixes.beeFixes_enableBeeFixes.tooltip": "Master switch for all bee-related bug fixes",
@@ -205,12 +178,10 @@
   "config.tritium.fixes.beeFixes_fixBeeGravity.tooltip": "Fix MC-229321: Tendency to move northwest",
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg": "MC-248332",
   "config.tritium.fixes.beeFixes_fixBeeTurtleEgg.tooltip": "Fix MC-248332: Bees can destroy turtle eggs",
-
   "config.tritium.category.serverPerformance": "Server Performance",
   "config.tritium.serverPerformance.noiseSamplingCache": "Noise Sampling Cache",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache": "Enable Noise Sampling Cache",
   "config.tritium.serverPerformance.noiseSamplingCache_noiseSamplingCache.tooltip": "Cache noise sampling to improve server performance",
-
   "config.tritium.serverPerformance.jigsawOptimizations": "Jigsaw Optimizations",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations": "Enable Jigsaw Optimizations",
   "config.tritium.serverPerformance.jigsawOptimizations_enableJigsawOptimizations.tooltip": "Master switch for all jigsaw structure generation optimizations",

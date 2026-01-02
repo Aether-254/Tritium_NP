@@ -23,10 +23,9 @@ public final class BlockFaceOcclusionCuller {
     private static final Object2BooleanOpenHashMap<Key> BLOCK_CACHE = new Object2BooleanOpenHashMap<>(16_000);
 
     private static final ConcurrentMap<Key, CompletableFuture<Boolean>> INFLIGHT = new ConcurrentHashMap<>();
-
+    private static final AtomicInteger PENDING = new AtomicInteger();
     private static ExecutorService tracerPool;
     private static ScheduledExecutorService timeoutChecker;
-    private static final AtomicInteger PENDING = new AtomicInteger();
     private static long lastCacheCleanup = System.currentTimeMillis();
 
     static {
@@ -247,5 +246,6 @@ public final class BlockFaceOcclusionCuller {
         }
     }
 
-    private record Key(int levelId, long pos, byte face) { }
+    private record Key(int levelId, long pos, byte face) {
+    }
 }

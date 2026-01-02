@@ -14,7 +14,9 @@ import java.io.File;
 
 @Mixin(FilePackResources.FileResourcesSupplier.class)
 public abstract class FileResourcesSupplierMixin {
-    @Shadow @Final private File content;
+    @Shadow
+    @Final
+    private File content;
 
     /**
      * @author ZCRAFT

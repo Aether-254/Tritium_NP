@@ -16,8 +16,8 @@ public class ChestRendererMixin {
             method = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;Lnet/minecraft/client/model/geom/ModelPart;FII)V",
             at = @At(value = "HEAD"),
             index = 6, argsOnly = true)
-    public float renderLid(float value){
-        if(!TritiumConfigBase.Rendering.CRO.chest_rendering_optimization) return value;
+    public float renderLid(float value) {
+        if (!TritiumConfigBase.Rendering.CRO.chest_rendering_optimization) return value;
         return 0F;
     }
 }

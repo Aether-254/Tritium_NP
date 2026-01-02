@@ -25,23 +25,47 @@ public abstract class AbstractFurnaceBlockEntityMixin {
 
     @Unique
     private static final int DEFAULT_COOK_TIME = 200;
-
+    @Shadow
+    protected NonNullList<ItemStack> items;
     @Unique
     @Nullable
     private RecipeHolder<? extends AbstractCookingRecipe> tritium$cachedRecipe;
-
     @Unique
     private ItemStack tritium$cachedInput = ItemStack.EMPTY;
-
     @Unique
     private boolean tritium$cacheMissed;
-
     @Shadow
     @Final
     private RecipeManager.CachedCheck<SingleRecipeInput, ? extends AbstractCookingRecipe> quickCheck;
 
-    @Shadow
-    protected NonNullList<ItemStack> items;
+    @Redirect(
+            method = "serverTick",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getTotalCookTime(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)I"
+            )
+    )
+    private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
+        AbstractFurnaceBlockEntityMixin self = (AbstractFurnaceBlockEntityMixin) (Object) blockEntity;
+
+        if (self != null && self.items.isEmpty()) {
+            self.tritium$cachedInput = ItemStack.EMPTY;
+            self.tritium$cacheMissed = false;
+            return DEFAULT_COOK_TIME;
+        }
+
+        assert self != null;
+        ItemStack currentInput = self.items.getFirst();
+        if (currentInput.isEmpty()) {
+            self.tritium$cachedInput = ItemStack.EMPTY;
+            self.tritium$cacheMissed = false;
+            return DEFAULT_COOK_TIME;
+        }
+
+        RecipeHolder<? extends AbstractCookingRecipe> recipe = self.tritium$getCachedRecipe(currentInput, level);
+
+        return recipe == null ? DEFAULT_COOK_TIME : recipe.value().getCookingTime();
+    }
 
     @Unique
     @Nullable
@@ -71,35 +95,6 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             this.tritium$cacheMissed = true;
             return null;
         }
-    }
-
-    @Redirect(
-            method = "serverTick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getTotalCookTime(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)I"
-            )
-    )
-    private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
-        AbstractFurnaceBlockEntityMixin self = (AbstractFurnaceBlockEntityMixin) (Object) blockEntity;
-
-        if (self != null && self.items.isEmpty()) {
-            self.tritium$cachedInput = ItemStack.EMPTY;
-            self.tritium$cacheMissed = false;
-            return DEFAULT_COOK_TIME;
-        }
-
-        assert self != null;
-        ItemStack currentInput = self.items.getFirst();
-        if (currentInput.isEmpty()) {
-            self.tritium$cachedInput = ItemStack.EMPTY;
-            self.tritium$cacheMissed = false;
-            return DEFAULT_COOK_TIME;
-        }
-
-        RecipeHolder<? extends AbstractCookingRecipe> recipe = self.tritium$getCachedRecipe(currentInput, level);
-
-        return recipe == null ? DEFAULT_COOK_TIME : recipe.value().getCookingTime();
     }
 
     @Inject(

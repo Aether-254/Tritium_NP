@@ -26,7 +26,8 @@ public final class ResourcePackFactory {
                 cacheSize
         );
 
-        return new MappedPackResources(info, cache) {};
+        return new MappedPackResources(info, cache) {
+        };
     }
 
     public static PackResources createFallbackPack(PackLocationInfo info,

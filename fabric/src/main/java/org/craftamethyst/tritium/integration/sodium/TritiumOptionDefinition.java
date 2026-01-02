@@ -64,15 +64,41 @@ public class TritiumOptionDefinition<T> {
         this(key, translationKey, getter, setter, null, controlType, null, controlParams);
     }
 
-    public String getKey() { return key; }
-    public String getTranslationKey() { return translationKey; }
-    public Function<TritiumConfigBase, T> getGetter() { return getter; }
-    public BiConsumer<TritiumConfigBase, T> getSetter() { return setter; }
-    public OptionImpact getImpact() { return impact; }
-    public boolean hasImpact() { return hasImpact; }
-    public ControlType getControlType() { return controlType; }
-    public Object[] getControlParams() { return controlParams; }
-    public ControlValueFormatter getFormatter() { return formatter; }
+    public String getKey() {
+        return key;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public Function<TritiumConfigBase, T> getGetter() {
+        return getter;
+    }
+
+    public BiConsumer<TritiumConfigBase, T> getSetter() {
+        return setter;
+    }
+
+    public OptionImpact getImpact() {
+        return impact;
+    }
+
+    public boolean hasImpact() {
+        return hasImpact;
+    }
+
+    public ControlType getControlType() {
+        return controlType;
+    }
+
+    public Object[] getControlParams() {
+        return controlParams;
+    }
+
+    public ControlValueFormatter getFormatter() {
+        return formatter;
+    }
 
     public enum ControlType {
         BOOLEAN,

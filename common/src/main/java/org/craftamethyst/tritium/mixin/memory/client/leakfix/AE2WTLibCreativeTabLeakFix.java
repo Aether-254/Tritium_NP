@@ -19,7 +19,7 @@ public class AE2WTLibCreativeTabLeakFix {
     @Final
     private static List<ItemStack> items;
 
-    @Inject(method = "init", at = @At("HEAD"),require = 0)
+    @Inject(method = "init", at = @At("HEAD"), require = 0)
     private static void tritium$clearOnInit(CallbackInfo ci) {
         if (TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix) {
             synchronized (items) {

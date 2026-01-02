@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.nio.ByteBuffer;
 
-@Mixin(value = VertexBuffer.class,priority = 499)
+@Mixin(value = VertexBuffer.class, priority = 499)
 public abstract class VertexBufferMixin {
 
     @Shadow

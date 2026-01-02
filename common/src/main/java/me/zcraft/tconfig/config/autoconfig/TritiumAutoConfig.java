@@ -198,6 +198,7 @@ public class TritiumAutoConfig {
             TritiumCommon.LOG.error("Failed to generate subcategory entries for section: {}", sectionName, e);
         }
     }
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void generateFieldEntry(ConfigEntryBuilder entryBuilder,
                                     ConfigCategory category,
@@ -436,6 +437,7 @@ public class TritiumAutoConfig {
             TritiumCommon.LOG.error("Failed to update config value: {}", fullPath, e);
         }
     }
+
     private interface FieldAccessor {
         Object getValue(Object obj) throws Exception;
 

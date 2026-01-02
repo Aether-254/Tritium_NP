@@ -233,7 +233,7 @@ public abstract class ItemEntityMixin {
             return false;
         }
 
-        if (!ItemStack.isSameItemSameComponents(a,b)) {
+        if (!ItemStack.isSameItemSameComponents(a, b)) {
             return false;
         }
 
@@ -256,7 +256,7 @@ public abstract class ItemEntityMixin {
             return false;
         }
 
-        return Arrays.equals(a.getTags().toArray(),b.getTags().toArray());
+        return Arrays.equals(a.getTags().toArray(), b.getTags().toArray());
 
     }
 

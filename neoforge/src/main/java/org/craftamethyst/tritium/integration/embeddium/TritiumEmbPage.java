@@ -158,7 +158,7 @@ public class TritiumEmbPage extends OptionPage {
                         .addInteger("fps_display_position",
                                 "config.tritium.fpsdisplan.fpsDisplay_position",
                                 0, 4, 1,
-                                v -> switch(v) {
+                                v -> switch (v) {
                                     case 0 -> Component.translatable("config.tritium.fpsDisplay.position.topLeft");
                                     case 1 -> Component.translatable("config.tritium.fpsDisplay.position.topRight");
                                     case 2 -> Component.translatable("config.tritium.fpsDisplay.position.bottomLeft");
@@ -171,7 +171,7 @@ public class TritiumEmbPage extends OptionPage {
                         .addInteger("fps_display_mode",
                                 "config.tritium.fpsdisplan.fpsDisplay_displayMode",
                                 0, 4, 1,
-                                v -> switch(v) {
+                                v -> switch (v) {
                                     case 0 -> Component.translatable("config.tritium.fpsDisplay.mode.avgOnly");
                                     case 1 -> Component.translatable("config.tritium.fpsDisplay.mode.currentOnly");
                                     case 2 -> Component.translatable("config.tritium.fpsDisplay.mode.all");
@@ -367,7 +367,8 @@ public class TritiumEmbPage extends OptionPage {
 
     public static TritiumEmbPage createNetworkPage() {
         return new TritiumPageBuilder("network", Component.translatable("config.tritium.category.network"))
-                .addGroup("network", Component.translatable("config.tritium.category.network"), builder -> {})
+                .addGroup("network", Component.translatable("config.tritium.category.network"), builder -> {
+                })
                 .build();
     }
 }

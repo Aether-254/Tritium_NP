@@ -25,6 +25,7 @@ public class GuiMixin {
     private void onRenderAfterChat(GuiGraphics pGuiGraphics, DeltaTracker pDeltaTracker, CallbackInfo ci) {
         tritium$renderFPSCounter(pGuiGraphics);
     }
+
     @Unique
     private void tritium$renderFPSCounter(GuiGraphics pGuiGraphics) {
         Minecraft minecraft = Minecraft.getInstance();

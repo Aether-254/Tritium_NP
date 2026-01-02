@@ -9,11 +9,18 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = ArrayOcclusionCache.class, remap = false)
 public abstract class ArrayOcclusionCacheMixin {
 
-    @Shadow @Final private int reachX2;
-    @Shadow @Final private byte[] cache;
-    @Shadow private int positionKey;
-    @Shadow private int entry;
-    @Shadow private int offset;
+    @Shadow
+    @Final
+    private int reachX2;
+    @Shadow
+    @Final
+    private byte[] cache;
+    @Shadow
+    private int positionKey;
+    @Shadow
+    private int entry;
+    @Shadow
+    private int offset;
 
     @Overwrite
     public void setVisible(int x, int y, int z) {

@@ -20,14 +20,21 @@ import java.util.List;
 @Mixin(StructureTemplatePool.class)
 public class StructureTemplatePoolMixin {
 
-    @Shadow @Final private List<Pair<StructurePoolElement, Integer>> rawTemplates;
-
-    @Unique private final Object tritium$lock = new Object();
-    @Unique private volatile boolean tritium$initialized = false;
-    @Unique private StructurePoolElement[] tritium$elements;
-    @Unique private int[] tritium$prefix;
-    @Unique private int tritium$total;
-    @Unique private static final boolean SPA_LOADED = Services.PLATFORM.isModLoaded("structure_pool_api");
+    @Unique
+    private static final boolean SPA_LOADED = Services.PLATFORM.isModLoaded("structure_pool_api");
+    @Unique
+    private final Object tritium$lock = new Object();
+    @Shadow
+    @Final
+    private List<Pair<StructurePoolElement, Integer>> rawTemplates;
+    @Unique
+    private volatile boolean tritium$initialized = false;
+    @Unique
+    private StructurePoolElement[] tritium$elements;
+    @Unique
+    private int[] tritium$prefix;
+    @Unique
+    private int tritium$total;
 
     @Inject(method = "getShuffledTemplates",
             at = @At("HEAD"),
@@ -66,6 +73,7 @@ public class StructureTemplatePoolMixin {
             System.err.println("Tritium StructureTemplatePool failed, falling back to vanilla: " + e.getMessage());
         }
     }
+
     @Unique
     private void tritium$init() {
         try {

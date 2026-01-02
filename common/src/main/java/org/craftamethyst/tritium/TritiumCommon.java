@@ -24,7 +24,7 @@ public class TritiumCommon {
                         "Version: {} | Platform: {} | Environment: {}\n" +
                         "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
-         try {
+        try {
             //TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {

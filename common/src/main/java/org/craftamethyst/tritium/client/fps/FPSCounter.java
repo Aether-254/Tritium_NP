@@ -30,7 +30,8 @@ public class FPSCounter {
     private double intervalOnePercentLowFPS = Double.MAX_VALUE;
     private double intervalMaxFPS = 0;
 
-    private FPSCounter() {}
+    private FPSCounter() {
+    }
 
     public static FPSCounter getInstance() {
         return INSTANCE;
@@ -141,7 +142,7 @@ public class FPSCounter {
         };
 
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity > 0) {
-            int bgColor = (int)(TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
+            int bgColor = (int) (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
             guiGraphics.fill(x - 2, y - 2, x + textWidth + 2, y + 12, bgColor);
         }
 
@@ -162,15 +163,12 @@ public class FPSCounter {
         String maxLabel = Component.translatable("config.tritium.fpsDisplay.label.max").getString();
 
         return switch (TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode) {
-            case 0 ->
-                    avgLabel + String.format(" " + format + unit, avgFPS);
+            case 0 -> avgLabel + String.format(" " + format + unit, avgFPS);
             case 2 ->
                     String.format(format + "｜" + minLabel + " " + format + "｜" + avgLabel + " " + format + "｜" + maxLabel + " " + format + unit,
                             currentFPS, intervalOnePercentLowFPS, avgFPS, intervalMaxFPS);
-            case 3 ->
-                    maxLabel + String.format(" " + format + unit, intervalMaxFPS);
-            case 4 ->
-                    minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
+            case 3 -> maxLabel + String.format(" " + format + unit, intervalMaxFPS);
+            case 4 -> minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
             default -> String.format(format + unit, currentFPS);
         };
     }

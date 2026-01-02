@@ -101,6 +101,7 @@ public class TritiumPageBuilder {
                     .build());
             return this;
         }
+
         public OptionGroup build() {
             return builder.build();
         }

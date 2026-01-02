@@ -16,6 +16,7 @@ public class ModMenuIntegration implements ModMenuApi {
     public static Screen createConfigScreen(TritiumConfig config) {
         return TritiumConfigScreenFactory.createConfigScreen(config);
     }
+
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> createConfigScreen(config);

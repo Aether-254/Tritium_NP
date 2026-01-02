@@ -13,15 +13,15 @@ import java.util.concurrent.CompletableFuture;
 @Mixin(Minecraft.class)
 public class MinecraftClientMixin {
 
-    @Inject(method = "reloadResourcePacks()Ljava/util/concurrent/CompletableFuture;", 
-            at = @At("HEAD"), 
+    @Inject(method = "reloadResourcePacks()Ljava/util/concurrent/CompletableFuture;",
+            at = @At("HEAD"),
             cancellable = true,
             require = 0)
     private void onReloadResourcePacks(CallbackInfoReturnable<CompletableFuture<Void>> cir) {
         if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
-        
+
         if (LanguageLoadOptimizer.isLanguageChanging()) {
             cir.setReturnValue(CompletableFuture.completedFuture(null));
             LanguageLoadOptimizer.reset();

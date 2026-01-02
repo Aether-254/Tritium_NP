@@ -16,11 +16,11 @@ import java.lang.ref.Cleaner;
 public abstract class FramebufferCleanerMixin implements FramebufferFixer, Cleaner.Cleanable {
 
     @Shadow
+    public int frameBufferId;
+    @Shadow
     protected int colorTextureId;
     @Shadow
     protected int depthBufferId;
-    @Shadow
-    public int frameBufferId;
 
     @Override
     public void clean() {

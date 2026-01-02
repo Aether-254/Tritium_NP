@@ -18,6 +18,10 @@ public class TritiumNeoForge {
         modEventBus.addListener(this::onClientSideSetup);
     }
 
+    private static boolean isEmbLoaded() {
+        return ModList.get().isLoaded("embeddium");
+    }
+
     public void onClientSideSetup(FMLClientSetupEvent event) {
         System.out.println("Client setup for Tritium");
         event.enqueueWork(() -> {
@@ -30,8 +34,5 @@ public class TritiumNeoForge {
             }
         }
         TritiumConfigScreenReg.registerConfigScreen(TritiumCommon.MOD_ID);
-    }
-    private static boolean isEmbLoaded() {
-        return ModList.get().isLoaded("embeddium");
     }
 }

@@ -18,11 +18,11 @@ import java.util.function.UnaryOperator;
 @Mixin(DataComponents.class)
 public class DataComponentsMixin {
 
-    @ModifyArgs(method = "register",at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;register(Lnet/minecraft/core/Registry;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;"))
-    private static void resetMaxStackCount(Args args){
-        if(args.get(1) instanceof String name && name.equals("max_stack_size")){
-            UnaryOperator<DataComponentType.Builder<Integer>> NEW_MAX_STACK_SIZE = (p_333287_) -> p_333287_.persistent(ExtraCodecs.intRange(1,Integer.MAX_VALUE)).networkSynchronized(ByteBufCodecs.VAR_INT);
-            args.set(2,NEW_MAX_STACK_SIZE.apply(DataComponentType.builder()).build());
+    @ModifyArgs(method = "register", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;register(Lnet/minecraft/core/Registry;Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;"))
+    private static void resetMaxStackCount(Args args) {
+        if (args.get(1) instanceof String name && name.equals("max_stack_size")) {
+            UnaryOperator<DataComponentType.Builder<Integer>> NEW_MAX_STACK_SIZE = (p_333287_) -> p_333287_.persistent(ExtraCodecs.intRange(1, Integer.MAX_VALUE)).networkSynchronized(ByteBufCodecs.VAR_INT);
+            args.set(2, NEW_MAX_STACK_SIZE.apply(DataComponentType.builder()).build());
         }
     }
 }

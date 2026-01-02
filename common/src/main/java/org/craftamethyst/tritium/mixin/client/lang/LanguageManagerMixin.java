@@ -18,21 +18,20 @@ public abstract class LanguageManagerMixin {
 
     @Shadow
     private String currentCode;
+    @Unique
+    private String tritium$previousLanguage;
 
     @Shadow
     protected abstract void onResourceManagerReload(ResourceManager resourceManager);
-
-    @Unique
-    private String tritium$previousLanguage;
 
     @Inject(method = "setSelected", at = @At("HEAD"))
     private void onSetLanguageHead(String languageCode, CallbackInfo ci) {
         if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
-        
+
         tritium$previousLanguage = this.currentCode;
-        
+
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
             LanguageLoadOptimizer.setLanguageChanging(true);
         }
@@ -43,7 +42,7 @@ public abstract class LanguageManagerMixin {
         if (!TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch) {
             return;
         }
-        
+
         if (tritium$previousLanguage != null && !tritium$previousLanguage.equals(languageCode)) {
             Minecraft minecraft = Minecraft.getInstance();
             if (minecraft != null && minecraft.getResourceManager() != null) {

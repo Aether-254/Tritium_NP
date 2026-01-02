@@ -10,16 +10,20 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ImprovedNoise.class)
 public abstract class ImprovedNoiseMixin {
-    @Shadow @Final
-    public double xo;
-    @Shadow @Final
-    public double yo;
-    @Shadow @Final
-    public double zo;
-    @Shadow @Final
-    private byte[] p;
     @Unique
     private static final double[] OPTIMIZED_GRADIENTS = tritium$createOptimizedGradients();
+    @Shadow
+    @Final
+    public double xo;
+    @Shadow
+    @Final
+    public double yo;
+    @Shadow
+    @Final
+    public double zo;
+    @Shadow
+    @Final
+    private byte[] p;
     @Unique
     private int[] tritium$optimizedPermutation;
 

@@ -27,6 +27,7 @@ public abstract class ParticleEngineMixin {
     @Shadow
     @Final
     private Queue<Particle> particlesToAdd;
+
     @Inject(
             method = "createParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)Lnet/minecraft/client/particle/Particle;",
             at = @At("HEAD"),

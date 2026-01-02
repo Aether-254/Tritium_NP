@@ -26,7 +26,7 @@ public abstract class EntityRendererMixin<T extends Entity> {
 
     @Unique
     public void tritium_renderNameTag(T entity, Component component, PoseStack poseStack,
-                                       MultiBufferSource multiBufferSource, int light, float partialTick) {
+                                      MultiBufferSource multiBufferSource, int light, float partialTick) {
         renderNameTag(entity, component, poseStack, multiBufferSource, light, partialTick);
     }
 }

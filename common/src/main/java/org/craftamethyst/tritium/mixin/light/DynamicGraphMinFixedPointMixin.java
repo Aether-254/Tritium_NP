@@ -18,10 +18,12 @@ import java.util.function.LongPredicate;
 public abstract class DynamicGraphMinFixedPointMixin {
 
     @Mutable
-    @Shadow @Final
+    @Shadow
+    @Final
     private it.unimi.dsi.fastutil.longs.Long2ByteMap computedLevels;
 
-    @Shadow protected abstract void removeFromQueue(long pos);
+    @Shadow
+    protected abstract void removeFromQueue(long pos);
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void init(int levelCount, int queueSize, int mapCapacity, CallbackInfo ci) {

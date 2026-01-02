@@ -22,10 +22,12 @@ import static net.minecraft.world.item.ItemStack.ITEM_NON_AIR_CODEC;
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
     @Mutable
-    @Shadow @Final public static Codec<ItemStack> CODEC;
+    @Shadow
+    @Final
+    public static Codec<ItemStack> CODEC;
 
-    @Inject(method = "<clinit>",at = @At("TAIL"))
-    private static void resetMaxStackCount(CallbackInfo ci){
+    @Inject(method = "<clinit>", at = @At("TAIL"))
+    private static void resetMaxStackCount(CallbackInfo ci) {
         CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create((p_341560_) -> p_341560_.group(ITEM_NON_AIR_CODEC.fieldOf("id").forGetter(ItemStack::getItemHolder), ExtraCodecs.intRange(1, Integer.MAX_VALUE).fieldOf("count").orElse(1).forGetter(ItemStack::getCount), DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStack::getComponentsPatch)).apply(p_341560_, ItemStack::new)));
     }
 }

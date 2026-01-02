@@ -304,7 +304,7 @@ public class TritiumSodiumOptions {
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.position,
                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.position = v,
                 TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                v -> switch(v) {
+                v -> switch (v) {
                     case 0 -> Component.translatable("config.tritium.fpsDisplay.position.topLeft");
                     case 1 -> Component.translatable("config.tritium.fpsDisplay.position.topRight");
                     case 2 -> Component.translatable("config.tritium.fpsDisplay.position.bottomLeft");
@@ -320,7 +320,7 @@ public class TritiumSodiumOptions {
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode,
                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode = v,
                 TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                v -> switch(v) {
+                v -> switch (v) {
                     case 0 -> Component.translatable("config.tritium.fpsDisplay.mode.avgOnly");
                     case 1 -> Component.translatable("config.tritium.fpsDisplay.mode.currentOnly");
                     case 2 -> Component.translatable("config.tritium.fpsDisplay.mode.all");

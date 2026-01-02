@@ -13,6 +13,7 @@ public class Tritium {
         TritiumCommon.init();
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSideSetup);
     }
+
     public void onClientSideSetup(FMLClientSetupEvent event) {
         System.out.println("Client setup for Tritium");
         event.enqueueWork(() -> {
