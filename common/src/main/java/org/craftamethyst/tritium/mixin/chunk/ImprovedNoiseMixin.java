@@ -60,6 +60,10 @@ public abstract class ImprovedNoiseMixin {
         return this.tritium$optimizedPermutation[index & 0xFF];
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Optimized noise
+     */
     @Deprecated
     @Overwrite
     public double noise(double x, double y, double z, double yScale, double yMax) {
@@ -138,6 +142,10 @@ public abstract class ImprovedNoiseMixin {
         return t3 * (t * (t * 6.0 - 15.0) + 10.0);
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Optimized noise with derivative
+     */
     @Overwrite
     public double noiseWithDerivative(double x, double y, double z, double[] values) {
         double offsetX = x + this.xo;

@@ -22,6 +22,10 @@ public abstract class ArrayOcclusionCacheMixin {
     @Shadow
     private int offset;
 
+    /**
+     * @author ZCRAFT
+     * @reason Memory-mapped resource pack loading
+     */
     @Overwrite
     public void setVisible(int x, int y, int z) {
         if (x < 0 || x >= reachX2 || y < 0 || y >= reachX2 || z < 0 || z >= reachX2) {
@@ -43,6 +47,10 @@ public abstract class ArrayOcclusionCacheMixin {
         cache[entry] |= 1 << offset;
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Memory-mapped resource pack loading
+     */
     @Overwrite
     public void setHidden(int x, int y, int z) {
         if (x < 0 || x >= reachX2 || y < 0 || y >= reachX2 || z < 0 || z >= reachX2) {
@@ -64,6 +72,10 @@ public abstract class ArrayOcclusionCacheMixin {
         cache[entry] |= 1 << offset + 1;
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Memory-mapped resource pack loading
+     */
     @Overwrite
     public int getState(int x, int y, int z) {
         if (x < 0 || x >= reachX2 || y < 0 || y >= reachX2 || z < 0 || z >= reachX2) {
@@ -85,6 +97,10 @@ public abstract class ArrayOcclusionCacheMixin {
         return (cache[entry] >> offset) & 3;
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Memory-mapped resource pack loading
+     */
     @Overwrite
     public void setLastVisible() {
         if (entry < 0 || entry >= cache.length) {
@@ -93,6 +109,10 @@ public abstract class ArrayOcclusionCacheMixin {
         cache[entry] |= 1 << offset;
     }
 
+    /**
+     * @author ZCRAFT
+     * @reason Memory-mapped resource pack loading
+     */
     @Overwrite
     public void setLastHidden() {
         if (entry < 0 || entry >= cache.length) {
