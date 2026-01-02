@@ -39,6 +39,9 @@ public class TritiumConfigBase {
     @SubCategory("Tech Optimizations")
     public TechOptimizations techOptimizations = new TechOptimizations();
 
+    @SubCategory("Fast Random")
+    public FastRandom fastRandom = new FastRandom();
+
     @ClientOnly
     @SubCategory("Fixes")
     public Fixes fixes = new Fixes();
@@ -222,7 +225,7 @@ public class TritiumConfigBase {
             public static String stackCountColor = "#00FF00";
             @Range(min = 0, max = 2)
             public static int listMode = 0;
-            public static List<String> itemList = java.util.Arrays.asList(
+            public static List<String> itemList = List.of(
                     "minecraft:item"
             );
         }
@@ -234,6 +237,75 @@ public class TritiumConfigBase {
 
         public static class CreateOptimizations {
             public static boolean enableRailOffloading = true;
+        }
+    }
+
+    public static class FastRandom {
+        public static boolean enableFastRandom = false;
+        public static Algorithm defaultAlgorithm = Algorithm.L64X128MIXRANDOM;
+        public static long defaultSeed = 0L;
+        public static StreamMode defaultStreamMode = StreamMode.SHARED;
+        @Range(min = 0, max = 1024)
+        public static int defaultSplit = 0;
+
+        @SubCategory("Structure Pool Weighted Sample")
+        public StructurePoolWeightedSample structurePoolWeightedSample = new StructurePoolWeightedSample();
+
+        @SubCategory("Particle Rejection")
+        public ParticleRejection particleRejection = new ParticleRejection();
+
+        @SubCategory("Minecraft Global")
+        public MinecraftGlobal minecraftGlobal = new MinecraftGlobal();
+
+        public enum Algorithm {
+            DEFAULT,
+            VANILLA,
+            INHERIT,
+            RANDOM,
+            SPLITABLERANDOM,
+            L64X128MIXRANDOM,
+            L64X256MIXRANDOM,
+            L128X128MIXRANDOM,
+            L128X256MIXRANDOM,
+            L64X1024MIXRANDOM,
+            L128X1024MIXRANDOM,
+            XOROSHIRO128PLUSPLUS,
+            XOROSHIRO128STARSTAR,
+            XOSHIRO256PLUSPLUS,
+            XOSHIRO256STARSTAR
+        }
+
+        public enum StreamMode {
+            DEFAULT,
+            SHARED,
+            THREAD_LOCAL
+        }
+
+        public static class StructurePoolWeightedSample {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
+        }
+
+        public static class MinecraftGlobal {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
+        }
+
+        public static class ParticleRejection {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
         }
     }
 
