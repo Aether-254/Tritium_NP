@@ -38,6 +38,8 @@
      "cloth-config": ">=8",
      "java": ">=17"
    },
-    "suggests": {}
+  "suggests": {
+    "modmenu": "*"
+  }
 }
   

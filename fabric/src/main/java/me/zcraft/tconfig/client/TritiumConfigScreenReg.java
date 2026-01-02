@@ -1,16 +1,13 @@
 package me.zcraft.tconfig.client;
 
-import com.terraformersmc.modmenu.api.ConfigScreenFactory;
-import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.gui.screens.Screen;
 import org.craftamethyst.tritium.TritiumCommon;
 
 @Environment(EnvType.CLIENT)
-public class TritiumConfigScreenReg implements ModMenuApi {
+public class TritiumConfigScreenReg {
 
     public static void registerConfigScreen() {
         try {
@@ -50,24 +47,10 @@ public class TritiumConfigScreenReg implements ModMenuApi {
             return;
         }
 
-        // For Fabric, the config screen is automatically available through ModMenu
-        TritiumCommon.LOG.info("Config screen registered for mod: {} (available through ModMenu)", modId);
-    }
-
-    public static Screen createConfigScreen(Screen parent, TritiumConfig config) {
-        return TritiumConfigScreenFactory.createConfigScreen(parent, config);
-    }
-
-    public static Screen createConfigScreen(Screen parent, String modId) {
-        return TritiumConfigScreenFactory.createConfigScreen(parent, TritiumConfig.getConfig(modId));
-    }
-
-    private static Screen createConfigScreen(Screen parent, String modId, TritiumConfig config) {
-        return TritiumConfigScreenFactory.createConfigScreen(parent, config);
-    }
-
-    @Override
-    public ConfigScreenFactory<?> getModConfigScreenFactory() {
-        return parent -> createConfigScreen(parent, TritiumCommon.MOD_ID);
+        if (FabricLoader.getInstance().isModLoaded("modmenu")) {
+            TritiumCommon.LOG.info("Config screen registered for mod: {} (available through ModMenu)", modId);
+        } else {
+            TritiumCommon.LOG.warn("Mod Menu is not installed; config screen for mod {} won't be available.", modId);
+        }
     }
 }
