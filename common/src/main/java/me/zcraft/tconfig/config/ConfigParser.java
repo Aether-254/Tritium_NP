@@ -128,6 +128,14 @@ public class ConfigParser {
             try {
                 return Enum.valueOf(defaultValue.getClass(), value.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
+                try {
+                    int ordinal = Integer.parseInt(value.trim());
+                    Enum[] constants = defaultValue.getClass().getEnumConstants();
+                    if (ordinal >= 0 && ordinal < constants.length) {
+                        return constants[ordinal];
+                    }
+                } catch (NumberFormatException ignored) {
+                }
                 TritiumCommon.LOG.warn("Invalid enum value '{}' for key '{}', using default: {}", value, key, defaultValue);
                 return defaultValue;
             }

@@ -105,7 +105,7 @@ public abstract class ItemEntityMixin {
     @Unique
     private List<ItemEntity> tritium$findMergeableItems(ItemEntity self) {
         double mergeDistance = TritiumConfigBase.Entities.EntityStacking.mergeDistance;
-        int listMode = TritiumConfigBase.Entities.EntityStacking.listMode;
+        TritiumConfigBase.Entities.ListMode listMode = TritiumConfigBase.Entities.EntityStacking.listMode;
         List<? extends String> itemList = TritiumConfigBase.Entities.EntityStacking.itemList;
 
         List<ItemEntity> nearby = self.level().getEntitiesOfClass(
@@ -216,7 +216,7 @@ public abstract class ItemEntityMixin {
     }
 
     @Unique
-    private boolean tritium$isValidMergeTarget(ItemEntity self, ItemEntity other, int listMode, List<? extends String> itemList) {
+    private boolean tritium$isValidMergeTarget(ItemEntity self, ItemEntity other, TritiumConfigBase.Entities.ListMode listMode, List<? extends String> itemList) {
         if (self == other || other.isRemoved()) return false;
 
         ItemStack selfStack = self.getItem();
@@ -261,11 +261,14 @@ public abstract class ItemEntityMixin {
     }
 
     @Unique
-    private boolean tritium$isMergeAllowed(ItemStack stack, int listMode, List<? extends String> itemList) {
-        if (listMode == 0) return true;
+    private boolean tritium$isMergeAllowed(ItemStack stack, TritiumConfigBase.Entities.ListMode listMode, List<? extends String> itemList) {
+        if (listMode == TritiumConfigBase.Entities.ListMode.ALL) return true;
 
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         boolean inList = itemList.contains(id.toString());
-        return (listMode == 1) == inList;
+        if (listMode == TritiumConfigBase.Entities.ListMode.WHITELIST) {
+            return inList;
+        }
+        return !inList;
     }
 }

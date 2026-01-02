@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.embeddedt.embeddium.api.options.control.ControlValueFormatter;
+import org.embeddedt.embeddium.api.options.control.CyclingControl;
 import org.embeddedt.embeddium.api.options.control.SliderControl;
 import org.embeddedt.embeddium.api.options.control.TickBoxControl;
 import org.embeddedt.embeddium.api.options.structure.OptionGroup;
@@ -63,6 +64,30 @@ public class TritiumPageBuilder {
                     .setBinding(setter, getter)
                     .build());
             return this;
+        }
+
+        public <E extends Enum<E>> GroupBuilder addEnum(String id, String translationKey,
+                                                        Class<E> enumClass,
+                                                        Component[] labels,
+                                                        BiConsumer<TritiumConfigBase, E> setter,
+                                                        Function<TritiumConfigBase, E> getter) {
+            builder.add(OptionImpl.createBuilder(enumClass, optionStorage)
+                    .setId(ResourceLocation.fromNamespaceAndPath(TritiumCommon.MOD_ID, id))
+                    .setName(Component.translatable(translationKey))
+                    .setTooltip(Component.translatable(translationKey + ".tooltip"))
+                    .setControl(option -> labels != null
+                            ? new CyclingControl<>(option, enumClass, labels)
+                            : new CyclingControl<>(option, enumClass))
+                    .setBinding(setter, getter)
+                    .build());
+            return this;
+        }
+
+        public <E extends Enum<E>> GroupBuilder addEnum(String id, String translationKey,
+                                                        Class<E> enumClass,
+                                                        BiConsumer<TritiumConfigBase, E> setter,
+                                                        Function<TritiumConfigBase, E> getter) {
+            return addEnum(id, translationKey, enumClass, null, setter, getter);
         }
 
         public GroupBuilder addInteger(String id, String translationKey,
