@@ -10,7 +10,16 @@
     "ServerLifecycleHook",
     "TrainEntitiesMixin"
   ],
-  "client": [],
+  "client": [
+    "renderbounds.ArmBlockEntityRenderBoundsMixin",
+    "renderbounds.BeltBlockEntityRenderBoundsMixin",
+    "renderbounds.ChainConveyorBlockEntityRenderBoundsMixin",
+    "renderbounds.DeployerBlockEntityRenderBoundsMixin",
+    "renderbounds.FactoryPanelBlockEntityRenderBoundsMixin",
+    "renderbounds.FrogportBlockEntityRenderBoundsMixin",
+    "renderbounds.PortableStorageInterfaceBlockEntityRenderBoundsMixin",
+    "renderbounds.RollerBlockEntityRenderBoundsMixin"
+  ],
   "server": [],
   "injectors": {
     "defaultRequire": 0
