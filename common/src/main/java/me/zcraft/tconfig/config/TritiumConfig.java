@@ -381,6 +381,8 @@ public class TritiumConfig {
             return new ConfigValue<>(configParser.getLong(key, (Long) defaultValue));
         } else if (type == double.class || type == Double.class) {
             return new ConfigValue<>(configParser.getDouble(key, (Double) defaultValue));
+        } else if (type == float.class || type == Float.class) {
+            return new ConfigValue<>(configParser.getFloat(key, (Float) defaultValue));
         } else if (type == String.class) {
             return new ConfigValue<>(configParser.getString(key, (String) defaultValue));
         } else if (type.isEnum()) {
@@ -525,7 +527,7 @@ public class TritiumConfig {
 
         Object getDefaultValue() throws Exception;
 
-        Class<?> getType();
+        Class<?> type();
     }
 
     @FunctionalInterface
@@ -533,104 +535,89 @@ public class TritiumConfig {
         T get() throws Exception;
     }
 
-    private static class MethodHandleFieldAccessor implements FieldAccessor {
-        private final MethodHandle getter;
-        private final MethodHandle setter;
-        private final Class<?> type;
-        private final SupplierWithException<Object> defaultValueSupplier;
-
-        public MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter,
-                                         Class<?> type, SupplierWithException<Object> defaultValueSupplier) {
-            this.getter = getter;
-            this.setter = setter;
-            this.type = type;
-            this.defaultValueSupplier = defaultValueSupplier;
-        }
+    private record MethodHandleFieldAccessor(MethodHandle getter, MethodHandle setter, Class<?> type,
+                                             SupplierWithException<Object> defaultValueSupplier) implements FieldAccessor {
 
         @Override
-        public Object getValue(Object obj) throws Exception {
-            try {
-                return getter.invoke(obj);
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public void setValue(Object obj, Object value) throws Exception {
-            try {
-                Object convertedValue = convertValue(value, type);
-                int parameterCount = setter.type().parameterCount();
-                if (parameterCount == 1) {
-                    setter.invoke(convertedValue);
-                } else if (parameterCount == 2) {
-                    setter.invoke(obj, convertedValue);
-                } else {
-                    throw new RuntimeException("Unexpected setter parameter count: " + parameterCount);
+            public Object getValue(Object obj) throws Exception {
+                try {
+                    return getter.invoke(obj);
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private Object convertValue(Object value, Class<?> targetType) {
-            if (value == null) return getTypeDefaultValue(targetType);
-            if (targetType.isInstance(value)) {
-                return value;
             }
 
-            try {
-                if (targetType == boolean.class || targetType == Boolean.class) {
-                    if (value instanceof Boolean) return value;
-                    if (value instanceof String) return Boolean.parseBoolean((String) value);
-                    if (value instanceof Number) return ((Number) value).intValue() != 0;
-                    return false;
-                } else if (targetType == int.class || targetType == Integer.class) {
-                    if (value instanceof Integer) return value;
-                    if (value instanceof Number) return ((Number) value).intValue();
-                    if (value instanceof String) return Integer.parseInt((String) value);
-                    return 0;
-                } else if (targetType == double.class || targetType == Double.class) {
-                    if (value instanceof Double) return value;
-                    if (value instanceof Number) return ((Number) value).doubleValue();
-                    if (value instanceof String) return Double.parseDouble((String) value);
-                    return 0.0;
-                } else if (targetType == long.class || targetType == Long.class) {
-                    if (value instanceof Long) return value;
-                    if (value instanceof Number) return ((Number) value).longValue();
-                    if (value instanceof String) return Long.parseLong((String) value);
-                    return 0L;
-                } else if (targetType == float.class || targetType == Float.class) {
-                    if (value instanceof Float) return value;
-                    if (value instanceof Number) return ((Number) value).floatValue();
-                    if (value instanceof String) return Float.parseFloat((String) value);
-                    return 0.0f;
-                } else if (targetType == String.class) {
-                    return value.toString();
-                } else if (targetType.isEnum()) {
-                    if (value instanceof String) {
-                        try {
-                            return Enum.valueOf((Class<Enum>) targetType, ((String) value).trim().toUpperCase());
-                        } catch (IllegalArgumentException e) {
-                            TritiumCommon.LOG.warn("Invalid enum value '{}' for type {}, using first enum value", value, targetType.getSimpleName());
-                            return targetType.getEnumConstants()[0];
+            @Override
+            public void setValue(Object obj, Object value) throws Exception {
+                try {
+                    Object convertedValue = convertValue(value, type);
+                    int parameterCount = setter.type().parameterCount();
+                    if (parameterCount == 1) {
+                        setter.invoke(convertedValue);
+                    } else if (parameterCount == 2) {
+                        setter.invoke(obj, convertedValue);
+                    } else {
+                        throw new RuntimeException("Unexpected setter parameter count: " + parameterCount);
+                    }
+                } catch (Throwable e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            private Object convertValue(Object value, Class<?> targetType) {
+                if (value == null) return getTypeDefaultValue(targetType);
+                if (targetType.isInstance(value)) {
+                    return value;
+                }
+
+                try {
+                    if (targetType == boolean.class || targetType == Boolean.class) {
+                        if (value instanceof Boolean) return value;
+                        if (value instanceof String) return Boolean.parseBoolean((String) value);
+                        if (value instanceof Number) return ((Number) value).intValue() != 0;
+                        return false;
+                    } else if (targetType == int.class || targetType == Integer.class) {
+                        if (value instanceof Integer) return value;
+                        if (value instanceof Number) return ((Number) value).intValue();
+                        if (value instanceof String) return Integer.parseInt((String) value);
+                        return 0;
+                    } else if (targetType == double.class || targetType == Double.class) {
+                        if (value instanceof Double) return value;
+                        if (value instanceof Number) return ((Number) value).doubleValue();
+                        if (value instanceof String) return Double.parseDouble((String) value);
+                        return 0.0;
+                    } else if (targetType == long.class || targetType == Long.class) {
+                        if (value instanceof Long) return value;
+                        if (value instanceof Number) return ((Number) value).longValue();
+                        if (value instanceof String) return Long.parseLong((String) value);
+                        return 0L;
+                    } else if (targetType == float.class || targetType == Float.class) {
+                        if (value instanceof Float) return value;
+                        if (value instanceof Number) return ((Number) value).floatValue();
+                        if (value instanceof String) return Float.parseFloat((String) value);
+                        return 0.0f;
+                    } else if (targetType == String.class) {
+                        return value.toString();
+                    } else if (targetType.isEnum()) {
+                        if (value instanceof String) {
+                            try {
+                                return Enum.valueOf((Class<Enum>) targetType, ((String) value).trim().toUpperCase());
+                            } catch (IllegalArgumentException e) {
+                                TritiumCommon.LOG.warn("Invalid enum value '{}' for type {}, using first enum value", value, targetType.getSimpleName());
+                                return targetType.getEnumConstants()[0];
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    TritiumCommon.LOG.warn("Failed to convert value '{}' to type {}, using default", value, targetType.getSimpleName(), e);
                 }
-            } catch (Exception e) {
-                TritiumCommon.LOG.warn("Failed to convert value '{}' to type {}, using default", value, targetType.getSimpleName(), e);
+
+                return getTypeDefaultValue(targetType);
             }
 
-            return getTypeDefaultValue(targetType);
-        }
         @Override
-        public Object getDefaultValue() throws Exception {
-            return defaultValueSupplier.get();
+            public Object getDefaultValue() throws Exception {
+                return defaultValueSupplier.get();
+            }
         }
-
-        @Override
-        public Class<?> getType() {
-            return type;
-        }
-    }
 }
