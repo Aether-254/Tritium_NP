@@ -7,6 +7,8 @@ import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
+import org.craftamethyst.tritium.random.TritiumRandomManager;
+import org.craftamethyst.tritium.random.TritiumRandomTarget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -62,7 +64,11 @@ public class StructureTemplatePoolMixin {
                 return;
             }
 
-            int point = random.nextInt(tritium$total);
+            int point = TritiumRandomManager.nextInt(
+                    TritiumRandomTarget.STRUCTURE_POOL_WEIGHTED_SAMPLE,
+                    random,
+                    tritium$total
+            );
             int idx = IntArrays.binarySearch(tritium$prefix, point);
             if (idx < 0) idx = -idx - 1;
 

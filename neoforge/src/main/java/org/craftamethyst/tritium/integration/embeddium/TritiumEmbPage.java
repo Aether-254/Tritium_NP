@@ -155,29 +155,27 @@ public class TritiumEmbPage extends OptionPage {
                                 "config.tritium.fpsdisplan.fpsDisplay_enabled",
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.enabled = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.enabled)
-                        .addInteger("fps_display_position",
+                        .addEnum("fps_display_position",
                                 "config.tritium.fpsdisplan.fpsDisplay_position",
-                                0, 4, 1,
-                                v -> switch (v) {
-                                    case 0 -> Component.translatable("config.tritium.fpsDisplay.position.topLeft");
-                                    case 1 -> Component.translatable("config.tritium.fpsDisplay.position.topRight");
-                                    case 2 -> Component.translatable("config.tritium.fpsDisplay.position.bottomLeft");
-                                    case 3 -> Component.translatable("config.tritium.fpsDisplay.position.bottomRight");
-                                    case 4 -> Component.translatable("config.tritium.fpsDisplay.position.center");
-                                    default -> Component.literal(String.valueOf(v));
+                                TritiumConfigBase.FPSDisplan.Position.class,
+                                new Component[]{
+                                        Component.translatable("config.tritium.fpsDisplay.position.topLeft"),
+                                        Component.translatable("config.tritium.fpsDisplay.position.topRight"),
+                                        Component.translatable("config.tritium.fpsDisplay.position.bottomLeft"),
+                                        Component.translatable("config.tritium.fpsDisplay.position.bottomRight"),
+                                        Component.translatable("config.tritium.fpsDisplay.position.center")
                                 },
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.position = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.position)
-                        .addInteger("fps_display_mode",
+                        .addEnum("fps_display_mode",
                                 "config.tritium.fpsdisplan.fpsDisplay_displayMode",
-                                0, 4, 1,
-                                v -> switch (v) {
-                                    case 0 -> Component.translatable("config.tritium.fpsDisplay.mode.avgOnly");
-                                    case 1 -> Component.translatable("config.tritium.fpsDisplay.mode.currentOnly");
-                                    case 2 -> Component.translatable("config.tritium.fpsDisplay.mode.all");
-                                    case 3 -> Component.translatable("config.tritium.fpsDisplay.mode.maxOnly");
-                                    case 4 -> Component.translatable("config.tritium.fpsDisplay.mode.minOnly");
-                                    default -> Component.literal(String.valueOf(v));
+                                TritiumConfigBase.FPSDisplan.DisplayMode.class,
+                                new Component[]{
+                                        Component.translatable("config.tritium.fpsDisplay.mode.avgOnly"),
+                                        Component.translatable("config.tritium.fpsDisplay.mode.currentOnly"),
+                                        Component.translatable("config.tritium.fpsDisplay.mode.all"),
+                                        Component.translatable("config.tritium.fpsDisplay.mode.maxOnly"),
+                                        Component.translatable("config.tritium.fpsDisplay.mode.minOnly")
                                 },
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode)
@@ -191,10 +189,14 @@ public class TritiumEmbPage extends OptionPage {
                                 ControlValueFormatter.percentage(),
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity)
-                        .addInteger("decimal_places",
+                        .addEnum("decimal_places",
                                 "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces",
-                                0, 2, 1,
-                                ControlValueFormatter.number(),
+                                TritiumConfigBase.FPSDisplan.DecimalPlaces.class,
+                                new Component[]{
+                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.zero"),
+                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.one"),
+                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.two")
+                                },
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces)
                         .addBoolean("show_unit",

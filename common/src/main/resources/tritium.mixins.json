@@ -30,6 +30,7 @@
     "MCBUG.bee.TurtleEggBlockMixin",
     "MCBUG.boat.BoatMixin",
     "packs.FileResourcesSupplierMixin",
+    "random.RandomSourceMixin",
     "stack.DataComponentsMixin",
     "stack.ItemStackMixin",
     "tickstop.EntityTypeMixin",
