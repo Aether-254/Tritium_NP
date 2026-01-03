@@ -25,14 +25,8 @@ import java.util.regex.Pattern;
 
 public final class EntityTickHelper {
     private static final AtomicReference<Set<EntityType<?>>> WHITE_LIST = new AtomicReference<>(Collections.emptySet());
-    private static final AtomicReference<Set<EntityType<?>>> BLACK_LIST = new AtomicReference<>(Collections.emptySet());
     private static final List<WildcardPattern> WHITE_PATTERNS = new ArrayList<>();
-    private static final List<WildcardPattern> BLACK_PATTERNS = new ArrayList<>();
     private static final boolean ignoreDeadEntities = true;
-    private static volatile boolean enabled = true;
-    private static volatile boolean tickRaidersInRaid = true;
-    private static volatile int horizontalRange = 32;
-    private static volatile int verticalRange = 16;
 
     static {
         try {
@@ -47,36 +41,66 @@ public final class EntityTickHelper {
 
 
     public static boolean shouldSkipTick(Entity entity) {
-        if (!enabled) return false;
+        if (!TritiumConfigBase.Entities.EntityOpt.optimizeEntities) return false;
         if (!(entity instanceof LivingEntity living)) return false;
 
-        if (ignoreDeadEntities && !living.isAlive()) {
-            return false;
+        if (!living.isAlive()) {
+            return ignoreDeadEntities;
         }
-        if (!living.isAlive()) return true;
 
         EntityType<?> type = entity.getType();
-        if (matchesWildcard(type, BLACK_PATTERNS) || BLACK_LIST.get().contains(type)) {
-            return true;
-        }
         if (matchesWildcard(type, WHITE_PATTERNS) || WHITE_LIST.get().contains(type)) {
             return false;
         }
-        if (tickRaidersInRaid && isRaiderInRaid(living)) return false;
+        if (TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid && isRaiderInRaid(living)) return false;
 
         return !isNearPlayer(living);
     }
+    
+    public static boolean shouldSkipRender(Entity entity) {
+        if (!TritiumConfigBase.Entities.EntityOpt.optimizeEntities) return false;
+        if (!(entity instanceof LivingEntity living)) return false;
+
+        if (!living.isAlive()) {
+            return ignoreDeadEntities;
+        }
+
+        EntityType<?> type = entity.getType();
+        if (matchesWildcard(type, WHITE_PATTERNS) || WHITE_LIST.get().contains(type)) {
+            return false;
+        }
+        if (TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid && isRaiderInRaid(living)) return false;
+
+        return !isNearPlayerForRender(living);
+    }
+    
+    private static boolean isNearPlayerForRender(LivingEntity entity) {
+        Level level = entity.level();
+        BlockPos pos = entity.blockPosition();
+        
+        int renderHorizontalRange = TritiumConfigBase.Entities.EntityOpt.horizontalRange * 2;
+        int renderVerticalRange = TritiumConfigBase.Entities.EntityOpt.verticalRange * 2;
+
+        AABB box = new AABB(
+                pos.getX() - renderHorizontalRange,
+                pos.getY() - renderVerticalRange,
+                pos.getZ() - renderHorizontalRange,
+                pos.getX() + renderHorizontalRange,
+                pos.getY() + renderVerticalRange,
+                pos.getZ() + renderHorizontalRange
+        );
+
+        for (Player player : level.players()) {
+            if (!player.isAlive()) continue;
+            if (player.getBoundingBox().intersects(box)) return true;
+        }
+        return false;
+    }
 
     private static void reloadConfig() {
-        enabled = TritiumConfigBase.Entities.EntityOpt.optimizeEntities;
-        tickRaidersInRaid = TritiumConfigBase.Entities.EntityOpt.tickRaidersInRaid;
-        horizontalRange = TritiumConfigBase.Entities.EntityOpt.horizontalRange;
-        verticalRange = TritiumConfigBase.Entities.EntityOpt.verticalRange;
         List<String> whiteRaw = TritiumConfigBase.Entities.EntityOpt.entityWhitelist;
-
         Set<EntityType<?>> whiteIds = Sets.newHashSet();
         WHITE_PATTERNS.clear();
-        BLACK_PATTERNS.clear();
 
         whiteRaw.forEach(s -> parseEntry(s, whiteIds));
         WHITE_LIST.set(ImmutableSet.copyOf(whiteIds));
@@ -107,28 +131,19 @@ public final class EntityTickHelper {
 
     private static boolean isNearPlayer(LivingEntity entity) {
         Level level = entity.level();
-        if (!(level instanceof ServerLevel sl)) return true;
         BlockPos pos = entity.blockPosition();
 
-        int cx = pos.getX() >> 4;
-        int cz = pos.getZ() >> 4;
-        int radius = (horizontalRange >> 4) + 1;
-
         AABB box = new AABB(
-                pos.getX() - horizontalRange,
-                pos.getY() - verticalRange,
-                pos.getZ() - horizontalRange,
-                pos.getX() + horizontalRange,
-                pos.getY() + verticalRange,
-                pos.getZ() + horizontalRange
+                pos.getX() - TritiumConfigBase.Entities.EntityOpt.horizontalRange,
+                pos.getY() - TritiumConfigBase.Entities.EntityOpt.verticalRange,
+                pos.getZ() - TritiumConfigBase.Entities.EntityOpt.horizontalRange,
+                pos.getX() + TritiumConfigBase.Entities.EntityOpt.horizontalRange,
+                pos.getY() + TritiumConfigBase.Entities.EntityOpt.verticalRange,
+                pos.getZ() + TritiumConfigBase.Entities.EntityOpt.horizontalRange
         );
 
-        for (Player player : sl.players()) {
+        for (Player player : level.players()) {
             if (!player.isAlive()) continue;
-            BlockPos ppos = player.blockPosition();
-            int pcx = ppos.getX() >> 4;
-            int pcz = ppos.getZ() >> 4;
-            if (Math.abs(pcx - cx) > radius || Math.abs(pcz - cz) > radius) continue;
             if (player.getBoundingBox().intersects(box)) return true;
         }
         return false;

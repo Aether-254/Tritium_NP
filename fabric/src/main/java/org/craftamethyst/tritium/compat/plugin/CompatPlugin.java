@@ -86,7 +86,7 @@ public class CompatPlugin implements IMixinConfigPlugin {
             hasSod = FabricLoader.getInstance().isModLoaded(SODIUM_MODID);
 
             if (hasSod) {
-                System.out.println("[Tritium Compat] Disabling SodiumOptionsGUIMixin");
+                System.out.println("[Tritium Compat] Enabling SodiumOptionsGUIMixin");
             }
         }
 
