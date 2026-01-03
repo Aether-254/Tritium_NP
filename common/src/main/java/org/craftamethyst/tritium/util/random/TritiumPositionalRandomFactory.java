@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.random;
+package org.craftamethyst.tritium.util.random;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.levelgen.PositionalRandomFactory;

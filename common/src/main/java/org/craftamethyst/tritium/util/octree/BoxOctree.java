@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.octree;
+package org.craftamethyst.tritium.util.octree;
 
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;

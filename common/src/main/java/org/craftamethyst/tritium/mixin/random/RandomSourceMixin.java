@@ -6,7 +6,7 @@ import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.RandomSupport;
 import net.minecraft.world.level.levelgen.SingleThreadedRandomSource;
 import net.minecraft.world.level.levelgen.ThreadSafeLegacyRandomSource;
-import org.craftamethyst.tritium.random.TritiumRandomManager;
+import org.craftamethyst.tritium.util.random.TritiumRandomManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 

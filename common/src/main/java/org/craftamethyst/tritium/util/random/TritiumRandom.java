@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.random;
+package org.craftamethyst.tritium.util.random;
 
 public interface TritiumRandom {
     int nextInt();

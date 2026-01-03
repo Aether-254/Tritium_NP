@@ -12,7 +12,7 @@ import net.minecraft.world.level.levelgen.structure.pools.alias.PoolAliasLookup;
 import net.minecraft.world.level.levelgen.structure.templatesystem.LiquidSettings;
 import net.minecraft.world.phys.AABB;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.craftamethyst.tritium.octree.BoxOctree;
+import org.craftamethyst.tritium.util.octree.BoxOctree;
 import org.craftamethyst.tritium.util.octree.OctreeHolder;
 import org.craftamethyst.tritium.util.octree.RotationFailMask;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.random;
+package org.craftamethyst.tritium.util.random;
 
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.minecraft.util.RandomSource;

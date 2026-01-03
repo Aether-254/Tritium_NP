@@ -1,7 +1,5 @@
 package org.craftamethyst.tritium.util.octree;
 
-import org.craftamethyst.tritium.octree.BoxOctree;
-
 public final class OctreeHolder {
     private static BoxOctree current;
 

@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.random;
+package org.craftamethyst.tritium.util.random;
 
 import java.util.random.RandomGenerator;
 

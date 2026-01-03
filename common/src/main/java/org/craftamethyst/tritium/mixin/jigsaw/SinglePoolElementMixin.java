@@ -18,7 +18,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.craftamethyst.tritium.octree.BoxOctree;
+import org.craftamethyst.tritium.util.octree.BoxOctree;
 import org.craftamethyst.tritium.util.octree.OctreeHolder;
 import org.craftamethyst.tritium.util.octree.RotationFailMask;
 import org.spongepowered.asm.mixin.Final;
