@@ -66,6 +66,7 @@ dependencies {
 
     //Libraries
     implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
     //Mixin
     implementation group: 'org.spongepowered', name: 'mixin', version: '0.8.5'
@@ -73,6 +74,10 @@ dependencies {
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 
     //implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 }
 
 configurations {

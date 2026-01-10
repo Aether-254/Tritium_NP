@@ -19,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockOcclusionCache.class)
 public class SodiumBlockOcclusionCacheMixin {
 
-    @SuppressWarnings("InvalidInjectorMethodSignature")
     @Inject(
             method = "shouldDrawSide",
             at = @At("HEAD"),

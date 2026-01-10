@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.mixin.random;
+package org.craftamethyst.tritium.mixin.math;
 
 import io.netty.util.internal.ThreadLocalRandom;
 import net.minecraft.util.RandomSource;

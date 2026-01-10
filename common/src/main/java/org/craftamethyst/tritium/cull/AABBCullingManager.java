@@ -10,8 +10,8 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
 import java.util.Iterator;
 
@@ -115,7 +115,7 @@ public class AABBCullingManager {
                         continue;
                     }
 
-                    AABB boundingBox = entity.getBoundingBoxForCulling();
+                    AABB boundingBox = entity.getBoundingBox();
                     if (boundingBox.getXsize() > 50 || boundingBox.getYsize() > 50 || boundingBox.getZsize() > 50) {
                         cullable.tritium$setCulled(false);
                         cullCache.cacheEntity(entity, false);

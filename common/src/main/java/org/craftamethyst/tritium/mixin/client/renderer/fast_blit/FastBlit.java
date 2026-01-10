@@ -32,7 +32,7 @@ public abstract class FastBlit {
                 0, 0, width, height,
                 0, 0, width, height,
                 GL30.GL_COLOR_BUFFER_BIT,
-                GL30.GL_NEAREST
+                GL30.GL_LINEAR
         );
 
         GlStateManager._glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);

@@ -21,7 +21,6 @@ public abstract class EntityRenderDispatcherMixin {
     private static final Int2ObjectOpenHashMap<RenderCacheEntry> RENDER_CACHE = new Int2ObjectOpenHashMap<>();
     @Unique
     private static final long CACHE_DURATION_INVISIBLE = 300;
- /*
     @Inject(
             method = "shouldRender",
             at = @At("HEAD"),
@@ -40,7 +39,7 @@ public abstract class EntityRenderDispatcherMixin {
             return;
         }
  
-        if (EntityTickHelper.shouldSkipRender(entity)) {
+        if (EntityTickHelper.shouldSkipTick(entity)) {
             RENDER_CACHE.put(entityId, new RenderCacheEntry(false, CACHE_DURATION_INVISIBLE));
             cir.setReturnValue(false);
             return;
@@ -55,7 +54,7 @@ public abstract class EntityRenderDispatcherMixin {
                 cir.setReturnValue(false);
             }
         }
-    }*/
+    }
 
     @Inject(
             method = "shouldRender",

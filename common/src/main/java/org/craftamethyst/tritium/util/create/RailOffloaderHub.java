@@ -7,34 +7,39 @@ import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public final class RailOffloaderHub {
     private static final boolean CREATE_LOADED = Services.PLATFORM.isModLoaded("create");
     private static SingleTaskLane worker;
     private static volatile Future<?> currentFuture;
-    private static boolean initialized = false;
+    private static volatile boolean initialized = false;
+    private static final Object LOCK = new Object();
 
     public static void initialize() {
-        if (initialized || !CREATE_LOADED) return;
-        if (!TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {
-            return;
+        if (!CREATE_LOADED) return;
+
+        synchronized (LOCK) {
+            if (initialized) return;
+            if (!TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {
+                return;
+            }
+
+            worker = new SingleTaskLane("TritiumRailWorker");
+            initialized = true;
+            TritiumCommon.LOG.info("Tritium rail offloader initialized with ForkJoinPool");
         }
-
-        worker = new SingleTaskLane("TritiumRailWorker");
-        initialized = true;
-        TritiumCommon.LOG.info("Tritium rail offloader initialized");
     }
-
 
     public static void shutdown() {
         if (!CREATE_LOADED) return;
 
-        initialized = false;
-        if (worker != null) {
-            worker.shutdown();
-            worker = null;
+        synchronized (LOCK) {
+            initialized = false;
+            if (worker != null) {
+                worker.shutdown();
+                worker = null;
+            }
         }
     }
 
@@ -43,8 +48,13 @@ public final class RailOffloaderHub {
         if (!TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {
             return;
         }
-        ServerLevel overworld = server.overworld();
 
+        if (currentFuture != null && !currentFuture.isDone()) {
+            TritiumCommon.LOG.warn("Previous rail tick still running, skipping this tick");
+            return;
+        }
+
+        ServerLevel overworld = server.overworld();
         currentFuture = worker.submit(() -> {
             try {
                 Create.RAILWAYS.tick(overworld);
@@ -58,12 +68,17 @@ public final class RailOffloaderHub {
         if (!CREATE_LOADED || currentFuture == null) return;
 
         try {
-            currentFuture.get(100, TimeUnit.MILLISECONDS);
+            currentFuture.get(50, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException e) {
+            TritiumCommon.LOG.warn("Rail tick took too long, will continue asynchronously");
         } catch (Exception e) {
-            TritiumCommon.LOG.warn("Rail tick took too long, skipping sync");
-            currentFuture.cancel(true);
+            if (!(e instanceof CancellationException)) {
+                TritiumCommon.LOG.error("Error waiting for rail tick", e);
+            }
         } finally {
-            currentFuture = null;
+            if (currentFuture != null && currentFuture.isDone()) {
+                currentFuture = null;
+            }
         }
     }
 }
