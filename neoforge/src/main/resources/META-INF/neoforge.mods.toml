@@ -20,8 +20,6 @@ config = "${mod_id}.neoforge.mixins.json"
 config = "${mod_id}.compat.mixins.json"
 [[mixins]]
 config = "${mod_id}.create.mixins.json"
-[[mixins]]
-config = "${mod_id}.gpuplus.mixins.json"
 [[dependencies.tritium]] #optional
 modId = "neoforge" #mandatory
 type = "required" #mandatory Can be one of "required", "optional", "incompatible" or "discouraged"
