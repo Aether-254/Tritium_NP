@@ -4,7 +4,7 @@
   "package": "org.craftamethyst.tritium.mixin",
   "plugin": "org.craftamethyst.tritium.mixin.plugin.MixinPlugin",
   "refmap": "tritium.refmap.json",
-  "priority": 2000,
+  "priority": 20,
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
     "cache.BlockStatePairKeyLazyCache",

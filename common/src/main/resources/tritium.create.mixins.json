@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin.create",
   "compatibilityLevel": "JAVA_18",
-  "priority": 2000,
+  "priority": 20,
   "mixins": [
     "CarriageEntitiesMixin",
     "CommonEventsMixin",
