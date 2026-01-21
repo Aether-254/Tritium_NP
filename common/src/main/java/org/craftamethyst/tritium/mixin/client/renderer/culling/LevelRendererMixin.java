@@ -27,7 +27,7 @@ public class LevelRendererMixin {
     private EntityRenderDispatcher entityRenderDispatcher;
 
     @Inject(method = "renderEntity",
-            at = @At("TAIL"),
+            at = @At("HEAD"),
             cancellable = true)
     private void tritium$skipCulledEntityButMaybeRenderNameTag(
             Entity entity, double cameraX, double cameraY, double cameraZ,

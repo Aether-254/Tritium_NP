@@ -17,6 +17,9 @@ import org.craftamethyst.tritium.util.cache.SoftRenderTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.*;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -37,7 +40,7 @@ public abstract class SkullBlockRendererMixin {
 
     static {
         Map<SkullBlock.Type, RenderType> temp = new Object2ObjectOpenHashMap<>();
-        for (Map.Entry<SkullBlock.Type, ResourceLocation> entry : SkullBlockRendererMixin.SKIN_BY_TYPE.entrySet()) {
+        for (Map.Entry<SkullBlock.Type, ResourceLocation> entry : SKIN_BY_TYPE.entrySet()) {
             if (entry.getKey() != SkullBlock.Types.PLAYER) {
                 temp.put(entry.getKey(), RenderType.entityCutoutNoCullZOffset(entry.getValue()));
             }
@@ -65,62 +68,83 @@ public abstract class SkullBlockRendererMixin {
                 });
     }
 
-    /**
-     * @author ZCRAFT
-     * @reason Optimize
-     */
-    @Overwrite
-    public static RenderType getRenderType(SkullBlock.Type type, @Nullable ResolvableProfile profile) {
-        if (type != SkullBlock.Types.PLAYER) {
-            RenderType renderType = TRITIUM_SKULL_RENDER_TYPES.get(type);
-            return renderType != null ? renderType : RenderType.entityCutoutNoCullZOffset(SKIN_BY_TYPE.get(type));
-        }
-
-        if (profile == null) {
-            return RenderType.entityCutoutNoCullZOffset(DefaultPlayerSkin.getDefaultTexture());
-        }
-
-        String cacheKey = tritium$generateTextureHash(profile);
-
-        try {
-            SoftRenderTypeReference ref = TRITIUM_PLAYER_CACHE.getIfPresent(cacheKey);
-            if (ref != null && ref.renderType != null) {
-                return ref.renderType;
+    @Inject(
+            method = "getRenderType",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private static void tritium$getRenderType(SkullBlock.Type pType, @Nullable ResolvableProfile pProfile,
+                                              CallbackInfoReturnable<RenderType> cir) {
+        if (pType != SkullBlock.Types.PLAYER) {
+            RenderType renderType = TRITIUM_SKULL_RENDER_TYPES.get(pType);
+            if (renderType != null) {
+                cir.setReturnValue(renderType);
+                return;
             }
-        } catch (Exception e) {
-            TritiumCommon.LOG.error("Cache error, falling back to direct creation", e);
         }
 
-        Minecraft mc = Minecraft.getInstance();
-        SkinManager skinManager = mc.getSkinManager();
-        ResourceLocation skinTexture = skinManager.getInsecureSkin(profile.gameProfile()).texture();
+        if (pType == SkullBlock.Types.PLAYER) {
+            if (pProfile == null) {
+                cir.setReturnValue(RenderType.entityCutoutNoCullZOffset(DefaultPlayerSkin.getDefaultTexture()));
+                return;
+            }
 
-        RenderType renderType;
-        boolean isDefaultSkin = skinTexture.equals(DefaultPlayerSkin.getDefaultTexture());
+            String cacheKey = tritium$generateTextureHash(pProfile);
 
-        if (isDefaultSkin) {
-            renderType = RenderType.entityCutoutNoCullZOffset(skinTexture);
-        } else {
-            renderType = RenderType.entityTranslucent(skinTexture);
-            TRITIUM_PLAYER_CACHE.put(cacheKey, new SoftRenderTypeReference(cacheKey, renderType));
+            try {
+                SoftRenderTypeReference ref = TRITIUM_PLAYER_CACHE.getIfPresent(cacheKey);
+                if (ref != null && ref.renderType != null) {
+                    cir.setReturnValue(ref.renderType);
+                }
+            } catch (Exception e) {
+                TritiumCommon.LOG.error("Cache error, falling back to direct creation", e);
+            }
         }
+    }
 
-        return renderType;
+    @Inject(
+            method = "getRenderType",
+            at = @At("RETURN")
+    )
+    private static void tritium$cachePlayerRenderType(SkullBlock.Type pType, @Nullable ResolvableProfile pProfile,
+                                                      CallbackInfoReturnable<RenderType> cir) {
+        if (pType == SkullBlock.Types.PLAYER && pProfile != null && cir.getReturnValue() != null) {
+            RenderType renderType = cir.getReturnValue();
+            ResourceLocation skinTexture = tritium$getTextureLocation(pProfile);
+
+            if (skinTexture != null && !skinTexture.equals(DefaultPlayerSkin.getDefaultTexture())) {
+                String cacheKey = tritium$generateTextureHash(pProfile);
+                TRITIUM_PLAYER_CACHE.put(cacheKey, new SoftRenderTypeReference(cacheKey, renderType));
+            }
+        }
     }
 
     @Unique
     private static String tritium$generateTextureHash(@Nullable ResolvableProfile profile) {
-        if (profile == null || profile.properties() == null) {
+        if (profile == null) {
             return "default_skin";
         }
 
         var properties = profile.properties().get("textures");
-        if (properties != null && !properties.isEmpty()) {
+        if (!properties.isEmpty()) {
             var property = properties.iterator().next();
             String textureUrl = property.value();
             int hash = textureUrl.hashCode();
             return Integer.toHexString(hash) + "_" + Integer.toHexString(textureUrl.length());
         }
         return "default_skin";
+    }
+
+    @Unique
+    @Nullable
+    private static ResourceLocation tritium$getTextureLocation(@NotNull ResolvableProfile profile) {
+        Minecraft mc = Minecraft.getInstance();
+        SkinManager skinManager = mc.getSkinManager();
+        try {
+            return skinManager.getInsecureSkin(profile.gameProfile()).texture();
+        } catch (Exception e) {
+            TritiumCommon.LOG.error("Failed to get texture location for profile", e);
+            return null;
+        }
     }
 }

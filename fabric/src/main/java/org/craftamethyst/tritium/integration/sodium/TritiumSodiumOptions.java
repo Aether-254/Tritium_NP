@@ -117,33 +117,6 @@ public class TritiumSodiumOptions {
         ));
         groups.add(createGroup(fastBlit));
 
-        List<TritiumOptionDefinition<?>> gpuPlus = new ArrayList<>();
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlus",
-                "config.tritium.rendering.GpuPlus_gpuPlus",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlusVbo",
-                "config.tritium.rendering.GpuPlus_gpuPlusVbo",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlusIndex",
-                "config.tritium.rendering.GpuPlus_gpuPlusIndex",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        groups.add(createGroup(gpuPlus));
-
         List<TritiumOptionDefinition<?>> reflex = new ArrayList<>();
         reflex.add(new TritiumOptionDefinition<>(
                 "rendering.reflex_enableReflex",
@@ -259,17 +232,6 @@ public class TritiumSodiumOptions {
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));
         groups.add(createGroup(fl));
-
-        List<TritiumOptionDefinition<?>> fastResourcePack = new ArrayList<>();
-        fastResourcePack.add(new TritiumOptionDefinition<>(
-                "clientOptimizations.FastResourcePack_resourcePackCache",
-                "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache",
-                c -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache,
-                (c, v) -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        groups.add(createGroup(fastResourcePack));
 
         List<TritiumOptionDefinition<?>> dynamicFPS = new ArrayList<>();
         dynamicFPS.add(new TritiumOptionDefinition<>(

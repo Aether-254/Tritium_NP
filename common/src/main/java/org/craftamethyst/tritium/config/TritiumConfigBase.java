@@ -5,6 +5,7 @@ import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.ConfigVersion;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,9 +75,6 @@ public class TritiumConfigBase {
 
     @ClientOnly
     public static class Rendering {
-        // GPU Plus
-        @SubCategory("GPUPlus")
-        public static GpuPlus GpuPlus = new GpuPlus();
         @SubCategory("ChestRenderingOpt")
         public CRO cro = new CRO();
         @SubCategory("FastBlit")
@@ -96,12 +94,6 @@ public class TritiumConfigBase {
 
         public static class FastBlit {
             public static boolean fastBlit = true;
-        }
-
-        public static class GpuPlus {
-            public static boolean gpuPlus = true;
-            public static boolean gpuPlusVbo = true;
-            public static boolean gpuPlusIndex = true;
         }
 
         public static class Reflex {
@@ -133,17 +125,11 @@ public class TritiumConfigBase {
     public static class ClientOptimizations {
         @SubCategory("FastLanguage")
         public static FL FL = new FL();
-        @SubCategory("FastResourcePack")
-        public static FastResourcePack FastResourcePack = new FastResourcePack();
         @SubCategory("dynamicFPS")
         public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class FL {
             public static boolean fastLanguageSwitch = true;
-        }
-
-        public static class FastResourcePack {
-            public static boolean resourcePackCache = true;
         }
 
         public static class DynamicFPS {
@@ -311,7 +297,9 @@ public class TritiumConfigBase {
             @Override
             public String toString() {
                 if (this == XOROSHIRO128PLUSPLUS) {
-                    return "推荐 " + name();
+                    Component rcmComponent = net.minecraft.network.chat.Component.translatable("config.tritium.fastRandom.rcm");
+                    String rcmText = rcmComponent.getString();
+                    return rcmText + " " + name();
                 }
                 return name();
             }

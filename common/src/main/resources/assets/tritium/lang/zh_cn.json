@@ -58,20 +58,10 @@
   "config.tritium.rendering.cro": "箱子渲染优化",
   "config.tritium.rendering.cro_chest_rendering_optimization": "箱子渲染优化开关",
   "config.tritium.rendering.cro_chest_rendering_optimization.tooltip": "没有开箱动画。",
-  "config.tritium.rendering.GpuPlus": "GPU Plus",
-  "config.tritium.rendering.GpuPlus_gpuPlus": "启用GPU Plus",
-  "config.tritium.rendering.GpuPlus_gpuPlus.tooltip": "启用高级 GPU 特性：帧缓冲泄漏修复、缓冲存储、DSA 等。",
-  "config.tritium.rendering.GpuPlus_gpuPlusVbo": "启用顶点缓冲",
-  "config.tritium.rendering.GpuPlus_gpuPlusVbo.tooltip": "在可用时对顶点缓冲使用不可变缓冲存储 / DSA。",
-  "config.tritium.rendering.GpuPlus_gpuPlusIndex": "启用索引缓冲",
-  "config.tritium.rendering.GpuPlus_gpuPlusIndex.tooltip": "在可用时对索引缓冲使用不可变缓冲存储 / DSA。",
   "config.tritium.category.clientOptimizations": "客户端内容",
   "config.tritium.clientOptimizations.FL": "快速语言",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch": "快速语言切换",
   "config.tritium.clientOptimizations.FL_fastLanguageSwitch.tooltip": "通过跳过完整资源包重新加载来优化语言切换速度",
-  "config.tritium.clientOptimizations.FastResourcePack": "快速资源包",
-  "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache": "资源包缓存",
-  "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache.tooltip": "缓存文件包资源的命名空间查找以提升性能",
   "config.tritium.clientOptimizations.dynamicFPS": "动态帧率",
   "config.tritium.clientOptimizations.dynamicFPS_enable": "启用动态帧率",
   "config.tritium.clientOptimizations.dynamicFPS_enable.tooltip": "当游戏不聚焦时自动降低帧率（降至 最低帧率）或最小化（根本不渲染）",
@@ -239,5 +229,6 @@
   "config.tritium.fastRandom.particleRejection_streamMode": "流模式",
   "config.tritium.fastRandom.particleRejection_streamMode.tooltip": "可选：DEFAULT、SHARED、THREAD_LOCAL",
   "config.tritium.fastRandom.particleRejection_split": "拆分次数",
-  "config.tritium.fastRandom.particleRejection_split.tooltip": "对可拆分算法执行 split() 的次数"
+  "config.tritium.fastRandom.particleRejection_split.tooltip": "对可拆分算法执行 split() 的次数",
+  "config.tritium.fastRandom.rcm": "推荐"
 }

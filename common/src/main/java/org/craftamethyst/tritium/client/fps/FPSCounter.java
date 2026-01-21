@@ -111,7 +111,7 @@ public class FPSCounter {
         String text = getFPSString();
         int textWidth = font.width(text);
 
-        int x = 0, y = 0;
+        int x, y;
 
         y = switch (TritiumConfigBase.FPSDisplan.FPSDisplay.position) {
             case TOP_LEFT -> {
@@ -134,7 +134,6 @@ public class FPSCounter {
                 x = (screenWidth - textWidth) / 2;
                 yield (screenHeight - 15) / 2;
             }
-            default -> y;
         };
 
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity > 0) {

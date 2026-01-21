@@ -74,9 +74,7 @@ public abstract class SinglePoolElementMixin {
         AABB aabb = new AABB(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
 
         if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection && octree.intersects(aabb)) {
-            if (RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx)) {
-
-            }
+            RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx);
             cir.setReturnValue(false);
             return;
         }

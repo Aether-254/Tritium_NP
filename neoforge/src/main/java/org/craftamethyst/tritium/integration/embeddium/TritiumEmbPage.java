@@ -60,19 +60,6 @@ public class TritiumEmbPage extends OptionPage {
                                 "config.tritium.rendering.fastBlit_fastBlit",
                                 (c, v) -> TritiumConfigBase.Rendering.FastBlit.fastBlit = v,
                                 c -> TritiumConfigBase.Rendering.FastBlit.fastBlit))
-                .addGroup("group_gpu_plus", Component.translatable("config.tritium.rendering.GpuPlus"), builder -> builder
-                        .addBoolean("gpu_plus",
-                                "config.tritium.rendering.GpuPlus_gpuPlus",
-                                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus = v,
-                                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus)
-                        .addBoolean("gpu_plus_vbo",
-                                "config.tritium.rendering.GpuPlus_gpuPlusVbo",
-                                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo = v,
-                                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo)
-                        .addBoolean("gpu_plus_index",
-                                "config.tritium.rendering.GpuPlus_gpuPlusIndex",
-                                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex = v,
-                                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex))
                 .addGroup("reflex", Component.translatable("config.tritium.rendering.reflex"), builder -> builder
                         .addBoolean("enable_reflex",
                                 "config.tritium.rendering.reflex_enableReflex",
@@ -134,11 +121,6 @@ public class TritiumEmbPage extends OptionPage {
                                 "config.tritium.clientOptimizations.FL_fastLanguageSwitch",
                                 (c, v) -> TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch = v,
                                 c -> TritiumConfigBase.ClientOptimizations.FL.fastLanguageSwitch))
-                .addGroup("fast_resource_pack", Component.translatable("config.tritium.clientOptimizations.FastResourcePack"), builder -> builder
-                        .addBoolean("resource_pack_cache",
-                                "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache",
-                                (c, v) -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache = v,
-                                c -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache))
                 .addGroup("dynamic_fps", Component.translatable("config.tritium.clientOptimizations.dynamicFPS"), builder -> builder
                         .addBoolean("enable_dynamic_fps",
                                 "config.tritium.clientOptimizations.dynamicFPS_enable",

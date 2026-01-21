@@ -46,11 +46,6 @@ public abstract class MinecraftMixin {
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void tritium$gpuPlusTick(CallbackInfo ci) {
-        org.craftamethyst.tritium.gpu.GpuPlus.processQueue();
-    }
-
-    @Inject(method = "tick", at = @At("TAIL"))
     private void tritium$culling(CallbackInfo ci) {
         if (TritiumClient.instance != null) {
             TritiumClient.instance.clientTick();
