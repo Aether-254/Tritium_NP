@@ -2,7 +2,7 @@ package me.zcraft.tconfig.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
-import me.zcraft.tconfig.config.TritiumAutoConfig;
+import me.zcraft.tconfig.config.autoconfig.TritiumAutoConfig;
 import me.zcraft.tconfig.config.TritiumConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

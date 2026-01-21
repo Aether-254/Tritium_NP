@@ -5,6 +5,8 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.core.particles.ParticleOptions;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.craftamethyst.tritium.util.random.TritiumRandomManager;
+import org.craftamethyst.tritium.util.random.TritiumRandomTarget;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,6 +29,7 @@ public abstract class ParticleEngineMixin {
     @Shadow
     @Final
     private Queue<Particle> particlesToAdd;
+
     @Inject(
             method = "createParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)Lnet/minecraft/client/particle/Particle;",
             at = @At("HEAD"),
@@ -44,7 +47,7 @@ public abstract class ParticleEngineMixin {
             double rejectionProbability = Math.min(0.95,
                     (double) totalParticles / (TritiumConfigBase.ParticleLimit.maxParticles * 1.5));
 
-            if (Math.random() < rejectionProbability) {
+            if (TritiumRandomManager.nextDouble(TritiumRandomTarget.PARTICLE_REJECTION, null) < rejectionProbability) {
                 cir.setReturnValue(null);
                 cir.cancel();
             }

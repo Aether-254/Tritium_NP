@@ -34,8 +34,6 @@ public abstract class ItemEntityMixin {
     @Shadow
     public abstract void setItem(ItemStack stack);
 
-    @Shadow private int age;
-
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         if (!tritium$shouldProcess()) return;
@@ -64,7 +62,13 @@ public abstract class ItemEntityMixin {
         tritium$updateStackDisplay(self);
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    @Inject(method = "<init>(Lnet/minecraft/world/level/Level;DDDLnet/minecraft/world/item/ItemStack;DDD)V", at = @At("TAIL"))
+    private void onConstructorWithVelocity(Level level, double x, double y, double z, ItemStack stack, double dx, double dy, double dz, CallbackInfo ci) {
+        if (!tritium$shouldProcess()) return;
+        ItemEntity self = (ItemEntity) (Object) this;
+        tritium$updateStackDisplay(self);
+    }
+
     @Unique
     private boolean tritium$shouldProcess() {
         return TritiumConfigBase.Entities.EntityStacking.enable;
@@ -100,7 +104,7 @@ public abstract class ItemEntityMixin {
     @Unique
     private List<ItemEntity> tritium$findMergeableItems(ItemEntity self) {
         double mergeDistance = TritiumConfigBase.Entities.EntityStacking.mergeDistance;
-        int listMode = TritiumConfigBase.Entities.EntityStacking.listMode;
+        TritiumConfigBase.Entities.ListMode listMode = TritiumConfigBase.Entities.EntityStacking.listMode;
         List<? extends String> itemList = TritiumConfigBase.Entities.EntityStacking.itemList;
 
         List<ItemEntity> nearby = self.level().getEntitiesOfClass(
@@ -125,8 +129,7 @@ public abstract class ItemEntityMixin {
 
             stack.grow(transfer);
             self.setItem(stack);
-
-            ((ItemEntityMixin) (Object) self).age = -200;
+            self.setExtendedLifetime();
 
             tritium$handleOtherStackAfterTransfer(other, otherStack, transfer);
             remainingSpace -= transfer;
@@ -212,7 +215,7 @@ public abstract class ItemEntityMixin {
     }
 
     @Unique
-    private boolean tritium$isValidMergeTarget(ItemEntity self, ItemEntity other, int listMode, List<? extends String> itemList) {
+    private boolean tritium$isValidMergeTarget(ItemEntity self, ItemEntity other, TritiumConfigBase.Entities.ListMode listMode, List<? extends String> itemList) {
         if (self == other || other.isRemoved()) return false;
 
         ItemStack selfStack = self.getItem();
@@ -277,11 +280,14 @@ public abstract class ItemEntityMixin {
     }
 
     @Unique
-    private boolean tritium$isMergeAllowed(ItemStack stack, int listMode, List<? extends String> itemList) {
-        if (listMode == 0) return true;
+    private boolean tritium$isMergeAllowed(ItemStack stack, TritiumConfigBase.Entities.ListMode listMode, List<? extends String> itemList) {
+        if (listMode == TritiumConfigBase.Entities.ListMode.ALL) return true;
 
         ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
         boolean inList = itemList.contains(id.toString());
-        return (listMode == 1) == inList;
+        if (listMode == TritiumConfigBase.Entities.ListMode.WHITELIST) {
+            return inList;
+        }
+        return !inList;
     }
 }

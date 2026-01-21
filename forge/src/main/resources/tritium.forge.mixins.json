@@ -7,8 +7,6 @@
     "mixins": [
     ],
     "client": [
-        "sodium.SodiumOptionsGUIMixin",
-        "sodium.SodiumOptionsGUIAccessor"
     ],
     "server": [
     ],

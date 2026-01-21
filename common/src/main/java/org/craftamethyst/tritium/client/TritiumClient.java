@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.AABBCullingManager;
+import org.craftamethyst.tritium.cull.BlockFaceOcclusionCuller;
 import org.craftamethyst.tritium.cull.CullCache;
 import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
@@ -27,6 +28,7 @@ public class TritiumClient {
     public static void shutdown() {
         if (instance != null) {
             instance.aabbCulling.dispose();
+            BlockFaceOcclusionCuller.shutdown();
         }
     }
 

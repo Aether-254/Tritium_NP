@@ -4,17 +4,17 @@ package org.craftamethyst.tritium.util.lang;
  * Coordinates language switching optimization between mixins.
  */
 public class LanguageLoadOptimizer {
-    
+
     private static volatile boolean isLanguageChanging = false;
-    
-    public static void setLanguageChanging(boolean changing) {
-        isLanguageChanging = changing;
-    }
-    
+
     public static boolean isLanguageChanging() {
         return isLanguageChanging;
     }
-    
+
+    public static void setLanguageChanging(boolean changing) {
+        isLanguageChanging = changing;
+    }
+
     public static void reset() {
         isLanguageChanging = false;
     }

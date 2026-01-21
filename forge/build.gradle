@@ -57,39 +57,31 @@ repositories {
 }
 
 dependencies {
-    // Compile common sources directly; repeat its runtime deps here for compilation
     compileOnly project(":common")
 
-    //Embeddium
+    //Mods
     implementation 'maven.modrinth:embeddium:UTbfe5d1'
-
-    //Create
     implementation 'maven.modrinth:create:8amzvn9x'
-
-    //TR
     implementation "maven.modrinth:tritiumconfiguration:${tc}"
-
-    //AE2
     implementation 'maven.modrinth:guideme:9YGnKYDF'
     implementation 'maven.modrinth:ae2:7KVs6HMQ'
     implementation 'maven.modrinth:curios:IPQlZkz1'
     implementation 'maven.modrinth:architectury-api:1MKTLiiG'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:BLQZoB0F'
 
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
-    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
-    implementation 'org.jetbrains:annotations:24.1.0'
-
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 
     implementation group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
     annotationProcessor group: 'io.github.llamalad7', name: 'mixinextras-common', version: '0.3.5'
 
-    // Config UI + AutoConfig (Forge)
     implementation "me.shedaniel.cloth:cloth-config-forge:${cloth_config_version}"
 
-    // Bundle Caffeine and dependencies into the JAR
+    //Libraries
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.2.0'
+    implementation 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    implementation 'org.jetbrains:annotations:24.1.0'
     shadow 'com.logisticscraft:occlusionculling:0.0.8-SNAPSHOT'
+    shadow 'com.github.ben-manes.caffeine:caffeine:3.1.8'
     shadow 'io.github.llamalad7:mixinextras-common:0.3.5'
 
 }

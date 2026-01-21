@@ -1,6 +1,8 @@
 package org.craftamethyst.tritium;
 
+import me.zcraft.tconfig.config.TritiumConfig;
 import org.craftamethyst.tritium.client.TritiumClient;
+import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.platform.Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +27,7 @@ public class TritiumCommon {
                         "\n",
                 Services.PLATFORM.getModVersion(), Services.PLATFORM.getPlatformName(), Services.PLATFORM.getEnvironmentName());
         try {
-            //TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
+            TritiumConfig.register(MOD_ID, TritiumConfigBase.class);
             TritiumCommon.LOG.info("Config initialized");
         } catch (Throwable t) {
             TritiumCommon.LOG.warn("Failed to initialize config service: {}", t.toString());

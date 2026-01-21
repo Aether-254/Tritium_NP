@@ -10,8 +10,8 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
+import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
 import java.util.Iterator;
 
@@ -22,13 +22,12 @@ public class AABBCullingManager {
     private final Vec3d reusableAabbMin = new Vec3d(0, 0, 0);
     private final Vec3d reusableAabbMax = new Vec3d(0, 0, 0);
     private final Vec3d reusableCamera = new Vec3d(0, 0, 0);
+    private final Vec3d lastCameraPos = new Vec3d(0, 0, 0);
     private Vec3 cachedCameraPos = Vec3.ZERO;
     private long lastCameraUpdate = 0;
     private Thread cullThread;
     private volatile boolean running = true;
     private volatile boolean requestCull = false;
-
-    private final Vec3d lastCameraPos = new Vec3d(0, 0, 0);
 
     public AABBCullingManager() {
         this.mc = Minecraft.getInstance();
@@ -116,7 +115,7 @@ public class AABBCullingManager {
                         continue;
                     }
 
-                    AABB boundingBox = entity.getBoundingBoxForCulling();
+                    AABB boundingBox = entity.getBoundingBox();
                     if (boundingBox.getXsize() > 50 || boundingBox.getYsize() > 50 || boundingBox.getZsize() > 50) {
                         cullable.tritium$setCulled(false);
                         cullCache.cacheEntity(entity, false);

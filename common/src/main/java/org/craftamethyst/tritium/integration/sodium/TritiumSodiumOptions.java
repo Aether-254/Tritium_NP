@@ -3,6 +3,7 @@ package org.craftamethyst.tritium.integration.sodium;
 import com.google.common.collect.ImmutableList;
 import me.jellysquid.mods.sodium.client.gui.options.*;
 import me.jellysquid.mods.sodium.client.gui.options.control.ControlValueFormatter;
+import me.jellysquid.mods.sodium.client.gui.options.control.CyclingControl;
 import me.jellysquid.mods.sodium.client.gui.options.control.SliderControl;
 import me.jellysquid.mods.sodium.client.gui.options.control.TickBoxControl;
 import net.minecraft.network.chat.Component;
@@ -115,33 +116,6 @@ public class TritiumSodiumOptions {
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));
         groups.add(createGroup(fastBlit));
-
-        List<TritiumOptionDefinition<?>> gpuPlus = new ArrayList<>();
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlus",
-                "config.tritium.rendering.GpuPlus_gpuPlus",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlus = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlusVbo",
-                "config.tritium.rendering.GpuPlus_gpuPlusVbo",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusVbo = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        gpuPlus.add(new TritiumOptionDefinition<>(
-                "rendering.GpuPlus_gpuPlusIndex",
-                "config.tritium.rendering.GpuPlus_gpuPlusIndex",
-                c -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex,
-                (c, v) -> TritiumConfigBase.Rendering.GpuPlus.gpuPlusIndex = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        groups.add(createGroup(gpuPlus));
 
         List<TritiumOptionDefinition<?>> reflex = new ArrayList<>();
         reflex.add(new TritiumOptionDefinition<>(
@@ -259,17 +233,6 @@ public class TritiumSodiumOptions {
         ));
         groups.add(createGroup(fl));
 
-        List<TritiumOptionDefinition<?>> fastResourcePack = new ArrayList<>();
-        fastResourcePack.add(new TritiumOptionDefinition<>(
-                "clientOptimizations.FastResourcePack_resourcePackCache",
-                "config.tritium.clientOptimizations.FastResourcePack_resourcePackCache",
-                c -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache,
-                (c, v) -> TritiumConfigBase.ClientOptimizations.FastResourcePack.resourcePackCache = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        groups.add(createGroup(fastResourcePack));
-
         List<TritiumOptionDefinition<?>> dynamicFPS = new ArrayList<>();
         dynamicFPS.add(new TritiumOptionDefinition<>(
                 "clientOptimizations.dynamicFPS_enable",
@@ -303,32 +266,30 @@ public class TritiumSodiumOptions {
                 "config.tritium.fpsdisplan.fpsDisplay_position",
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.position,
                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.position = v,
-                TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                v -> switch(v) {
-                    case 0 -> Component.translatable("config.tritium.fpsDisplay.position.topLeft");
-                    case 1 -> Component.translatable("config.tritium.fpsDisplay.position.topRight");
-                    case 2 -> Component.translatable("config.tritium.fpsDisplay.position.bottomLeft");
-                    case 3 -> Component.translatable("config.tritium.fpsDisplay.position.bottomRight");
-                    case 4 -> Component.translatable("config.tritium.fpsDisplay.position.center");
-                    default -> Component.literal(String.valueOf(v));
-                },
-                0, 4, 1
+                TritiumOptionDefinition.ControlType.ENUM_CYCLE,
+                TritiumConfigBase.FPSDisplan.Position.class,
+                new net.minecraft.network.chat.Component[]{
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.position.topLeft"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.position.topRight"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.position.bottomLeft"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.position.bottomRight"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.position.center")
+                }
         ));
         fpsDisplay.add(new TritiumOptionDefinition<>(
                 "fpsdisplan.fpsDisplay_displayMode",
                 "config.tritium.fpsdisplan.fpsDisplay_displayMode",
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode,
                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode = v,
-                TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                v -> switch(v) {
-                    case 0 -> Component.translatable("config.tritium.fpsDisplay.mode.avgOnly");
-                    case 1 -> Component.translatable("config.tritium.fpsDisplay.mode.currentOnly");
-                    case 2 -> Component.translatable("config.tritium.fpsDisplay.mode.all");
-                    case 3 -> Component.translatable("config.tritium.fpsDisplay.mode.maxOnly");
-                    case 4 -> Component.translatable("config.tritium.fpsDisplay.mode.minOnly");
-                    default -> Component.literal(String.valueOf(v));
-                },
-                0, 4, 1
+                TritiumOptionDefinition.ControlType.ENUM_CYCLE,
+                TritiumConfigBase.FPSDisplan.DisplayMode.class,
+                new net.minecraft.network.chat.Component[]{
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.mode.avgOnly"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.mode.currentOnly"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.mode.all"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.mode.maxOnly"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.mode.minOnly")
+                }
         ));
         fpsDisplay.add(new TritiumOptionDefinition<>(
                 "fpsdisplan.fpsDisplay_backgroundOpacity",
@@ -344,8 +305,13 @@ public class TritiumSodiumOptions {
                 "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces",
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces,
                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces = v,
-                TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                0, 2, 1
+                TritiumOptionDefinition.ControlType.ENUM_CYCLE,
+                TritiumConfigBase.FPSDisplan.DecimalPlaces.class,
+                new net.minecraft.network.chat.Component[]{
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.decimalPlaces.zero"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.decimalPlaces.one"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.fpsDisplay.decimalPlaces.two")
+                }
         ));
         fpsDisplay.add(new TritiumOptionDefinition<>(
                 "fpsdisplan.fpsDisplay_shadow",
@@ -486,8 +452,13 @@ public class TritiumSodiumOptions {
                 "config.tritium.entities.entityStacking_listMode",
                 c -> TritiumConfigBase.Entities.EntityStacking.listMode,
                 (c, v) -> TritiumConfigBase.Entities.EntityStacking.listMode = v,
-                TritiumOptionDefinition.ControlType.INTEGER_SLIDER,
-                0, 2, 1
+                TritiumOptionDefinition.ControlType.ENUM_CYCLE,
+                TritiumConfigBase.Entities.ListMode.class,
+                new net.minecraft.network.chat.Component[]{
+                        net.minecraft.network.chat.Component.translatable("config.tritium.entities.entityStacking.listMode.0"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.entities.entityStacking.listMode.1"),
+                        net.minecraft.network.chat.Component.translatable("config.tritium.entities.entityStacking.listMode.2")
+                }
         ));
         groups.add(createGroup(entityStacking));
 
@@ -719,7 +690,56 @@ public class TritiumSodiumOptions {
             case BOOLEAN -> createBooleanOptionFromDefinition((TritiumOptionDefinition<Boolean>) definition);
             case INTEGER_SLIDER -> createIntSliderOptionFromDefinition((TritiumOptionDefinition<Integer>) definition);
             case DOUBLE_SLIDER -> createDoubleSliderOptionFromDefinition((TritiumOptionDefinition<Double>) definition);
+            case ENUM_CYCLE -> createEnumOptionFromDefinition((TritiumOptionDefinition<? extends Enum<?>>) definition);
         };
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E extends Enum<E>> OptionImpl<TritiumConfigBase, E> createEnumOptionFromDefinition(
+            TritiumOptionDefinition<? extends Enum<?>> definition) {
+
+        String translationKey = definition.getTranslationKey();
+        Object[] params = definition.getControlParams();
+
+        if (params.length < 1 || !(params[0] instanceof Class<?> enumClassRaw)) {
+            TritiumCommon.LOG.error("Invalid parameters for enum control: {}", definition.getKey());
+            return null;
+        }
+
+        Class<E> enumClass = (Class<E>) enumClassRaw;
+
+        net.minecraft.network.chat.Component[] labels = null;
+        if (params.length > 1 && params[1] instanceof net.minecraft.network.chat.Component[] labelArray) {
+            labels = labelArray;
+        }
+
+        net.minecraft.network.chat.Component[] finalLabels = labels;
+        Class<E> finalEnumClass = enumClass;
+
+        OptionImpl.Builder<TritiumConfigBase, E> builder = OptionImpl.createBuilder(enumClass, storage)
+                .setName(Component.translatable(translationKey))
+                .setTooltip(Component.translatable(translationKey + ".tooltip"))
+                .setControl(option -> {
+                    if (finalLabels != null) {
+                        return new CyclingControl<>(
+                                option, finalEnumClass, finalLabels
+                        );
+                    } else {
+                        return new CyclingControl<>(
+                                option, finalEnumClass
+                        );
+                    }
+                })
+                .setBinding(
+                        (config, value) -> safeSetter((TritiumOptionDefinition<E>) definition, config, value),
+                        (config) -> safeGetter((TritiumOptionDefinition<E>) definition, config)
+                );
+
+        if (definition.hasImpact()) {
+            builder.setImpact(definition.getImpact());
+        }
+
+        return builder.build();
     }
 
     private OptionImpl<TritiumConfigBase, Boolean> createBooleanOptionFromDefinition(

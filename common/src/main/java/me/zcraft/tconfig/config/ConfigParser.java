@@ -119,20 +119,6 @@ public class ConfigParser {
         };
     }
 
-    public Supplier<Float> getFloat(String key, float defaultValue) {
-        return () -> {
-            String value = configValues.get(key);
-            if (value == null) return defaultValue;
-
-            try {
-                return Float.parseFloat(value.trim());
-            } catch (NumberFormatException e) {
-                TritiumCommon.LOG.warn("Invalid float value '{}' for key '{}', using default: {}", value, key, defaultValue);
-                return defaultValue;
-            }
-        };
-    }
-
     @SuppressWarnings({"unchecked", "rawtypes"})
     public Supplier<Enum> getEnum(String key, Enum defaultValue) {
         return () -> {
@@ -142,6 +128,14 @@ public class ConfigParser {
             try {
                 return Enum.valueOf(defaultValue.getClass(), value.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
+                try {
+                    int ordinal = Integer.parseInt(value.trim());
+                    Enum[] constants = defaultValue.getClass().getEnumConstants();
+                    if (ordinal >= 0 && ordinal < constants.length) {
+                        return constants[ordinal];
+                    }
+                } catch (NumberFormatException ignored) {
+                }
                 TritiumCommon.LOG.warn("Invalid enum value '{}' for key '{}', using default: {}", value, key, defaultValue);
                 return defaultValue;
             }

@@ -77,6 +77,7 @@ public class TritiumOptionDefinition<T> {
     public enum ControlType {
         BOOLEAN,
         INTEGER_SLIDER,
-        DOUBLE_SLIDER
+        DOUBLE_SLIDER,
+        ENUM_CYCLE
     }
 }

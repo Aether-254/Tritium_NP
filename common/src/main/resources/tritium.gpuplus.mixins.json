@@ -6,7 +6,7 @@
   "plugin": "org.craftamethyst.tritium.compat.plugin.CompatPlugin",
   "mixins": [],
   "client": [
-    "client.renderer.vertex.VertexConsumerMixin",
-    "client.renderer.fast_blit.FastBlit"
+    "client.renderer.fast_blit.FastBlit",
+    "client.renderer.vertex.VertexConsumerMixin"
   ]
 }

@@ -7,11 +7,7 @@ import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public class FPSCounter {
     private static final FPSCounter INSTANCE = new FPSCounter();
@@ -30,7 +26,8 @@ public class FPSCounter {
     private double intervalOnePercentLowFPS = Double.MAX_VALUE;
     private double intervalMaxFPS = 0;
 
-    private FPSCounter() {}
+    private FPSCounter() {
+    }
 
     public static FPSCounter getInstance() {
         return INSTANCE;
@@ -114,34 +111,33 @@ public class FPSCounter {
         String text = getFPSString();
         int textWidth = font.width(text);
 
-        int x = 0, y = 0;
+        int x, y;
 
         y = switch (TritiumConfigBase.FPSDisplan.FPSDisplay.position) {
-            case 0 -> {
+            case TOP_LEFT -> {
                 x = 5;
                 yield 5;
             }
-            case 1 -> {
+            case TOP_RIGHT -> {
                 x = screenWidth - textWidth - 5;
                 yield 5;
             }
-            case 2 -> {
+            case BOTTOM_LEFT -> {
                 x = 5;
                 yield screenHeight - 15;
             }
-            case 3 -> {
+            case BOTTOM_RIGHT -> {
                 x = screenWidth - textWidth - 5;
                 yield screenHeight - 15;
             }
-            case 4 -> {
+            case CENTER -> {
                 x = (screenWidth - textWidth) / 2;
                 yield (screenHeight - 15) / 2;
             }
-            default -> y;
         };
 
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity > 0) {
-            int bgColor = (int)(TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
+            int bgColor = (int) (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
             guiGraphics.fill(x - 2, y - 2, x + textWidth + 2, y + 12, bgColor);
         }
 
@@ -151,8 +147,9 @@ public class FPSCounter {
 
     private String getFPSString() {
         String format = "%.0f";
-        if (TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces > 0) {
-            format = "%." + TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces + "f";
+        int decimals = TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces.value();
+        if (decimals > 0) {
+            format = "%." + decimals + "f";
         }
 
         String unit = TritiumConfigBase.FPSDisplan.FPSDisplay.showUnit ? " FPS" : "";
@@ -162,15 +159,12 @@ public class FPSCounter {
         String maxLabel = Component.translatable("config.tritium.fpsDisplay.label.max").getString();
 
         return switch (TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode) {
-            case 0 ->
-                    avgLabel + String.format(" " + format + unit, avgFPS);
-            case 2 ->
+            case AVG_ONLY -> avgLabel + String.format(" " + format + unit, avgFPS);
+            case ALL ->
                     String.format(format + "｜" + minLabel + " " + format + "｜" + avgLabel + " " + format + "｜" + maxLabel + " " + format + unit,
                             currentFPS, intervalOnePercentLowFPS, avgFPS, intervalMaxFPS);
-            case 3 ->
-                    maxLabel + String.format(" " + format + unit, intervalMaxFPS);
-            case 4 ->
-                    minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
+            case MAX_ONLY -> maxLabel + String.format(" " + format + unit, intervalMaxFPS);
+            case MIN_ONLY -> minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
             default -> String.format(format + unit, currentFPS);
         };
     }

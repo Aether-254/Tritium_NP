@@ -17,7 +17,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.craftamethyst.tritium.octree.BoxOctree;
+import org.craftamethyst.tritium.util.octree.BoxOctree;
 import org.craftamethyst.tritium.util.octree.OctreeHolder;
 import org.craftamethyst.tritium.util.octree.RotationFailMask;
 import org.spongepowered.asm.mixin.Final;
@@ -60,12 +60,11 @@ public abstract class SinglePoolElementMixin {
         AABB aabb = new AABB(bb.minX(), bb.minY(), bb.minZ(), bb.maxX(), bb.maxY(), bb.maxZ());
 
         if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection && octree.intersects(aabb)) {
-            if (RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx)) {
-
-            }
+            RotationFailMask.markFailed(templateId, pos.getX(), pos.getY(), pos.getZ(), rotIdx);
             cir.setReturnValue(false);
             return;
         }
+
         if (TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableOctreeCollisionDetection) {
             VoxelShape shape = Shapes.create(aabb);
             if (!shape.isEmpty()) {

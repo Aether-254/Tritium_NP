@@ -5,6 +5,7 @@ import me.zcraft.tconfig.annotation.ClientOnly;
 import me.zcraft.tconfig.annotation.ConfigVersion;
 import me.zcraft.tconfig.annotation.Range;
 import me.zcraft.tconfig.annotation.SubCategory;
+import net.minecraft.network.chat.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,6 +40,9 @@ public class TritiumConfigBase {
     @SubCategory("Tech Optimizations")
     public TechOptimizations techOptimizations = new TechOptimizations();
 
+    @SubCategory("Fast Random")
+    public FastRandom fastRandom = new FastRandom();
+
     @ClientOnly
     @SubCategory("Fixes")
     public Fixes fixes = new Fixes();
@@ -57,9 +61,11 @@ public class TritiumConfigBase {
         public static class FastFurnace {
             public static boolean fastFurnace = true;
         }
+
         public static class BlockStateCache {
             public static boolean blockStatePairKeyCache = true;
         }
+
         public static class LightingOptimizations {
             public static boolean enableLightingOptimizations = true;
             public static boolean optimizeDynamicGraph = true;
@@ -73,9 +79,14 @@ public class TritiumConfigBase {
         public CRO cro = new CRO();
         @SubCategory("FastBlit")
         public FastBlit fastBlit = new FastBlit();
-        // GPU Plus
-        @SubCategory("GPUPlus")
-        public static GpuPlus GpuPlus = new GpuPlus();
+        @SubCategory("Reflex")
+        public Reflex reflex = new Reflex();
+        // Entity and Block Entity Culling
+        @SubCategory("Entity Culling")
+        public EntityCulling entityCulling = new EntityCulling();
+        // Leaf Culling
+        @SubCategory("Leaf Culling")
+        public LeafCulling leafCulling = new LeafCulling();
 
         public static class CRO {
             public static boolean chest_rendering_optimization = false;
@@ -85,31 +96,15 @@ public class TritiumConfigBase {
             public static boolean fastBlit = true;
         }
 
-        public static class GpuPlus {
-            public static boolean gpuPlus = true;
-            public static boolean gpuPlusVbo = true;
-            public static boolean gpuPlusIndex = true;
-        }
-
-        @SubCategory("Reflex")
-        public Reflex reflex = new Reflex();
-
-        // Entity and Block Entity Culling
-        @SubCategory("Entity Culling")
-        public EntityCulling entityCulling = new EntityCulling();
-
-        // Leaf Culling
-        @SubCategory("Leaf Culling")
-        public LeafCulling leafCulling = new LeafCulling();
-
         public static class Reflex {
             public static boolean enableReflex = true;
             public static boolean reflexDebug = false;
-            @Range(min=-100000, max=100000)
+            @Range(min = -100000, max = 100000)
             public static int reflexOffsetNs = 0;
-            @Range(min=0, max=1000)
+            @Range(min = 0, max = 1000)
             public static int MAX_FPS = 0;
         }
+
         public static class EntityCulling {
             public static boolean enableCulling = true;
             public static boolean enableBlockEntityCulling = true;
@@ -129,26 +124,19 @@ public class TritiumConfigBase {
     @ClientOnly
     public static class ClientOptimizations {
         @SubCategory("FastLanguage")
-        public static FL FL= new FL();
-        @SubCategory("FastResourcePack")
-        public static FastResourcePack FastResourcePack= new FastResourcePack();
+        public static FL FL = new FL();
+        @SubCategory("dynamicFPS")
+        public DynamicFPS dynamicFPS = new DynamicFPS();
 
         public static class FL {
             public static boolean fastLanguageSwitch = true;
         }
 
-        public static class FastResourcePack {
-            public static boolean resourcePackCache = true;
-        }
-        @SubCategory("dynamicFPS")
-        public DynamicFPS dynamicFPS = new DynamicFPS();
-
-        public static class DynamicFPS{
-            public static boolean enable = true;
+        public static class DynamicFPS {
+            public static boolean enable = false;
             @Range(min = 1)
             public static int minimizedFPS = 1;
         }
-
     }
 
     @ClientOnly
@@ -156,13 +144,43 @@ public class TritiumConfigBase {
         @SubCategory("FPSDisplay")
         public static FPSDisplay fpsDisplay = new FPSDisplay();
 
+        public enum Position {
+            TOP_LEFT,
+            TOP_RIGHT,
+            BOTTOM_LEFT,
+            BOTTOM_RIGHT,
+            CENTER
+        }
+
+        public enum DisplayMode {
+            AVG_ONLY,
+            CURRENT_ONLY,
+            ALL,
+            MAX_ONLY,
+            MIN_ONLY
+        }
+
+        public enum DecimalPlaces {
+            ZERO(0),
+            ONE(1),
+            TWO(2);
+
+            private final int value;
+
+            DecimalPlaces(int value) {
+                this.value = value;
+            }
+
+            public int value() {
+                return value;
+            }
+        }
+
         public static class FPSDisplay {
             public static boolean enabled = true;
 
-            @Range(min = 0, max = 4)
-            public static int position = 0;
-            @Range(min = 0, max = 4)
-            public static int displayMode = 1;
+            public static Position position = Position.TOP_LEFT;
+            public static DisplayMode displayMode = DisplayMode.CURRENT_ONLY;
 
             public static String textColor = "#FFFFFF";
 
@@ -171,8 +189,7 @@ public class TritiumConfigBase {
             @Range(min = 0, max = 1)
             public static float backgroundOpacity = 0.3f;
 
-            @Range(min = 0, max = 2)
-            public static int decimalPlaces = 1;
+            public static DecimalPlaces decimalPlaces = DecimalPlaces.ONE;
 
             public static boolean showUnit = true;
         }
@@ -192,6 +209,9 @@ public class TritiumConfigBase {
     public static class Entities {
         @SubCategory("EntityOpt")
         public EntityOpt entityOpt = new EntityOpt();
+        @SubCategory("entityStacking")
+        public EntityStacking entityStacking = new EntityStacking();
+
         public static class EntityOpt {
             public static boolean optimizeEntities = true;
             public static boolean tickRaidersInRaid = true;
@@ -203,14 +223,17 @@ public class TritiumConfigBase {
             @Range(min = 1, max = 256)
             public static int verticalRange = 32;
 
-            public static  List<String> entityWhitelist = List.of("minecraft:ender_dragon");
+            public static List<String> entityWhitelist = List.of("minecraft:ender_dragon");
 
         }
 
-        @SubCategory("entityStacking")
-        public EntityStacking entityStacking = new EntityStacking();
+        public enum ListMode {
+            ALL,
+            WHITELIST,
+            BLACKLIST
+        }
 
-        public static class EntityStacking{
+        public static class EntityStacking {
             public static boolean enable = true;
             public static boolean lockMaxedStacks = true;
             public static boolean showStackCount = true;
@@ -218,12 +241,11 @@ public class TritiumConfigBase {
             public static int maxStackSize = 0;
             @Range(min = 0)
             public static int mergeCooldown = 5;
-            @Range(min = 0.1,max = 10)
+            @Range(min = 0.1, max = 10)
             public static double mergeDistance = 1.5;
             public static String stackCountColor = "#00FF00";
-            @Range(min = 0,max = 2)
-            public static int listMode=0;
-            public static List<String> itemList = Arrays.asList(
+            public static ListMode listMode = ListMode.ALL;
+            public static List<String> itemList = List.of(
                     "minecraft:item"
             );
         }
@@ -232,24 +254,104 @@ public class TritiumConfigBase {
     public static class TechOptimizations {
         @SubCategory("Create Optimizations")
         public CreateOptimizations createOptimizations = new CreateOptimizations();
+
         @SubCategory("LambdaEventListeners")
         public LambdaEventListeners lambdaEventListeners = new LambdaEventListeners();
 
         public static class CreateOptimizations {
             public static boolean enableRailOffloading = true;
         }
+
         public static class LambdaEventListeners {
             public static boolean lambdaEventListeners = true;
         }
+    }
 
+    public static class FastRandom {
+        public static boolean enableFastRandom = false;
+        public static Algorithm defaultAlgorithm = Algorithm.L64X128MIXRANDOM;
+        public static long defaultSeed = 0L;
+        public static StreamMode defaultStreamMode = StreamMode.SHARED;
+        @Range(min = 0, max = 1024)
+        public static int defaultSplit = 0;
+
+        @SubCategory("Structure Pool Weighted Sample")
+        public StructurePoolWeightedSample structurePoolWeightedSample = new StructurePoolWeightedSample();
+
+        @SubCategory("Particle Rejection")
+        public ParticleRejection particleRejection = new ParticleRejection();
+
+        @SubCategory("Minecraft Global")
+        public MinecraftGlobal minecraftGlobal = new MinecraftGlobal();
+
+        public enum Algorithm {
+            DEFAULT,
+            VANILLA,
+            INHERIT,
+            RANDOM,
+            SPLITABLERANDOM,
+            L64X128MIXRANDOM,
+            L64X256MIXRANDOM,
+            L128X128MIXRANDOM,
+            L128X256MIXRANDOM,
+            L64X1024MIXRANDOM,
+            L128X1024MIXRANDOM,
+            XOROSHIRO128PLUSPLUS,
+            XOROSHIRO128STARSTAR,
+            XOSHIRO256PLUSPLUS,
+            XOSHIRO256STARSTAR;
+
+            @Override
+            public String toString() {
+                if (this == XOROSHIRO128PLUSPLUS) {
+                    Component rcmComponent = net.minecraft.network.chat.Component.translatable("config.tritium.fastRandom.rcm");
+                    String rcmText = rcmComponent.getString();
+                    return rcmText + " " + name();
+                }
+                return name();
+            }
+        }
+
+        public enum StreamMode {
+            DEFAULT,
+            SHARED,
+            THREAD_LOCAL
+        }
+
+        public static class StructurePoolWeightedSample {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
+        }
+
+        public static class MinecraftGlobal {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
+        }
+
+        public static class ParticleRejection {
+            public static boolean enable = false;
+            public static Algorithm algorithm = Algorithm.DEFAULT;
+            public static long seed = 0L;
+            public static StreamMode streamMode = StreamMode.DEFAULT;
+            @Range(min = 0, max = 1024)
+            public static int split = 0;
+        }
     }
 
     @ClientOnly
     public static class Fixes {
         @SubCategory("Button Fix")
         public ButtonFix buttonFix = new ButtonFix();
-       @SubCategory("No GLog")
-       public NoGLog noGLog = new NoGLog();
+        @SubCategory("No GLog")
+        public NoGLog noGLog = new NoGLog();
         @SubCategory("Memory Leak Fix")
         public MemoryLeakFix memoryLeakFix = new MemoryLeakFix();
         @SubCategory("Bee Fixes")
@@ -268,6 +370,7 @@ public class TritiumConfigBase {
             public static boolean AE2WTLibCreativeTabLeakFix = true;
             public static boolean ScreenshotByteBufferLeakFix = true;
         }
+
         public static class BeeFixes {
             public static boolean enableBeeFixes = true;
             public static boolean fixWeatherInNether = true;
@@ -284,9 +387,6 @@ public class TritiumConfigBase {
         @SubCategory("Jigsaw Optimizations")
         public JigsawOptimizations jigsawOptimizations = new JigsawOptimizations();
 
-        @SubCategory("Async World Save")
-        public AsyncWorldSave asyncWorldSave = new AsyncWorldSave();
-
         public static class NoiseSamplingCache {
             public static boolean noiseSamplingCache = true;
         }
@@ -298,6 +398,7 @@ public class TritiumConfigBase {
             public static boolean enableStructureBlockFiltering = true;
             public static boolean enableJigsawGenerationCheck = true;
         }
+
         public static class AsyncWorldSave {
             public static boolean asyncWorldSave = true;
 

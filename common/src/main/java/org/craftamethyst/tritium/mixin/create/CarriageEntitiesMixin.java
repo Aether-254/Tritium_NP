@@ -16,7 +16,7 @@ public class CarriageEntitiesMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/simibubi/create/content/trains/entity/Carriage;manageEntities(Lnet/minecraft/world/level/Level;)V"
-            ),remap = false
+            ), remap = false
     )
     private void redirectManageEntities(Carriage carriage, Level level) {
         if (TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading && level instanceof ServerLevel serverLevel) {

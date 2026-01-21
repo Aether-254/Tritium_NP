@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.BooleanSupplier;
 
 @Mixin(MinecraftServer.class)
-abstract class ServerLifecycleHook {
+public abstract class ServerLifecycleHook {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void onConstruct(CallbackInfo ci) {

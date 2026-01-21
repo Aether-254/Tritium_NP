@@ -17,7 +17,7 @@ public class CommonEventsMixin {
             at = @At(
                     value = "INVOKE",
                     target = "Lcom/simibubi/create/content/trains/GlobalRailwayManager;tick(Lnet/minecraft/world/level/Level;)V"
-            ),remap = false
+            ), remap = false
     )
     private static void disableOriginalRailwayTicking(GlobalRailwayManager instance, Level level) {
         if (TritiumConfigBase.TechOptimizations.CreateOptimizations.enableRailOffloading) {

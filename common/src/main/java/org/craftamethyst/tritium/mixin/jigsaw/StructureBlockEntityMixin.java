@@ -79,7 +79,8 @@ public class StructureBlockEntityMixin {
 
         List<StructureBlockInfo> secondCut = new ArrayList<>(firstCut.size());
         for (StructureBlockInfo info : firstCut) {
-            if (box.isInside(info.pos())) {
+            BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos()).offset(offset);
+            if (box.isInside(target)) {
                 secondCut.add(info);
             }
         }

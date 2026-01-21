@@ -5,179 +5,124 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ItemInHandRenderer;
 import net.minecraft.client.renderer.RenderBuffers;
 import net.minecraft.server.packs.resources.ResourceManager;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL32C;
+import org.lwjgl.opengl.GL33C;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL33.*;
-
 @Mixin(GameRenderer.class)
 public abstract class ReflexSchedulerMixin {
 
     @Unique
-    private static final int MODE_DISABLED = 0;
+    private static final double NS_TO_SECONDS = 1e-9;
     @Unique
-    private static final int MODE_TIMESTAMP = 1;
+    private final long[] tritium$gpuSamples = new long[60];
     @Unique
-    private static final int MODE_ELAPSED = 2;
+    private long tritium$lastCpuTime;
     @Unique
-    private static final Logger tritium$LOGGER = LogManager.getLogger("Tritium-Reflex");
+    private long tritium$estCpuTime = -1;
     @Unique
-    private static final long MAX_WAIT_NS = 2_000_000L;
+    private long tritium$estGpuTime = -1;
     @Unique
-    private static final long MIN_FRAME_NS = 1_000_000L;
+    private int tritium$queryStart;
     @Unique
-    private static final double SMOOTH_ALPHA = 0.15;
+    private int tritium$queryEnd;
     @Unique
-    private final int[] tritium$queryIds = new int[2];
+    private long tritium$gpuEndTime;
     @Unique
-    private int tritium$timingMode = MODE_DISABLED;
+    private boolean tritium$queryActive;
     @Unique
-    private int tritium$queryIndex = 0;
-
+    private int tritium$sampleIdx;
     @Unique
-    private long tritium$lastGpuDoneNs = -1L;
-    @Unique
-    private long tritium$lastFrameEndNs = -1L;
-    @Unique
-    private double tritium$smoothedDeltaNs = 0.0;
+    private int tritium$sampleCnt;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void reflex$init(Minecraft p_234219_, ItemInHandRenderer p_234220_, ResourceManager p_234221_, RenderBuffers p_234222_, CallbackInfo ci) {
-
-        if (GL.getCapabilities().GL_ARB_timer_query) {
-            tritium$timingMode = MODE_TIMESTAMP;
-            glGenQueries(tritium$queryIds);
-            tritium$LOGGER.info("Using high-precision timestamp queries");
-        } else if (GL.getCapabilities().GL_EXT_timer_query ||
-                GL.getCapabilities().GL_ARB_occlusion_query) {
-            tritium$timingMode = MODE_ELAPSED;
-            glGenQueries(tritium$queryIds);
-            tritium$LOGGER.info("Using elapsed time queries (compatibility mode)");
-        } else {
-            tritium$LOGGER.warn("No supported GPU timing method available, Reflex disabled");
-        }
+    private void reflex$init(Minecraft pMinecraft, ItemInHandRenderer pItemInHandRenderer,
+                             ResourceManager pResourceManager, RenderBuffers pRenderBuffers, CallbackInfo ci) {
+        GL.getCapabilities();
     }
 
     @Inject(method = "render", at = @At("HEAD"))
-    private void reflex$onCpuStart(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (!TritiumConfigBase.Rendering.Reflex.enableReflex || tritium$timingMode == MODE_DISABLED) return;
+    private void reflex$frameStart(float partialTick, long nanoTime, boolean renderLevel, CallbackInfo ci) {
+        if (!TritiumConfigBase.Rendering.Reflex.enableReflex || !GL.getCapabilities().GL_ARB_timer_query) return;
 
-        final long cpuNow = System.nanoTime();
+        if (tritium$queryEnd != 0) {
+            if (GL33C.glGetQueryObjecti64(tritium$queryEnd, GL33C.GL_QUERY_RESULT_AVAILABLE) == 1) {
+                long endGpu = GL33C.glGetQueryObjecti64(tritium$queryEnd, GL33C.GL_QUERY_RESULT);
+                if (tritium$queryStart != 0 && GL33C.glGetQueryObjecti64(tritium$queryStart, GL33C.GL_QUERY_RESULT_AVAILABLE) == 1) {
+                    long startGpu = GL33C.glGetQueryObjecti64(tritium$queryStart, GL33C.GL_QUERY_RESULT);
+                    long[] gpuNow = new long[1];
+                    GL33C.glGetInteger64v(GL33C.GL_TIMESTAMP, gpuNow);
+                    long sysNow = System.nanoTime();
+                    long offset = sysNow - gpuNow[0];
+                    long gpuTime = (endGpu + offset) - (startGpu + offset);
 
+                    tritium$gpuSamples[tritium$sampleIdx] = gpuTime;
+                    tritium$sampleIdx = (tritium$sampleIdx + 1) % 60;
+                    if (tritium$sampleCnt < 60) tritium$sampleCnt++;
 
-        long gpuDone = -1;
-        gpuDone = switch (tritium$timingMode) {
-            case MODE_TIMESTAMP -> tritium$getGpuTimestamp(cpuNow);
-            case MODE_ELAPSED -> tritium$getGpuElapsedTime();
-            default -> gpuDone;
-        };
+                    long sum = 0;
+                    for (int i = 0; i < tritium$sampleCnt; i++) sum += tritium$gpuSamples[i];
+                    tritium$estGpuTime = sum / tritium$sampleCnt;
+                    tritium$gpuEndTime = endGpu + offset;
 
-        if (gpuDone > 0 && gpuDone < cpuNow) {
-            tritium$lastGpuDoneNs = gpuDone;
-            long cpuElapsed = cpuNow - tritium$lastGpuDoneNs;
-            tritium$smoothedDeltaNs = SMOOTH_ALPHA * cpuElapsed + (1.0 - SMOOTH_ALPHA) * tritium$smoothedDeltaNs;
-
-            long waitNs = (long) (tritium$smoothedDeltaNs + TritiumConfigBase.Rendering.Reflex.reflexOffsetNs);
-            waitNs = Math.max(-MAX_WAIT_NS, Math.min(MAX_WAIT_NS, waitNs));
-
-            if (waitNs > 0) {
-                tritium$smartWait(cpuNow, waitNs);
+                    GL32C.glDeleteQueries(tritium$queryStart);
+                    GL32C.glDeleteQueries(tritium$queryEnd);
+                    tritium$queryStart = 0;
+                    tritium$queryEnd = 0;
+                    tritium$queryActive = false;
+                }
             }
         }
 
-        int maxFps = TritiumConfigBase.Rendering.Reflex.MAX_FPS;
-        if (maxFps > 0 && tritium$lastFrameEndNs > 0) {
-            long targetFrameTime = 1_000_000_000L / maxFps;
-            long elapsed = cpuNow - tritium$lastFrameEndNs;
-            long remaining = targetFrameTime - elapsed;
-
-            if (remaining > MIN_FRAME_NS) {
-                tritium$smartWait(cpuNow, remaining);
+        if (tritium$estCpuTime > 0 && tritium$estGpuTime > 0 && tritium$gpuEndTime > 0) {
+            long now = System.nanoTime();
+            long elapsed = now - tritium$gpuEndTime;
+            if (elapsed < tritium$estGpuTime) {
+                long wait = tritium$estGpuTime - elapsed - TritiumConfigBase.Rendering.Reflex.reflexOffsetNs;
+                int maxFps = TritiumConfigBase.Rendering.Reflex.MAX_FPS;
+                if (maxFps > 0) {
+                    long minTime = 1000000000L / maxFps;
+                    long frameElapsed = now - tritium$lastCpuTime;
+                    long remaining = minTime - frameElapsed;
+                    if (remaining > 0) wait = Math.max(wait, remaining);
+                }
+                if (wait > 1000000L) {
+                    wait = Math.min(wait, 33000000L);
+                    GLFW.glfwWaitEventsTimeout(wait * NS_TO_SECONDS);
+                }
             }
         }
 
-        if (TritiumConfigBase.Rendering.Reflex.reflexDebug) {
-            tritium$LOGGER.debug("Reflex stats - Mode: {}, GPU: {}ns, CPU: {}ns, Delta: {}ns",
-                    tritium$timingModeToString(), tritium$lastGpuDoneNs, tritium$lastFrameEndNs, tritium$smoothedDeltaNs);
+        tritium$lastCpuTime = System.nanoTime();
+
+        if (!tritium$queryActive) {
+            tritium$queryStart = GL32C.glGenQueries();
+            GL33C.glQueryCounter(tritium$queryStart, GL33C.GL_TIMESTAMP);
+            tritium$queryActive = true;
         }
     }
 
-    @Inject(method = "render", at = @At("RETURN"))
-    private void reflex$onCpuEnd(float partialTicks, long nanoTime, boolean renderLevel, CallbackInfo ci) {
-        if (tritium$timingMode == MODE_DISABLED || !TritiumConfigBase.Rendering.Reflex.enableReflex) return;
+    @Inject(method = "render", at = @At("TAIL"))
+    private void reflex$frameEnd(float partialTick, long nanoTime, boolean renderLevel, CallbackInfo ci) {
+        if (!TritiumConfigBase.Rendering.Reflex.enableReflex || !GL.getCapabilities().GL_ARB_timer_query) return;
 
-        switch (tritium$timingMode) {
-            case MODE_TIMESTAMP:
-                glQueryCounter(tritium$queryIds[tritium$queryIndex], GL_TIMESTAMP);
-                break;
-            case MODE_ELAPSED:
-                glBeginQuery(GL_TIME_ELAPSED, tritium$queryIds[tritium$queryIndex]);
-                glEndQuery(GL_TIME_ELAPSED);
-                break;
-        }
-        tritium$queryIndex ^= 1;
-        tritium$lastFrameEndNs = System.nanoTime();
-    }
-
-    @Unique
-    private long tritium$getGpuTimestamp(long cpuNow) {
-        int prev = tritium$queryIndex ^ 1;
-        if (!glIsQuery(tritium$queryIds[prev])) return -1;
-
-        int[] ready = {0};
-        glGetQueryObjectiv(tritium$queryIds[prev], GL_QUERY_RESULT_AVAILABLE, ready);
-        if (ready[0] == 0) return -1;
-
-        long gpuTime = glGetQueryObjecti64(tritium$queryIds[prev], GL_QUERY_RESULT);
-        return (gpuTime > 0 && gpuTime < cpuNow) ? gpuTime : -1;
-    }
-
-    @Unique
-    private long tritium$getGpuElapsedTime() {
-        int prev = tritium$queryIndex ^ 1;
-        if (!glIsQuery(tritium$queryIds[prev])) return -1;
-
-        int[] ready = {0};
-        glGetQueryObjectiv(tritium$queryIds[prev], GL_QUERY_RESULT_AVAILABLE, ready);
-        if (ready[0] == 0) return -1;
-
-        int[] timeNs = {0};
-        glGetQueryObjectiv(tritium$queryIds[prev], GL_QUERY_RESULT, timeNs);
-        return (tritium$lastFrameEndNs > 0) ? tritium$lastFrameEndNs + timeNs[0] * 1_000_000L : -1;
-    }
-
-    @Unique
-    private void tritium$smartWait(long startTime, long waitNs) {
-        long endTime = startTime + waitNs;
-
-        while (System.nanoTime() < endTime - 100_000L) {
-            Thread.onSpinWait();
+        if (tritium$queryActive && tritium$queryEnd == 0) {
+            tritium$queryEnd = GL32C.glGenQueries();
+            GL33C.glQueryCounter(tritium$queryEnd, GL33C.GL_TIMESTAMP);
         }
 
-        while (System.nanoTime() < endTime) {
-            try {
-                Thread.sleep(0, 1000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                break;
-            }
+        long cpuTime = System.nanoTime() - tritium$lastCpuTime;
+        if (tritium$estCpuTime < 0) {
+            tritium$estCpuTime = cpuTime;
+        } else {
+            tritium$estCpuTime = (long) (0.85 * cpuTime + 0.15 * tritium$estCpuTime);
         }
-    }
-
-    @Unique
-    private String tritium$timingModeToString() {
-        return switch (tritium$timingMode) {
-            case MODE_TIMESTAMP -> "TIMESTAMP";
-            case MODE_ELAPSED -> "ELAPSED";
-            default -> "DISABLED";
-        };
     }
 }

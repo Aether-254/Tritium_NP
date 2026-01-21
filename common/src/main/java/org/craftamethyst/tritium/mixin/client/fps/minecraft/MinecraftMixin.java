@@ -24,27 +24,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
-    @Shadow public abstract boolean isWindowActive();
+    @Shadow
+    @Final
+    private Window window;
 
-    @Shadow @Final private Window window;
+    @Shadow
+    public abstract boolean isWindowActive();
 
-    @Inject(method = "<init>",at = @At(value = "TAIL"))
-    private void init(GameConfig pGameConfig, CallbackInfo ci){
+    @Inject(method = "<init>", at = @At(value = "TAIL"))
+    private void init(GameConfig pGameConfig, CallbackInfo ci) {
         GLFW.glfwSetWindowIconifyCallback(this.window.getWindow(), (window, iconified) -> {
-            if(TritiumConfigBase.ClientOptimizations.DynamicFPS.enable)Minecraft.getInstance().noRender = iconified;
+            if (TritiumConfigBase.ClientOptimizations.DynamicFPS.enable) Minecraft.getInstance().noRender = iconified;
         });
     }
 
-    @Inject(method = "getFramerateLimit",at = @At("RETURN"),cancellable = true)
-    public void framerateLimit(CallbackInfoReturnable<Integer> cir){
-        if(!this.isWindowActive() && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable){
+    @Inject(method = "getFramerateLimit", at = @At("RETURN"), cancellable = true)
+    public void framerateLimit(CallbackInfoReturnable<Integer> cir) {
+        if (!this.isWindowActive() && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable) {
             cir.setReturnValue(TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS);
         }
-    }
-
-    @Inject(method = "tick", at = @At("TAIL"))
-    private void tritium$gpuPlusTick(CallbackInfo ci) {
-        org.craftamethyst.tritium.gpu.GpuPlus.processQueue();
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
