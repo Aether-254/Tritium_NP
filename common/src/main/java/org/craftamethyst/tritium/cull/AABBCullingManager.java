@@ -56,9 +56,16 @@ public class AABBCullingManager {
                     cullEntities(cameraPos);
                     cullBlockEntities(cameraPos);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            }  catch (InterruptedException | NullPointerException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+                running = false;
+                break;
             }
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         }
     }
 
@@ -173,8 +180,35 @@ public class AABBCullingManager {
                             continue;
                         }
 
-                        reusableAabbMin.set(pos.getX(), pos.getY(), pos.getZ());
-                        reusableAabbMax.set(pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
+                        AABB boundingBox;
+                        if (blockEntity.hasLevel()) {
+                            var blockState = blockEntity.getBlockState();
+                            var shape = blockState.getCollisionShape(blockEntity.getLevel(), pos);
+                            if (!shape.isEmpty()) {
+                                boundingBox = shape.bounds().move(pos);
+                            } else {
+                                boundingBox = new AABB(pos);
+                            }
+                        } else {
+                            boundingBox = new AABB(pos);
+                        }
+
+                        String className = blockEntity.getClass().getName();
+                        if (className.contains("GunSmithTableBlockEntity")) {
+                            cullable.tritium$setCulled(false);
+                            cullCache.cacheBlockEntity(blockEntity, false);
+                            continue;
+                        }
+
+                        double maxSize = 16.0;
+                        if (boundingBox.getXsize() > maxSize || boundingBox.getYsize() > maxSize || boundingBox.getZsize() > maxSize) {
+                            cullable.tritium$setCulled(false);
+                            cullCache.cacheBlockEntity(blockEntity, false);
+                            continue;
+                        }
+
+                        reusableAabbMin.set(boundingBox.minX, boundingBox.minY, boundingBox.minZ);
+                        reusableAabbMax.set(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
                         reusableCamera.set(cameraPos.x, cameraPos.y, cameraPos.z);
                         boolean visible = occlusionCulling.isAABBVisible(reusableAabbMin, reusableAabbMax, reusableCamera);
                         boolean shouldCull = !visible;
