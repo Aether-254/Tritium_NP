@@ -117,7 +117,7 @@ public class AABBCullingManager {
                     }
 
                     if (!entity.position().closerThan(cameraPos, 128)) {
-                        cullable.tritium$setCulled(false);
+                        cullable.tritium$setCulled(true);
                         cullCache.cacheEntity(entity, false);
                         continue;
                     }
@@ -175,7 +175,7 @@ public class AABBCullingManager {
                         BlockPos pos = entry.getKey();
                         Vec3 blockCenter = Vec3.atCenterOf(pos);
                         if (!blockCenter.closerThan(cameraPos, 64)) {
-                            cullable.tritium$setCulled(false);
+                            cullable.tritium$setCulled(true);
                             cullCache.cacheBlockEntity(blockEntity, false);
                             continue;
                         }
