@@ -75,8 +75,6 @@
   "config.tritium.fpsdisplan.fpsDisplay_position.tooltip": "0Top Left｜1Top Right｜2Bottom Left｜3Bottom Right｜4Center",
   "config.tritium.fpsdisplan.fpsDisplay_displayMode": "Display Mode",
   "config.tritium.fpsdisplan.fpsDisplay_displayMode.tooltip": "What FPS information to display",
-  "config.tritium.fpsdisplan.fpsDisplay_textColor": "Text Color",
-  "config.tritium.fpsdisplan.fpsDisplay_textColor.tooltip": "Set text color，Example #FFFFFF is white",
   "config.tritium.fpsdisplan.fpsDisplay_shadow": "Text Shadow",
   "config.tritium.fpsdisplan.fpsDisplay_shadow.tooltip": "Add shadow to the FPS text",
   "config.tritium.fpsdisplan.fpsDisplay_backgroundOpacity": "Background Opacity",

@@ -301,19 +301,6 @@ public class TritiumSodiumOptions {
                 0, 100, 5
         ));
         fpsDisplay.add(new TritiumOptionDefinition<>(
-                "fpsdisplan.fpsDisplay_decimalPlaces",
-                "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces",
-                c -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces,
-                (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces = v,
-                TritiumOptionDefinition.ControlType.ENUM_CYCLE,
-                TritiumConfigBase.FPSDisplan.DecimalPlaces.class,
-                new Component[]{
-                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.zero"),
-                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.one"),
-                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.two")
-                }
-        ));
-        fpsDisplay.add(new TritiumOptionDefinition<>(
                 "fpsdisplan.fpsDisplay_shadow",
                 "config.tritium.fpsdisplan.fpsDisplay_shadow",
                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.shadow,

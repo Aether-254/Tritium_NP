@@ -4,17 +4,27 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.List;
 
 public class FPSCounter {
     private static final FPSCounter INSTANCE = new FPSCounter();
     private static final long UPDATE_INTERVAL_MS = 2000;
     private static final double ONE_PERCENT_THRESHOLD = 0.01;
+    private static final int HISTORY_SIZE = 100;
 
-    private final Deque<Double> fpsHistory = new ArrayDeque<>();
+    private static final int COLOR_VERY_LOW = 0xFF5555;
+    private static final int COLOR_LOW = 0xFFAA00;
+    private static final int COLOR_MEDIUM = 0xFFFF55;
+    private static final int COLOR_HIGH = 0x55FF55;
+    private static final int COLOR_LABEL = 0xFFFFFF;
+
+    private final Deque<Double> fpsHistory = new ArrayDeque<>(HISTORY_SIZE);
     private final Deque<Double> recentFpsBuffer = new ArrayDeque<>();
     private final List<Double> fpsForOnePercentLow = new ArrayList<>();
     private double currentFPS = 0;
@@ -52,8 +62,7 @@ public class FPSCounter {
         }
 
         fpsHistory.addLast(currentFPS);
-        int historySize = 100;
-        while (fpsHistory.size() > historySize) {
+        if (fpsHistory.size() > HISTORY_SIZE) {
             fpsHistory.removeFirst();
         }
 
@@ -70,7 +79,6 @@ public class FPSCounter {
         if (currentFPS < dynamicMinFPS) {
             dynamicMinFPS = currentFPS;
         }
-
         if (currentFPS > dynamicMaxFPS) {
             dynamicMaxFPS = currentFPS;
         }
@@ -108,76 +116,121 @@ public class FPSCounter {
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null) return;
 
-        String text = getFPSString();
-        int textWidth = font.width(text);
+        String[] parts = getFPSParts();
 
-        int x, y;
+        int totalWidth = 0;
+        for (String part : parts) {
+            totalWidth += font.width(part);
+        }
 
-        y = switch (TritiumConfigBase.FPSDisplan.FPSDisplay.position) {
+        int x = 0;
+        int y = 0;
+
+        switch (TritiumConfigBase.FPSDisplan.FPSDisplay.position) {
             case TOP_LEFT -> {
                 x = 5;
-                yield 5;
+                y = 5;
             }
             case TOP_RIGHT -> {
-                x = screenWidth - textWidth - 5;
-                yield 5;
+                x = screenWidth - totalWidth - 5;
+                y = 5;
             }
             case BOTTOM_LEFT -> {
                 x = 5;
-                yield screenHeight - 15;
+                y = screenHeight - 15;
             }
             case BOTTOM_RIGHT -> {
-                x = screenWidth - textWidth - 5;
-                yield screenHeight - 15;
+                x = screenWidth - totalWidth - 5;
+                y = screenHeight - 15;
             }
             case CENTER -> {
-                x = (screenWidth - textWidth) / 2;
-                yield (screenHeight - 15) / 2;
+                x = (screenWidth - totalWidth) / 2;
+                y = (screenHeight - 15) / 2;
             }
-        };
+        }
 
         if (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity > 0) {
             int bgColor = (int) (TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity * 255) << 24;
-            guiGraphics.fill(x - 2, y - 2, x + textWidth + 2, y + 12, bgColor);
+            guiGraphics.fill(x - 2, y - 2, x + totalWidth + 2, y + 12, bgColor);
         }
 
-        int color = parseColor(TritiumConfigBase.FPSDisplan.FPSDisplay.textColor);
-        guiGraphics.drawString(font, text, x, y, color, TritiumConfigBase.FPSDisplan.FPSDisplay.shadow);
+        int currentX = x;
+        for (String part : parts) {
+            guiGraphics.drawString(font, part, currentX, y, getPartColor(part), TritiumConfigBase.FPSDisplan.FPSDisplay.shadow);
+            currentX += font.width(part);
+        }
     }
 
-    private String getFPSString() {
-        String format = "%.0f";
-        int decimals = TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces.value();
-        if (decimals > 0) {
-            format = "%." + decimals + "f";
-        }
+    private int getColorForFPS(double fps) {
+        if (fps < 15) return COLOR_VERY_LOW;
+        if (fps < 30) return COLOR_LOW;
+        if (fps < 60) return COLOR_MEDIUM;
+        return COLOR_HIGH;
+    }
 
+    private String[] getFPSParts() {
         String unit = TritiumConfigBase.FPSDisplan.FPSDisplay.showUnit ? " FPS" : "";
-
         String minLabel = Component.translatable("config.tritium.fpsDisplay.label.min").getString();
         String avgLabel = Component.translatable("config.tritium.fpsDisplay.label.avg").getString();
         String maxLabel = Component.translatable("config.tritium.fpsDisplay.label.max").getString();
 
-        return switch (TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode) {
-            case AVG_ONLY -> avgLabel + String.format(" " + format + unit, avgFPS);
-            case ALL ->
-                    String.format(format + "｜" + minLabel + " " + format + "｜" + avgLabel + " " + format + "｜" + maxLabel + " " + format + unit,
-                            currentFPS, intervalOnePercentLowFPS, avgFPS, intervalMaxFPS);
-            case MAX_ONLY -> maxLabel + String.format(" " + format + unit, intervalMaxFPS);
-            case MIN_ONLY -> minLabel + String.format(" " + format + unit, intervalOnePercentLowFPS);
-            default -> String.format(format + unit, currentFPS);
-        };
+        switch (TritiumConfigBase.FPSDisplan.FPSDisplay.displayMode) {
+            case AVG_ONLY -> {
+                return new String[]{
+                        avgLabel + " ",
+                        String.format("%.0f", avgFPS),
+                        unit
+                };
+            }
+            case ALL -> {
+                return new String[]{
+                        String.format("%.0f", currentFPS),
+                        "｜",
+                        minLabel + " ",
+                        String.format("%.0f", intervalOnePercentLowFPS),
+                        "｜",
+                        avgLabel + " ",
+                        String.format("%.0f", avgFPS),
+                        "｜",
+                        maxLabel + " ",
+                        String.format("%.0f", intervalMaxFPS),
+                        unit
+                };
+            }
+            case MAX_ONLY -> {
+                return new String[]{
+                        maxLabel + " ",
+                        String.format("%.0f", intervalMaxFPS),
+                        unit
+                };
+            }
+            case MIN_ONLY -> {
+                return new String[]{
+                        minLabel + " ",
+                        String.format("%.0f", intervalOnePercentLowFPS),
+                        unit
+                };
+            }
+            default -> {
+                return new String[]{
+                        String.format("%.0f", currentFPS),
+                        unit
+                };
+            }
+        }
     }
 
-    private int parseColor(String hexColor) {
-        try {
-            if (hexColor.startsWith("#")) {
-                return Integer.parseInt(hexColor.substring(1), 16);
-            }
-        } catch (NumberFormatException e) {
-            TritiumCommon.LOG.warn("Invalid color format: {}", hexColor);
+    private int getPartColor(String part) {
+        if (part.contains("min") || part.contains("avg") || part.contains("max") || part.equals("｜") || part.equals(" FPS")) {
+            return COLOR_LABEL;
         }
-        return 0xFFFFFF;
+
+        try {
+            double fps = Double.parseDouble(part.trim());
+            return getColorForFPS(fps);
+        } catch (NumberFormatException e) {
+            return COLOR_LABEL;
+        }
     }
 
     public void resetHistory() {

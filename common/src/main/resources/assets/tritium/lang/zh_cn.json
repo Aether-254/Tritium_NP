@@ -75,8 +75,6 @@
   "config.tritium.fpsdisplan.fpsDisplay_position.tooltip": "0左上角｜1右上角｜2左下角｜3右下角｜4居中",
   "config.tritium.fpsdisplan.fpsDisplay_displayMode": "显示模式",
   "config.tritium.fpsdisplan.fpsDisplay_displayMode.tooltip": "要显示的FPS信息类型",
-  "config.tritium.fpsdisplan.fpsDisplay_textColor": "文字颜色",
-  "config.tritium.fpsdisplan.fpsDisplay_textColor.tooltip": "设置文字颜色，例如#FFFFFF为白色",
   "config.tritium.fpsdisplan.fpsDisplay_shadow": "文本阴影",
   "config.tritium.fpsdisplan.fpsDisplay_shadow.tooltip": "为FPS文本添加阴影",
   "config.tritium.fpsdisplan.fpsDisplay_backgroundOpacity": "背景不透明度",

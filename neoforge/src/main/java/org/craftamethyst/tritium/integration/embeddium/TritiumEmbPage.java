@@ -171,16 +171,6 @@ public class TritiumEmbPage extends OptionPage {
                                 ControlValueFormatter.percentage(),
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity = v,
                                 c -> TritiumConfigBase.FPSDisplan.FPSDisplay.backgroundOpacity)
-                        .addEnum("decimal_places",
-                                "config.tritium.fpsdisplan.fpsDisplay_decimalPlaces",
-                                TritiumConfigBase.FPSDisplan.DecimalPlaces.class,
-                                new Component[]{
-                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.zero"),
-                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.one"),
-                                        Component.translatable("config.tritium.fpsDisplay.decimalPlaces.two")
-                                },
-                                (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces = v,
-                                c -> TritiumConfigBase.FPSDisplan.FPSDisplay.decimalPlaces)
                         .addBoolean("show_unit",
                                 "config.tritium.fpsdisplan.fpsDisplay_showUnit",
                                 (c, v) -> TritiumConfigBase.FPSDisplan.FPSDisplay.showUnit = v,

@@ -160,36 +160,16 @@ public class TritiumConfigBase {
             MIN_ONLY
         }
 
-        public enum DecimalPlaces {
-            ZERO(0),
-            ONE(1),
-            TWO(2);
-
-            private final int value;
-
-            DecimalPlaces(int value) {
-                this.value = value;
-            }
-
-            public int value() {
-                return value;
-            }
-        }
-
         public static class FPSDisplay {
             public static boolean enabled = true;
 
             public static Position position = Position.TOP_LEFT;
             public static DisplayMode displayMode = DisplayMode.CURRENT_ONLY;
 
-            public static String textColor = "#FFFFFF";
-
             public static boolean shadow = true;
 
             @Range(min = 0, max = 1)
             public static float backgroundOpacity = 0.3f;
-
-            public static DecimalPlaces decimalPlaces = DecimalPlaces.ONE;
 
             public static boolean showUnit = true;
         }
