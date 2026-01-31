@@ -50,7 +50,7 @@
     "client.renderer.head.SkullBlockRendererMixin",
     "client.renderer.reflex.ReflexSchedulerMixin",
     "MCBUG.button.AbstractWidgetMixin",
-    "memory.client.PoseStackMixin",
+
     "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
     "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
     "occfix.ArrayOcclusionCacheMixin",

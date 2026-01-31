@@ -1,6 +1,5 @@
 package org.craftamethyst.tritium.mixin.entity.stack.item.fix;
 
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -25,11 +24,13 @@ public class BucketItem {
                     shift = At.Shift.AFTER
             )
     )
-    private void onUse(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir, @Local ItemStack itemStack) {
+    private void onUse(Level level, Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResultHolder<ItemStack>> cir) {
         net.minecraft.world.item.BucketItem bucket = (net.minecraft.world.item.BucketItem) (Object) this;
         Fluid content = ((BucketItemAccessor) bucket).getContent();
 
         if (content == Fluids.EMPTY) return;
+
+        ItemStack itemStack = player.getItemInHand(hand);
 
         if (!player.isCreative() && itemStack.getCount() >= 2) {
             player.addItem(new ItemStack(Items.BUCKET));
