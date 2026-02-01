@@ -21,6 +21,7 @@ public abstract class EntityRenderDispatcherMixin {
     private static final Int2ObjectOpenHashMap<RenderCacheEntry> RENDER_CACHE = new Int2ObjectOpenHashMap<>();
     @Unique
     private static final long CACHE_DURATION_INVISIBLE = 300;
+
     @Inject(
             method = "shouldRender",
             at = @At("HEAD"),
@@ -29,28 +30,29 @@ public abstract class EntityRenderDispatcherMixin {
     private <E extends Entity> void tritium$earlyCullingCheck(
             E entity, Frustum frustum, double camX, double camY, double camZ,
             CallbackInfoReturnable<Boolean> cir) {
-        if (!TritiumConfigBase.Entities.EntityOpt.ite) return;
-        
+
         int entityId = entity.getId();
-        
-        RenderCacheEntry cacheEntry = RENDER_CACHE.get(entityId);
-        if (cacheEntry != null && !cacheEntry.isExpired()) {
-            cir.setReturnValue(cacheEntry.isShouldRender());
-            return;
+
+        if (TritiumConfigBase.Entities.EntityOpt.ite) {
+            RenderCacheEntry cacheEntry = RENDER_CACHE.get(entityId);
+            if (cacheEntry != null && !cacheEntry.isExpired()) {
+                cir.setReturnValue(cacheEntry.isShouldRender());
+                return;
+            }
+
+            if (EntityTickHelper.shouldSkipTick(entity)) {
+                RENDER_CACHE.put(entityId, new RenderCacheEntry(false, CACHE_DURATION_INVISIBLE));
+                cir.setReturnValue(false);
+                return;
+            }
         }
- 
-        if (EntityTickHelper.shouldSkipTick(entity)) {
-            RENDER_CACHE.put(entityId, new RenderCacheEntry(false, CACHE_DURATION_INVISIBLE));
-            cir.setReturnValue(false);
-            return;
-        }
-        
-        TritiumClient client = TritiumClient.instance;
-        if (client == null) return;
-        if (client.getCullCache() != null) {
+
+        if (TritiumConfigBase.Rendering.EntityCulling.enableCulling) {
+            TritiumClient client = TritiumClient.instance;
+            if (client == null) return;
+
             CullCache.CullResult cached = client.getCullCache().checkEntity(entity);
             if (cached.isCached() && cached.isCulled()) {
-                RENDER_CACHE.put(entityId, new RenderCacheEntry(false, CACHE_DURATION_INVISIBLE));
                 cir.setReturnValue(false);
             }
         }

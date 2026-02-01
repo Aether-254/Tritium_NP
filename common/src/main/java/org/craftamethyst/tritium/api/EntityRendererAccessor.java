@@ -1,4 +1,4 @@
-package org.craftamethyst.tritium.accessor;
+package org.craftamethyst.tritium.api;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;

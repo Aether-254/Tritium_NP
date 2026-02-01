@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
-import org.craftamethyst.tritium.accessor.EntityRendererAccessor;
+import org.craftamethyst.tritium.api.EntityRendererAccessor;
 import org.craftamethyst.tritium.client.TritiumClient;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.craftamethyst.tritium.cull.iface.EntityVisibility;
