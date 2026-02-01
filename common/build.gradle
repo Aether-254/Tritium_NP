@@ -58,6 +58,7 @@ dependencies {
     implementation 'org.joml:joml:1.10.5'
 
     //Mods
+    implementation 'maven.modrinth:sodium:Pb3OXVqC'
     implementation 'maven.modrinth:embeddium:J7b96IEd'
     implementation 'maven.modrinth:create:88L641Un'
     implementation 'maven.modrinth:applied-energistics-2-wireless-terminals:IQFaf9vp'

@@ -7,7 +7,6 @@
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
     "cache.BlockStatePairKeyLazyCache",
-    "chunk.ImprovedNoiseMixin",
     "chunk.NoiseSamplingCacheMixin",
     "entity.stack.ExperienceOrbMixin",
     "entity.stack.item.InventoryMixin",
@@ -40,6 +39,7 @@
     "client.gl.NoErrorMixin",
     "client.lang.LanguageManagerMixin",
     "client.lang.MinecraftClientMixin",
+    "client.particle.ParticleMixin",
     "client.particle.ParticleEngineMixin",
     "client.renderer.culling.BlockEntityMixin",
     "client.renderer.culling.BlockEntityRenderDispatcherMixin",
@@ -57,10 +57,11 @@
     "client.renderer.vertex.VertexConsumerMixin",
     "client.renderer.head.SkullBlockRendererMixin",
     "MCBUG.button.AbstractWidgetMixin",
-    "memory.client.PoseStackMixin",
     "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
     "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
-    "occfix.ArrayOcclusionCacheMixin"
+    "occfix.ArrayOcclusionCacheMixin",
+    "sodium.SodiumOptionsGUIAccessor",
+    "sodium.SodiumOptionsGUIMixin"
   ],
   "server": [],
   "injectors": {

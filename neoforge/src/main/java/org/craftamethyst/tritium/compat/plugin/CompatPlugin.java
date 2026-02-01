@@ -36,15 +36,12 @@ public class CompatPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals(VERTEX_BUFFER_MIXIN)) {
-            return !shouldDisableVertexBufferMixin();
-        }
+        return switch (mixinClassName) {
+            case VERTEX_BUFFER_MIXIN -> !shouldDisableVertexBufferMixin();
+            case FAST_BLIT_MIXIN -> !shouldDisableFastBlitMixin();
+            default -> true;
+        };
 
-        if (mixinClassName.equals(FAST_BLIT_MIXIN)) {
-            return !shouldDisableFastBlitMixin();
-        }
-
-        return true;
     }
 
     private boolean shouldDisableVertexBufferMixin() {

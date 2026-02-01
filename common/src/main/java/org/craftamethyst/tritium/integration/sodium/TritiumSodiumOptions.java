@@ -11,6 +11,7 @@ import org.craftamethyst.tritium.TritiumCommon;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class TritiumSodiumOptions {
@@ -20,7 +21,7 @@ public class TritiumSodiumOptions {
         this.storage = new TritiumOptionsStorage(config);
     }
 
-    public List<OptionPage> createOptionPages() {
+    public Collection<? extends OptionPage> createOptionPages() {
         List<OptionPage> pages = new ArrayList<>();
 
         pages.add(createPerformancePage());

@@ -67,7 +67,7 @@ public class TritiumConfig {
     public static TritiumConfig getConfig(String modId) {
         TritiumConfig config = CONFIG_REGISTRY.get(modId);
         if (config == null) {
-            throw new IllegalStateException("Config not registered for mod: " + modId);
+
         }
         return config;
     }
