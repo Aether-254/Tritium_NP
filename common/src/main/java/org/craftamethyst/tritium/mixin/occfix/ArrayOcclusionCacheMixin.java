@@ -24,7 +24,7 @@ public abstract class ArrayOcclusionCacheMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Memory-mapped resource pack loading
+     * @reason idk
      */
     @Overwrite
     public void setVisible(int x, int y, int z) {
@@ -49,7 +49,7 @@ public abstract class ArrayOcclusionCacheMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Memory-mapped resource pack loading
+     * @reason idk
      */
     @Overwrite
     public void setHidden(int x, int y, int z) {
@@ -74,7 +74,7 @@ public abstract class ArrayOcclusionCacheMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Memory-mapped resource pack loading
+     * @reason idk
      */
     @Overwrite
     public int getState(int x, int y, int z) {
@@ -99,7 +99,7 @@ public abstract class ArrayOcclusionCacheMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Memory-mapped resource pack loading
+     * @reason idk
      */
     @Overwrite
     public void setLastVisible() {
@@ -111,7 +111,7 @@ public abstract class ArrayOcclusionCacheMixin {
 
     /**
      * @author ZCRAFT
-     * @reason Memory-mapped resource pack loading
+     * @reason idk
      */
     @Overwrite
     public void setLastHidden() {
