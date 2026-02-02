@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "org.craftamethyst.tritium.mixin",
   "refmap": "tritium.refmap.json",
-  "priority": 20,
+  "priority": 2000,
   "mixins": [
     "cache.AbstractFurnaceBlockEntityMixin",
     "cache.BlockStatePairKeyLazyCache",
