@@ -17,17 +17,15 @@ public class CompatPlugin implements IMixinConfigPlugin {
     private static final String IMMEDIATELY_FAST_MODID = "immediatelyfast";
     private static final String ENTITY_TEXTURE_FEATURES_MODID = "entity_texture_features";
     private static final String BBS_MODID = "bbs";
-    private static final String SODIUM_MODID = "sodium";
+    private static final String IRON_MODID = "irons_spellbooks";
 
     private static final String VERTEX_BUFFER_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.vertex.VertexBufferMixin";
     private static final String FAST_BLIT_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.fast_blit.FastBlit";
-    private static final String SODIUM_MIXIN = "org.craftamethyst.tritium.mixin.sodium.SodiumOptionsGUIMixin";
-    private static final String SODIUM_ACC_MIXIN = "org.craftamethyst.tritium.mixin.sodium.SodiumOptionsGUIAccessor";
-
+    private static final String PARTICLE_MIXIN = "org.craftamethyst.tritium.mixin.client.particle.ParticleMixin";
     private Boolean hasImmFast;
     private Boolean hasETF;
     private Boolean hasBBS;
-    private Boolean hasSod;
+    private Boolean hasIRON;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -40,18 +38,12 @@ public class CompatPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals(VERTEX_BUFFER_MIXIN)) {
-            return !shouldDisableVertexBufferMixin();
-        }
-
-        if (mixinClassName.equals(FAST_BLIT_MIXIN)) {
-            return !shouldDisableFastBlitMixin();
-        }
-        if (mixinClassName.equals(SODIUM_MIXIN) || mixinClassName.equals(SODIUM_ACC_MIXIN)) {
-            return shouldDisableSodiumMixin();
-        }
-
-        return true;
+        return switch (mixinClassName) {
+            case VERTEX_BUFFER_MIXIN -> !shouldDisableVertexBufferMixin();
+            case FAST_BLIT_MIXIN -> !shouldDisableFastBlitMixin();
+            case PARTICLE_MIXIN -> !shouldDisableParticleMixin();
+            default -> true;
+        };
     }
 
     private boolean shouldDisableVertexBufferMixin() {
@@ -81,16 +73,16 @@ public class CompatPlugin implements IMixinConfigPlugin {
         return hasBBS;
     }
 
-    private boolean shouldDisableSodiumMixin() {
-        if (hasSod == null) {
-            hasSod = FabricLoader.getInstance().isModLoaded(SODIUM_MODID);
+    private boolean shouldDisableParticleMixin() {
+        if (hasIRON == null) {
+            hasIRON = FabricLoader.getInstance().isModLoaded(IRON_MODID);
 
-            if (hasSod) {
-                System.out.println("[Tritium Compat] Enabling SodiumOptionsGUIMixin");
+            if (hasIRON) {
+                System.out.println("[Tritium Compat] Disabling ParticleMixin due to compatibility issues with IRONSPELLBOOKS");
             }
         }
 
-        return hasSod;
+        return hasIRON;
     }
 
     @Override

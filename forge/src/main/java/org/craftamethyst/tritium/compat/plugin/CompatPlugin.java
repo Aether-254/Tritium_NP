@@ -17,13 +17,15 @@ public class CompatPlugin implements IMixinConfigPlugin {
     private static final String IMMEDIATELY_FAST_MODID = "immediatelyfast";
     private static final String ENTITY_TEXTURE_FEATURES_MODID = "entity_texture_features";
     private static final String BBS_MODID = "bbs";
+    private static final String IRON_MODID = "irons_spellbooks";
 
     private static final String VERTEX_BUFFER_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.vertex.VertexBufferMixin";
     private static final String FAST_BLIT_MIXIN = "org.craftamethyst.tritium.mixin.client.renderer.fast_blit.FastBlit";
-
+    private static final String PARTICLE_MIXIN = "org.craftamethyst.tritium.mixin.client.particle.ParticleMixin";
     private Boolean hasImmFast;
     private Boolean hasETF;
     private Boolean hasBBS;
+    private Boolean hasIRON;
 
     @Override
     public void onLoad(String mixinPackage) {
@@ -36,15 +38,12 @@ public class CompatPlugin implements IMixinConfigPlugin {
 
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (mixinClassName.equals(VERTEX_BUFFER_MIXIN)) {
-            return !shouldDisableVertexBufferMixin();
-        }
-
-        if (mixinClassName.equals(FAST_BLIT_MIXIN)) {
-            return !shouldDisableFastBlitMixin();
-        }
-
-        return true;
+        return switch (mixinClassName) {
+            case VERTEX_BUFFER_MIXIN -> !shouldDisableVertexBufferMixin();
+            case FAST_BLIT_MIXIN -> !shouldDisableFastBlitMixin();
+            case PARTICLE_MIXIN -> !shouldDisableParticleMixin();
+            default -> true;
+        };
     }
 
     private boolean shouldDisableVertexBufferMixin() {
@@ -72,6 +71,18 @@ public class CompatPlugin implements IMixinConfigPlugin {
         }
 
         return hasBBS;
+    }
+
+    private boolean shouldDisableParticleMixin() {
+        if (hasIRON == null) {
+            hasIRON = FMLLoader.getLoadingModList().getModFileById(IRON_MODID) != null;
+
+            if (hasIRON) {
+                System.out.println("[Tritium Compat] Disabling ParticleMixin due to compatibility issues with IRONSPELLBOOKS");
+            }
+        }
+
+        return hasIRON;
     }
 
     @Override
