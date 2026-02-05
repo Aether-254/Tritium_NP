@@ -10,7 +10,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.*;
 
-@Mixin(value = Particle.class,priority = 20)
+@Mixin(value = Particle.class,priority = 499)
 public abstract class ParticleMixin {
     @Shadow
     private boolean stoppedByCollision;
