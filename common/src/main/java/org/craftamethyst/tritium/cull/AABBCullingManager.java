@@ -10,6 +10,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.craftamethyst.tritium.cull.iface.BlockEntityVisibility;
 import org.craftamethyst.tritium.cull.iface.EntityVisibility;
 
@@ -31,7 +32,7 @@ public class AABBCullingManager {
 
     public AABBCullingManager() {
         this.mc = Minecraft.getInstance();
-        this.occlusionCulling = new OcclusionCullingInstance(16, new OcclusionProvider());
+        this.occlusionCulling = new OcclusionCullingInstance(128, new OcclusionProvider());
         startCullThread();
     }
 
@@ -116,11 +117,11 @@ public class AABBCullingManager {
                         continue;
                     }
 
-                    if (!entity.position().closerThan(cameraPos, 128)) {
-                        cullable.tritium$setCulled(true);
-                        cullCache.cacheEntity(entity, false);
-                        continue;
-                    }
+                    // if (!entity.position().closerThan(cameraPos, 128)) {
+                    //     cullable.tritium$setCulled(true);
+                    //     cullCache.cacheEntity(entity, false);
+                    //     continue;
+                    // }
 
                     AABB boundingBox = entity.getBoundingBox();
                     if (boundingBox.getXsize() > 50 || boundingBox.getYsize() > 50 || boundingBox.getZsize() > 50) {
@@ -145,7 +146,6 @@ public class AABBCullingManager {
             e.printStackTrace();
         }
     }
-
     private void cullBlockEntities(Vec3 cameraPos) {
         if (mc.level == null || mc.player == null) return;
 
@@ -173,17 +173,21 @@ public class AABBCullingManager {
                         }
 
                         BlockPos pos = entry.getKey();
-                        Vec3 blockCenter = Vec3.atCenterOf(pos);
-                        if (!blockCenter.closerThan(cameraPos, 64)) {
-                            cullable.tritium$setCulled(true);
-                            cullCache.cacheBlockEntity(blockEntity, false);
-                            continue;
-                        }
+
+                        // if (!blockCenter.closerThan(cameraPos, 64)) {
+                        //     cullable.tritium$setCulled(true);
+                        //     cullCache.cacheBlockEntity(blockEntity, false);
+                        //     continue;
+                        // }
 
                         AABB boundingBox;
                         if (blockEntity.hasLevel()) {
                             var blockState = blockEntity.getBlockState();
-                            var shape = blockState.getCollisionShape(blockEntity.getLevel(), pos);
+                            VoxelShape shape = null;
+                            if (blockEntity.getLevel() != null) {
+                                shape = blockState.getCollisionShape(blockEntity.getLevel(), pos);
+                            }
+                            assert shape != null;
                             if (!shape.isEmpty()) {
                                 boundingBox = shape.bounds().move(pos);
                             } else {
@@ -221,7 +225,6 @@ public class AABBCullingManager {
             }
         }
     }
-
     private boolean isSkippableArmorstand(Entity entity) {
         return entity instanceof ArmorStand && ((ArmorStand) entity).isMarker();
     }
