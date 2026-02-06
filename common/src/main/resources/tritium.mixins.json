@@ -32,7 +32,8 @@
     "stack.DataComponentsMixin",
     "stack.ItemStackMixin",
     "tickstop.EntityTypeMixin",
-    "tickstop.LevelMixin"
+    "tickstop.LevelMixin",
+    "crash.CrashReportMixin"
   ],
   "client": [
     "client.fps.count.GuiMixin",
