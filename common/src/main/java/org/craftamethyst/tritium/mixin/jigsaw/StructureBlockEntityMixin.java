@@ -10,7 +10,6 @@ import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.ArrayList;
@@ -18,57 +17,27 @@ import java.util.List;
 
 @Mixin(StructureTemplate.class)
 public class StructureBlockEntityMixin {
-    @ModifyVariable(
-            method = "processBlockInfos",
-            at = @At("HEAD"),
-            argsOnly = true,
-            index = 4
-    )
-    private static List<StructureBlockInfo> tritium$filterBlocksOutsideBox(
-            List<StructureBlockInfo> blockInfos,
-            ServerLevelAccessor level,
-            BlockPos offset,
-            BlockPos pos,
-            StructurePlaceSettings settings) {
-        if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
-                !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableStructureBlockFiltering) {
-            return blockInfos;
-        }
-
-        BoundingBox box = settings.getBoundingBox();
-        if (box == null || blockInfos.isEmpty()) {
-            return blockInfos;
-        }
-
-        List<StructureBlockInfo> filtered = new ArrayList<>(blockInfos.size());
-        for (StructureBlockInfo info : blockInfos) {
-            BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos()).offset(offset);
-            if (box.isInside(target)) {
-                filtered.add(info);
-            }
-        }
-        return filtered;
-    }
 
     @Inject(
-            method = "processBlockInfos",
+            method = "processBlockInfos(Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructurePlaceSettings;Ljava/util/List;)Ljava/util/List;",
             at = @At("RETURN"),
             cancellable = true
     )
-    private static void tritium$filterAgain(
+    private static void tritium$filterBlocks(
             ServerLevelAccessor level,
             BlockPos offset,
             BlockPos pos,
             StructurePlaceSettings settings,
             List<StructureBlockInfo> original,
             CallbackInfoReturnable<List<StructureBlockInfo>> cir) {
+
         if (!TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableJigsawOptimizations ||
                 !TritiumConfigBase.ServerPerformance.JigsawOptimizations.enableStructureBlockFiltering) {
             return;
         }
 
-        List<StructureBlockInfo> firstCut = cir.getReturnValue();
-        if (firstCut == null) {
+        List<StructureBlockInfo> result = cir.getReturnValue();
+        if (result == null || result.isEmpty()) {
             return;
         }
 
@@ -77,13 +46,20 @@ public class StructureBlockEntityMixin {
             return;
         }
 
-        List<StructureBlockInfo> secondCut = new ArrayList<>(firstCut.size());
-        for (StructureBlockInfo info : firstCut) {
-            BlockPos target = StructureTemplate.calculateRelativePosition(settings, info.pos()).offset(offset);
-            if (box.isInside(target)) {
-                secondCut.add(info);
+        List<StructureBlockInfo> filtered = new ArrayList<>(result.size());
+        for (StructureBlockInfo info : result) {
+            BlockPos relativePos = StructureTemplate.calculateRelativePosition(settings, info.pos());
+            BlockPos worldPos = relativePos.offset(offset);
+
+            if (box.isInside(worldPos)) {
+                filtered.add(info);
             }
         }
-        cir.setReturnValue(secondCut);
+
+        if (filtered.isEmpty() && !result.isEmpty()) {
+            return;
+        }
+
+        cir.setReturnValue(filtered);
     }
 }
