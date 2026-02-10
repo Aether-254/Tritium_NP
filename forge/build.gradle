@@ -6,7 +6,7 @@ plugins {
     id 'com.gradleup.shadow' version '9.0.2'
 }
 base {
-    archivesName = "${mod_name}-forge-${minecraft_version}"
+    archivesName = "tritium-forge-${minecraft_version}"
 }
 
 repositories {
