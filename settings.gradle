@@ -1,7 +1,13 @@
 pluginManagement {
+
     repositories {
+        mavenLocal()
         gradlePluginPortal()
         mavenCentral()
+        maven { url = "https://maven.lwjgl.org/releases" }
+        maven {
+            url = ('https://maven.fabricmc.net')
+        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -25,6 +31,17 @@ pluginManagement {
                 includeGroupAndSubgroups("org.spongepowered")
             }
         }
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = 'Forge'
+                    url = uri('https://maven.minecraftforge.net')
+                }
+            }
+            filter {
+                includeGroupAndSubgroups('net.minecraftforge')
+            }
+        }
     }
 }
 
@@ -36,4 +53,5 @@ plugins {
 rootProject.name = 'Tritium'
 include('common')
 include('fabric')
+include('forge')
 include('neoforge')
