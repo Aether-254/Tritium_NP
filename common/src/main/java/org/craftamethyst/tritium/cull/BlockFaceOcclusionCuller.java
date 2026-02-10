@@ -47,7 +47,7 @@ public final class BlockFaceOcclusionCuller {
                 FALLBACK_MODE.compareAndSet(true, false);
                 lastFallbackCheck = System.currentTimeMillis();
             }
-            return LeafCulling.checkSimpleConnection(level, pos.relative(face), face);
+            return LeafCulling.checkSimpleConnection(level, pos.relative(face));
         }
 
         final Key key = createKey(level, pos, face);
@@ -100,7 +100,7 @@ public final class BlockFaceOcclusionCuller {
 
             hash = 31 * hash + System.identityHashCode(state.getBlock());
             hash = 31 * hash + (state.isAir() ? 1 : 0);
-            hash = 31 * hash + (state.isSolidRender(level,pos) ? 1 : 0);
+            hash = 31 * hash + (state.isSolidRender() ? 1 : 0);
             hash = 31 * hash + state.getLightEmission();
         }
         return hash;
@@ -295,7 +295,7 @@ public final class BlockFaceOcclusionCuller {
             BlockState state = level.getBlockState(mpos);
 
             if (!state.isAir()) {
-                if (!state.getOcclusionShape(level,mpos).isEmpty() &&
+                if (!state.getOcclusionShape().isEmpty() &&
                         state.getCollisionShape(level, mpos).bounds().move(mpos).contains(current)) {
                     return false;
                 }
@@ -310,7 +310,7 @@ public final class BlockFaceOcclusionCuller {
         if (distance > 8.0) return 0.5;
         if (distance > 4.0) return 0.25;
         if (distance > 2.0) return 0.125;
-        if (level != null && level.getBlockState(BlockPos.containing(0, 0, 0)).isSolidRender(level, BlockPos.containing(0, 0, 0))) {
+        if (level != null && level.getBlockState(BlockPos.containing(0, 0, 0)).isSolidRender()) {
             return 0.125;
         }
         return 0.0625;

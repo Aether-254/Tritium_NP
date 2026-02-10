@@ -1,12 +1,12 @@
 package org.craftamethyst.tritium.mixin.cache;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
@@ -38,39 +38,38 @@ public abstract class AbstractFurnaceBlockEntityMixin {
     @Final
     private RecipeManager.CachedCheck<SingleRecipeInput, ? extends AbstractCookingRecipe> quickCheck;
 
-    @Redirect(
-            method = "serverTick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;getTotalCookTime(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/level/block/entity/AbstractFurnaceBlockEntity;)I"
-            )
+    @Inject(
+            method = "getTotalCookTime",
+            at = @At("HEAD"),
+            cancellable = true
     )
-    private static int redirectGetTotalCookTime(Level level, AbstractFurnaceBlockEntity blockEntity) {
-        AbstractFurnaceBlockEntityMixin self = (AbstractFurnaceBlockEntityMixin) (Object) blockEntity;
-
-        if (self != null && self.items.isEmpty()) {
-            self.tritium$cachedInput = ItemStack.EMPTY;
-            self.tritium$cacheMissed = false;
-            return DEFAULT_COOK_TIME;
-        }
+    private static void tritium$injectGetTotalCookTime(ServerLevel level, AbstractFurnaceBlockEntity furnace, CallbackInfoReturnable<Integer> cir) {
+        AbstractFurnaceBlockEntityMixin self = (AbstractFurnaceBlockEntityMixin) (Object) furnace;
 
         assert self != null;
+        if (self.items.isEmpty()) {
+            self.tritium$cachedInput = ItemStack.EMPTY;
+            self.tritium$cacheMissed = false;
+            cir.setReturnValue(DEFAULT_COOK_TIME);
+            return;
+        }
+
         ItemStack currentInput = self.items.getFirst();
         if (currentInput.isEmpty()) {
             self.tritium$cachedInput = ItemStack.EMPTY;
             self.tritium$cacheMissed = false;
-            return DEFAULT_COOK_TIME;
+            cir.setReturnValue(DEFAULT_COOK_TIME);
+            return;
         }
 
         RecipeHolder<? extends AbstractCookingRecipe> recipe = self.tritium$getCachedRecipe(currentInput, level);
-
-        return recipe == null ? DEFAULT_COOK_TIME : recipe.value().getCookingTime();
+        cir.setReturnValue(recipe == null ? DEFAULT_COOK_TIME : recipe.value().cookingTime());
     }
 
     @Unique
     @Nullable
-    private RecipeHolder<? extends AbstractCookingRecipe> tritium$getCachedRecipe(ItemStack currentInput, Level level) {
-        if (ItemStack.isSameItemSameComponents(this.tritium$cachedInput, currentInput)) {
+    private RecipeHolder<? extends AbstractCookingRecipe> tritium$getCachedRecipe(ItemStack currentInput, ServerLevel level) {
+        if (ItemStack.isSameItem(this.tritium$cachedInput, currentInput)) {
             return this.tritium$cacheMissed ? null : this.tritium$cachedRecipe;
         }
 
@@ -101,8 +100,8 @@ public abstract class AbstractFurnaceBlockEntityMixin {
             method = "setItem",
             at = @At("HEAD")
     )
-    private void onSetItem(int pIndex, ItemStack pStack, CallbackInfo ci) {
-        if (pIndex == 0 && !ItemStack.isSameItemSameComponents(this.tritium$cachedInput, pStack)) {
+    private void onSetItem(int index, ItemStack stack, CallbackInfo ci) {
+        if (index == 0 && !ItemStack.isSameItem(this.tritium$cachedInput, stack)) {
             this.tritium$cachedInput = ItemStack.EMPTY;
             this.tritium$cacheMissed = false;
             this.tritium$cachedRecipe = null;

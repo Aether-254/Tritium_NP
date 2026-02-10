@@ -83,8 +83,7 @@ public final class EntityTickHelper {
         } else {
             ResourceLocation key = ResourceLocation.tryParse(raw);
             if (key != null) {
-                EntityType<?> type = BuiltInRegistries.ENTITY_TYPE.get(key);
-                idTarget.add(type);
+                BuiltInRegistries.ENTITY_TYPE.get(key).ifPresent(holder -> idTarget.add(holder.value()));
             }
         }
     }

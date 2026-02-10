@@ -38,7 +38,7 @@ public abstract class MinecraftMixin {
         });
     }
 
-    @Inject(method = "getFramerateLimit", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "getFramerateLimitTracker", at = @At("RETURN"), cancellable = true)
     public void framerateLimit(CallbackInfoReturnable<Integer> cir) {
         if (!this.isWindowActive() && TritiumConfigBase.ClientOptimizations.DynamicFPS.enable) {
             cir.setReturnValue(TritiumConfigBase.ClientOptimizations.DynamicFPS.minimizedFPS);

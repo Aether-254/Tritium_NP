@@ -217,7 +217,7 @@ public abstract class ParticleMixin {
         int blockY = Mth.floor(y);
         int blockZ = Mth.floor(z);
 
-        if (blockY < this.level.getMinBuildHeight() || blockY >= this.level.getMaxBuildHeight()) {
+        if (blockY < this.level.getMinY() || blockY >= this.level.getMaxY()) {
             return false;
         }
 

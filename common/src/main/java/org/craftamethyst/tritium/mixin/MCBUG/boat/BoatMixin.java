@@ -1,13 +1,14 @@
 package org.craftamethyst.tritium.mixin.MCBUG.boat;
 
-
-import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.vehicle.AbstractBoat;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(Boat.class)
+@Mixin(value = AbstractBoat.class)
 public abstract class BoatMixin {
 
     @Inject(
@@ -15,8 +16,8 @@ public abstract class BoatMixin {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void onCheckFallDamage(double y, boolean onGround, net.minecraft.world.level.block.state.BlockState state, net.minecraft.core.BlockPos pos, CallbackInfo ci) {
-        Boat boat = (Boat) (Object) this;
+    private void onCheckFallDamage(double p_376661_, boolean p_376924_, BlockState p_376918_, BlockPos p_376727_, CallbackInfo ci) {
+        AbstractBoat boat = (AbstractBoat) (Object) this;
         boat.fallDistance = 0.0F;
         ci.cancel();
     }

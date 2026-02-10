@@ -12,7 +12,7 @@ public class DirectionMixin {
      * @reason Zero-allocation nearest direction calculation
      */
     @Overwrite
-    public static Direction getNearest(float x, float y, float z) {
+    public static Direction getApproximateNearest(float x, float y, float z) {
         if (x == 0.0f && y == 0.0f && z == 0.0f) {
             return Direction.NORTH;
         }

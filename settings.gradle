@@ -1,13 +1,7 @@
 pluginManagement {
-
     repositories {
-        mavenLocal()
         gradlePluginPortal()
         mavenCentral()
-        maven { url = "https://maven.lwjgl.org/releases" }
-        maven {
-            url = ('https://maven.fabricmc.net')
-        }
         exclusiveContent {
             forRepository {
                 maven {
@@ -31,26 +25,15 @@ pluginManagement {
                 includeGroupAndSubgroups("org.spongepowered")
             }
         }
-        exclusiveContent {
-            forRepository {
-                maven {
-                    name = 'Forge'
-                    url = uri('https://maven.minecraftforge.net')
-                }
-            }
-            filter {
-                includeGroupAndSubgroups('net.minecraftforge')
-            }
-        }
     }
 }
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
 }
+
 // This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)
 rootProject.name = 'Tritium'
 include('common')
 include('fabric')
 include('neoforge')
-include('forge')

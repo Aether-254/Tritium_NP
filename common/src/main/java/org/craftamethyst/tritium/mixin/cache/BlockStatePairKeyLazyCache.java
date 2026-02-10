@@ -1,30 +1,17 @@
 package org.craftamethyst.tritium.mixin.cache;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import org.craftamethyst.tritium.config.TritiumConfigBase;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.spongepowered.asm.mixin.*;
 
-@Mixin(Block.BlockStatePairKey.class)
+@Mixin(targets = "net.minecraft.world.level.block.Block$ShapePairKey")
 public class BlockStatePairKeyLazyCache {
-    @Final
     @Shadow
-    private BlockState first;
+    @Final
+    private VoxelShape first;
 
-    @Final
     @Shadow
-    private BlockState second;
-
     @Final
-    @Shadow
-    private Direction direction;
+    private VoxelShape second;
 
     @Unique
     private int tritium$cachedHash = 0;
@@ -32,27 +19,24 @@ public class BlockStatePairKeyLazyCache {
     @Unique
     private boolean tritium$isHashComputed = false;
 
-    @Inject(method = "hashCode", at = @At("HEAD"), cancellable = true)
-    private void onHashCode(CallbackInfoReturnable<Integer> cir) {
-        if (!TritiumConfigBase.Performance.BlockStateCache.blockStatePairKeyCache) {
-            return;
-        }
+    /**
+     * @author ZCRAFT
+     * @reason BlockStatePairKey hashCode
+     */
+    @Overwrite
+    public int hashCode() {
         if (!tritium$isHashComputed) {
             tritium$computeAndCacheHashCode();
         }
-        cir.setReturnValue(tritium$cachedHash);
+        return tritium$cachedHash;
     }
 
     @Unique
     private void tritium$computeAndCacheHashCode() {
-        int firstHash = this.first.hashCode();
-        int secondHash = this.second.hashCode();
-        int directionHash = this.direction.hashCode();
-        int result = firstHash;
-        result = (result << 5) - result + secondHash;
-        result = (result << 5) - result + directionHash;
+        int firstHash = System.identityHashCode(this.first);
+        int secondHash = System.identityHashCode(this.second);
 
-        this.tritium$cachedHash = result;
+        this.tritium$cachedHash = firstHash * 31 + secondHash;
         this.tritium$isHashComputed = true;
     }
 }

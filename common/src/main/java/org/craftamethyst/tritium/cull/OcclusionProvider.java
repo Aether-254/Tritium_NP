@@ -22,7 +22,7 @@ public class OcclusionProvider implements DataProvider {
         if (level == null) return false;
 
         BlockPos pos = new BlockPos(x, y, z);
-        return level.getBlockState(pos).isSolidRender(level, pos);
+        return level.getBlockState(pos).isSolidRender();
     }
 
     @Override

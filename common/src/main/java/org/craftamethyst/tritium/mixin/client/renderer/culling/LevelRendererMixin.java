@@ -36,47 +36,11 @@ public class LevelRendererMixin {
         if (!TritiumConfigBase.Rendering.EntityCulling.enableCulling) return;
         TritiumClient client = TritiumClient.instance;
         if (client == null || !(entity instanceof EntityVisibility cullable)) return;
-        if (cullable.tritium$isForcedVisible() || entity.noCulling) {
+        if (cullable.tritium$isForcedVisible() || entity.isSpectator()) {
             cullable.tritium$setOutOfCamera(false);
             return;
         }
 
-        if (client.shouldSkipEntity(entity)) {
-            if (!TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling
-                    && matrices != null
-                    && consumers != null
-                    && tritium$shouldRenderNameTag(entity)) {
-                tritium$renderNameTag(entity, cameraX, cameraY, cameraZ, tickDelta, matrices, consumers);
-            }
-            ci.cancel();
-            return;
-        }
-
         cullable.tritium$setOutOfCamera(false);
-    }
-
-    @Unique
-    private boolean tritium$shouldRenderNameTag(Entity entity) {
-        EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) entityRenderDispatcher.getRenderer(entity);
-        return renderer instanceof EntityRendererAccessor accessor
-                && accessor.tritium_shouldShowName(entity);
-    }
-
-    @Unique
-    private void tritium$renderNameTag(Entity entity, double camX, double camY, double camZ,
-                                       float tickDelta, PoseStack matrices, MultiBufferSource consumers) {
-        EntityRenderer<Entity> renderer = (EntityRenderer<Entity>) entityRenderDispatcher.getRenderer(entity);
-        if (!(renderer instanceof EntityRendererAccessor accessor)) return;
-
-        double x = Mth.lerp(tickDelta, entity.xOld, entity.getX()) - camX;
-        double y = Mth.lerp(tickDelta, entity.yOld, entity.getY()) - camY;
-        double z = Mth.lerp(tickDelta, entity.zOld, entity.getZ()) - camZ;
-
-        Vec3 offset = renderer.getRenderOffset(entity, tickDelta);
-        matrices.pushPose();
-        matrices.translate(x + offset.x, y + offset.y, z + offset.z);
-        accessor.tritium_renderNameTag(entity, entity.getDisplayName(), matrices, consumers,
-                entityRenderDispatcher.getPackedLightCoords(entity, tickDelta));
-        matrices.popPose();
     }
 }
