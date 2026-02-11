@@ -93,11 +93,7 @@ public class TritiumEmbPage extends OptionPage {
                         .addBoolean("enable_tick_stopping",
                                 "config.tritium.rendering.entityCulling_enableTickStopping",
                                 (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping = v,
-                                c -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping)
-                        .addBoolean("enable_name_tag_culling",
-                                "config.tritium.rendering.entityCulling_enableNameTagCulling",
-                                (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling = v,
-                                c -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling))
+                                c -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping))
                 .addGroup("leaf_culling", Component.translatable("config.tritium.rendering.leafCulling"), builder -> builder
                         .addBoolean("enable_leaf_culling",
                                 "config.tritium.rendering.leafCulling_enableLeafCulling",
@@ -269,11 +265,7 @@ public class TritiumEmbPage extends OptionPage {
                         .addBoolean("ae2wt_lib_creative_tab_leak_fix",
                                 "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix",
                                 (c, v) -> TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix = v,
-                                c -> TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix)
-                        .addBoolean("screenshot_byte_buffer_leak_fix",
-                                "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix",
-                                (c, v) -> TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix = v,
-                                c -> TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix))
+                                c -> TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix))
                 .addGroup("bee_fixes", Component.translatable("config.tritium.fixes.beeFixes"), builder -> builder
                         .addBoolean("enable_bee_fixes",
                                 "config.tritium.fixes.beeFixes_enableBeeFixes",

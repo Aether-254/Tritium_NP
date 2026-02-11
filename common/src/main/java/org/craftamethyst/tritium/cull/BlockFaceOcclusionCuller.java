@@ -129,7 +129,7 @@ public final class BlockFaceOcclusionCuller {
 
         PENDING.increment();
         initExecutors();
-        recordDependencies(level, pos, face, key);
+        recordDependencies(pos, face, key);
 
         CompletableFuture<Boolean> finalFuture = future;
         Runnable work = () -> {
@@ -190,7 +190,7 @@ public final class BlockFaceOcclusionCuller {
         return false;
     }
 
-    private static void recordDependencies(BlockGetter level, BlockPos pos, Direction face, Key key) {
+    private static void recordDependencies(BlockPos pos, Direction face, Key key) {
         BlockPos checkPos = pos.relative(face);
 
         for (Direction dir : Direction.values()) {
@@ -371,10 +371,6 @@ public final class BlockFaceOcclusionCuller {
                 pos.getY() + 0.5 + face.getStepY() * 0.501,
                 pos.getZ() + 0.5 + face.getStepZ() * 0.501
         );
-    }
-
-    public static boolean isInFallbackMode() {
-        return FALLBACK_MODE.get();
     }
 
     public static void shutdown() {

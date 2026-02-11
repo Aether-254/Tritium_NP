@@ -177,14 +177,6 @@ public class TritiumSodiumOptions {
                 OptionImpact.HIGH,
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));
-        entityCulling.add(new TritiumOptionDefinition<>(
-                "rendering.entityCulling_enableNameTagCulling",
-                "config.tritium.rendering.entityCulling_enableNameTagCulling",
-                c -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling,
-                (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling = v,
-                OptionImpact.LOW,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
         groups.add(createGroup(entityCulling));
 
         List<TritiumOptionDefinition<?>> leafCulling = new ArrayList<>();
@@ -506,14 +498,6 @@ public class TritiumSodiumOptions {
                 "config.tritium.fixes.memoryLeakFix_AE2WTLibCreativeTabLeakFix",
                 c -> TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix,
                 (c, v) -> TritiumConfigBase.Fixes.MemoryLeakFix.AE2WTLibCreativeTabLeakFix = v,
-                OptionImpact.MEDIUM,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
-        memoryLeakFix.add(new TritiumOptionDefinition<>(
-                "fixes.memoryLeakFix_ScreenshotByteBufferLeakFix",
-                "config.tritium.fixes.memoryLeakFix_ScreenshotByteBufferLeakFix",
-                c -> TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix,
-                (c, v) -> TritiumConfigBase.Fixes.MemoryLeakFix.ScreenshotByteBufferLeakFix = v,
                 OptionImpact.MEDIUM,
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));

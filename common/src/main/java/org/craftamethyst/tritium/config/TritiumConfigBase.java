@@ -109,7 +109,7 @@ public class TritiumConfigBase {
             public static boolean enableCulling = true;
             public static boolean enableBlockEntityCulling = true;
             public static boolean enableTickStopping = false;
-            public static boolean enableNameTagCulling = true;
+
 
             public static List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
         }
@@ -341,7 +341,6 @@ public class TritiumConfigBase {
 
         public static class MemoryLeakFix {
             public static boolean AE2WTLibCreativeTabLeakFix = true;
-            public static boolean ScreenshotByteBufferLeakFix = true;
         }
 
         public static class BeeFixes {

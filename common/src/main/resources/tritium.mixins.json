@@ -59,7 +59,6 @@
     "client.renderer.head.SkullBlockRendererMixin",
     "MCBUG.button.AbstractWidgetMixin",
     "memory.client.leakfix.AE2WTLibCreativeTabLeakFix",
-    "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
     "occfix.ArrayOcclusionCacheMixin",
     "sodium.SodiumOptionsGUIAccessor",
     "sodium.SodiumOptionsGUIMixin"
