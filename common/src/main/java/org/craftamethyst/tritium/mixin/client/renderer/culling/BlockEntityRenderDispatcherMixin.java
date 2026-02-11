@@ -42,7 +42,7 @@ public abstract class BlockEntityRenderDispatcherMixin {
 
         if (cullable.tritium$isForcedVisible()) return;
         BlockEntityRenderer<E> renderer = getRenderer(blockEntity);
-        if (renderer != null && renderer.shouldRenderOffScreen(blockEntity)) return;
+        if (renderer != null && renderer.shouldRenderOffScreen()) return;
         if (client.shouldSkipBlockEntity(blockEntity)) {
             ci.cancel();
         }

@@ -9,9 +9,10 @@ import org.craftamethyst.tritium.client.TritiumClient;
 @Mod(TritiumCommon.MOD_ID)
 public class Tritium {
 
-    public Tritium() {
+    public Tritium(FMLJavaModLoadingContext context) {
+        var modBusGroup = context.getModBusGroup();
         TritiumCommon.init();
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSideSetup);
+        FMLClientSetupEvent.getBus(modBusGroup).addListener(this::onClientSideSetup);
     }
 
     public void onClientSideSetup(FMLClientSetupEvent event) {

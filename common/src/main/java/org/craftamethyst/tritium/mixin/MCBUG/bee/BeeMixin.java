@@ -1,9 +1,9 @@
 package org.craftamethyst.tritium.mixin.MCBUG.bee;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.animal.Bee;
+import net.minecraft.world.level.storage.ValueInput;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,11 +15,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class BeeMixin {
 
     @Inject(method = "readAdditionalSaveData", at = @At("RETURN"))
-    private void onReadAdditionalSaveData(CompoundTag compound, CallbackInfo ci) {
+    private void onReadAdditionalSaveData(ValueInput input, CallbackInfo ci) {
         if (TritiumConfigBase.Fixes.BeeFixes.enableBeeFixes &&
                 TritiumConfigBase.Fixes.BeeFixes.fixBeeGravity) {
             Bee bee = (Bee) (Object) this;
-            if (compound.contains("NoGravity")) {
+            boolean noGravity = input.getBooleanOr("NoGravity", false);
+            if (noGravity) {
                 bee.setNoGravity(true);
             }
         }

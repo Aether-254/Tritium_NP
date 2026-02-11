@@ -5,7 +5,6 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import org.craftamethyst.tritium.config.TritiumConfigBase;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -156,16 +155,27 @@ public class FPSCounter {
 
         int currentX = x;
         for (String part : parts) {
-            guiGraphics.drawString(font, part, currentX, y, getPartColor(part), TritiumConfigBase.FPSDisplan.FPSDisplay.shadow);
+            int color = getPartColor(part);
+            if ((color & 0xFF000000) == 0) {
+                color = color | 0xFF000000;
+            }
+            guiGraphics.drawString(font, part, currentX, y, color, TritiumConfigBase.FPSDisplan.FPSDisplay.shadow);
             currentX += font.width(part);
         }
     }
 
     private int getColorForFPS(double fps) {
-        if (fps < 15) return COLOR_VERY_LOW;
-        if (fps < 30) return COLOR_LOW;
-        if (fps < 60) return COLOR_MEDIUM;
-        return COLOR_HIGH;
+        int color;
+        if (fps < 15) {
+            color = COLOR_VERY_LOW;
+        } else if (fps < 30) {
+            color = COLOR_LOW;
+        } else if (fps < 60) {
+            color = COLOR_MEDIUM;
+        } else {
+            color = COLOR_HIGH;
+        }
+        return 0xFF000000 | color;
     }
 
     private String[] getFPSParts() {
@@ -222,14 +232,14 @@ public class FPSCounter {
 
     private int getPartColor(String part) {
         if (part.contains("min") || part.contains("avg") || part.contains("max") || part.equals("｜") || part.equals(" FPS")) {
-            return COLOR_LABEL;
+            return 0xFF000000 | COLOR_LABEL;
         }
 
         try {
             double fps = Double.parseDouble(part.trim());
             return getColorForFPS(fps);
         } catch (NumberFormatException e) {
-            return COLOR_LABEL;
+            return 0xFF000000 | COLOR_LABEL;
         }
     }
 

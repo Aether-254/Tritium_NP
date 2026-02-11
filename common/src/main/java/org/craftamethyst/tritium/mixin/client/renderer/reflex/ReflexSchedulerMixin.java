@@ -44,7 +44,7 @@ public abstract class ReflexSchedulerMixin {
     private int tritium$sampleCnt;
 
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void reflex$init(Minecraft pMinecraft, ItemInHandRenderer pItemInHandRenderer, ResourceManager pResourceManager, RenderBuffers pRenderBuffers, CallbackInfo ci) {
+    private void reflex$init(Minecraft p_234219_, ItemInHandRenderer p_234220_, RenderBuffers p_234222_, CallbackInfo ci) {
         GL.getCapabilities();
     }
 
