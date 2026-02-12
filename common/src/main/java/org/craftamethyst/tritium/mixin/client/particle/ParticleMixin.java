@@ -119,7 +119,8 @@ public abstract class ParticleMixin {
             checkY = box.minY - distance;
 
             if (tritium$solidAt(centerX, checkY, centerZ)) {
-                return -Math.max(0, box.minY - Math.ceil(checkY) - 0.001);
+                double collisionDistance = box.minY - Math.ceil(checkY) - 0.001;
+                return -tritium$clampCollisionDistance(collisionDistance, distance);
             }
 
             double corner1X = box.minX + 0.25;
@@ -131,18 +132,17 @@ public abstract class ParticleMixin {
             boolean hit2 = tritium$solidAt(corner2X, checkY, corner2Z);
 
             if (hit1 || hit2) {
-                double minDistance = distance;
                 double collisionY = Math.ceil(checkY);
-                double d = box.minY - collisionY - 0.001;
-                minDistance = Math.min(minDistance, d);
-                return -minDistance;
+                double collisionDistance = box.minY - collisionY - 0.001;
+                return -tritium$clampCollisionDistance(collisionDistance, distance);
             }
 
         } else {
             checkY = box.maxY + distance;
 
             if (tritium$solidAt(centerX, checkY, centerZ)) {
-                return Math.max(0, Math.floor(checkY) - box.maxY - 0.001);
+                double collisionDistance = Math.floor(checkY) - box.maxY - 0.001;
+                return tritium$clampCollisionDistance(collisionDistance, distance);
             }
 
         }
@@ -165,6 +165,7 @@ public abstract class ParticleMixin {
                 double collisionPoint = positive ?
                         Math.ceil(checkX) - box.maxX - 0.001 :
                         box.minX - Math.floor(checkX) - 0.001;
+                collisionPoint = tritium$clampCollisionDistance(collisionPoint, distance);
                 return positive ? collisionPoint : -collisionPoint;
             }
 
@@ -178,6 +179,7 @@ public abstract class ParticleMixin {
                 double collisionPoint = positive ?
                         Math.ceil(checkX) - box.maxX - 0.001 :
                         box.minX - Math.floor(checkX) - 0.001;
+                collisionPoint = tritium$clampCollisionDistance(collisionPoint, distance);
                 return positive ? collisionPoint : -collisionPoint;
             }
 
@@ -191,6 +193,7 @@ public abstract class ParticleMixin {
                 double collisionPoint = positive ?
                         Math.ceil(checkZ) - box.maxZ - 0.001 :
                         box.minZ - Math.floor(checkZ) - 0.001;
+                collisionPoint = tritium$clampCollisionDistance(collisionPoint, distance);
                 return positive ? collisionPoint : -collisionPoint;
             }
 
@@ -204,11 +207,17 @@ public abstract class ParticleMixin {
                 double collisionPoint = positive ?
                         Math.ceil(checkZ) - box.maxZ - 0.001 :
                         box.minZ - Math.floor(checkZ) - 0.001;
+                collisionPoint = tritium$clampCollisionDistance(collisionPoint, distance);
                 return positive ? collisionPoint : -collisionPoint;
             }
 
             return originalMove;
         }
+    }
+
+    @Unique
+    private double tritium$clampCollisionDistance(double collisionDistance, double maxDistance) {
+        return Mth.clamp(collisionDistance, 0.0, maxDistance);
     }
 
     @Unique
