@@ -29,8 +29,7 @@
     "MCBUG.boat.BoatMixin",
     "server.AsyncWorldSaveMixin",
     "tickstop.EntityTypeMixin",
-    "tickstop.LevelMixin",
-    "crash.CrashReportMixin"
+    "tickstop.LevelMixin"
   ],
   "client": [
     "client.fps.minecraft.MinecraftMixin",
@@ -56,7 +55,8 @@
     "memory.client.leakfix.ScreenshotByteBufferLeakFixMixin",
     "occfix.ArrayOcclusionCacheMixin",
     "sodium.SodiumOptionsGUIMixin",
-    "sodium.SodiumOptionsGUIAccessor"
+    "sodium.SodiumOptionsGUIAccessor",
+    "crash.CrashReportMixin"
   ],
   "server": [],
   "injectors": {
