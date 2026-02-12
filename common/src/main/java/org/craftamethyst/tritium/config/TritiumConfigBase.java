@@ -109,7 +109,6 @@ public class TritiumConfigBase {
             public static boolean enableCulling = true;
             public static boolean enableBlockEntityCulling = true;
             public static boolean enableTickStopping = false;
-            public static boolean enableNameTagCulling = true;
 
             public static List<String> entityBlacklist = Arrays.asList("minecraft:player", "minecraft:villager");
         }

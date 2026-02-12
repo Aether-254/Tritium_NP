@@ -177,14 +177,6 @@ public class TritiumSodiumOptions {
                 OptionImpact.HIGH,
                 TritiumOptionDefinition.ControlType.BOOLEAN
         ));
-        entityCulling.add(new TritiumOptionDefinition<>(
-                "rendering.entityCulling_enableNameTagCulling",
-                "config.tritium.rendering.entityCulling_enableNameTagCulling",
-                c -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling,
-                (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling = v,
-                OptionImpact.LOW,
-                TritiumOptionDefinition.ControlType.BOOLEAN
-        ));
         groups.add(createGroup(entityCulling));
 
         List<TritiumOptionDefinition<?>> leafCulling = new ArrayList<>();

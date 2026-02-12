@@ -93,11 +93,7 @@ public class TritiumEmbPage extends OptionPage {
                         .addBoolean("enable_tick_stopping",
                                 "config.tritium.rendering.entityCulling_enableTickStopping",
                                 (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping = v,
-                                c -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping)
-                        .addBoolean("enable_name_tag_culling",
-                                "config.tritium.rendering.entityCulling_enableNameTagCulling",
-                                (c, v) -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling = v,
-                                c -> TritiumConfigBase.Rendering.EntityCulling.enableNameTagCulling))
+                                c -> TritiumConfigBase.Rendering.EntityCulling.enableTickStopping))
                 .addGroup("leaf_culling", Component.translatable("config.tritium.rendering.leafCulling"), builder -> builder
                         .addBoolean("enable_leaf_culling",
                                 "config.tritium.rendering.leafCulling_enableLeafCulling",
